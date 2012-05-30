@@ -5,6 +5,7 @@ Release:    3
 Group:      Applications
 License:    Samsung Proprietary License
 Source0:    %{name}-%{version}.tar.gz
+Source1001: packaging/org.tizen.volume.manifest 
 BuildRequires: pkgconfig(appcore-efl)
 BuildRequires: pkgconfig(bundle)
 BuildRequires: pkgconfig(ecore)
@@ -33,6 +34,7 @@ Volume App
 
 
 %build
+cp %{SOURCE1001} .
 RPM_OPT=`echo $CFLAGS|sed -n 's/-Wp,-D_FORTIFY_SOURCE=2//'`
 export CFLAGS=$RPM_OPT
 cmake  -DCMAKE_INSTALL_PREFIX="/opt/apps/org.tizen.volume"
@@ -45,6 +47,7 @@ rm -rf %{buildroot}
 %find_lang volume
 
 %files -f volume.lang
+%manifest org.tizen.volume.manifest
 /opt/apps/org.tizen.volume/bin/*
 /opt/apps/org.tizen.volume/res/*
 /opt/share/applications/*

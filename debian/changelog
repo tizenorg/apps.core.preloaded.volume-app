@@ -1,0 +1,7 @@
+volume (0.2.1-0) unstable; urgency=low
+
+  * released.
+  * Git: pkgs/v/volume-app
+  * Tag: volume_0.2.1-0
+
+ -- jeesun kim <iamjs.kim@samsung.com>  Fri, 17 Feb 2012 11:00:00 +0900

@@ -3,7 +3,7 @@ Summary:    volume
 Version:	0.2.0
 Release:    3
 Group:      Applications
-License:    Samsung Proprietary License
+License:    Flora Software License
 Source0:    %{name}-%{version}.tar.gz
 Source1001: packaging/org.tizen.volume.manifest 
 BuildRequires: pkgconfig(appcore-efl)

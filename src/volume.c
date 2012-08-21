@@ -1,22 +1,21 @@
- /*
-  * Copyright 2012  Samsung Electronics Co., Ltd
-  *
-  * Licensed under the Flora License, Version 1.0 (the License);
-  * you may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at
-  *
-  *     http://www.tizenopensource.org/license
-  *
-  * Unless required by applicable law or agreed to in writing, software
-  * distributed under the License is distributed on an AS IS BASIS,
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
-  */
+/*
+ * Copyright 2012  Samsung Electronics Co., Ltd
+ * 
+ * Licensed under the Flora License, Version 1.0 (the License);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.tizenopensource.org/license
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an AS IS BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 
 #include <stdio.h>
-#include <appcore-efl.h>
-#include <Ecore_X.h>
 
 #include "volume.h"
 #include "_util_log.h"
@@ -28,40 +27,9 @@ struct text_part {
 	char *msgid;
 };
 
-static struct text_part main_txt[] = {
-	{ "txt_title", N_("Application template"), },
-	{ "txt_mesg", N_("Click to exit"), },
-};
-
-
-static void win_del(void *data, Evas_Object *obj, void *event)
-{
-	elm_exit();
-}
-
-static void main_quit_cb(void *data, Evas_Object *obj,
-		const char *emission, const char *source)
-{
-	elm_exit();
-}
-
-static void update_ts(Evas_Object *eo, struct text_part *tp, int size)
-{
-	int i;
-
-	if (eo == NULL || tp == NULL || size < 0)
-		return;
-
-	for (i = 0; i < size; i++) {
-		if (tp[i].part && tp[i].msgid)
-			edje_object_part_text_set(eo,
-					tp[i].part, _(tp[i].msgid));
-	}
-}
-
 static int lang_changed(void *data)
 {
-	return 0;
+	return _lang_changed(data);
 }
 
 static int app_create(void *data)
@@ -98,15 +66,12 @@ static int app_terminate(void *data)
 
 static int app_pause(void *data)
 {
-	struct appdata *ad = data;
 	_app_pause(data);
 	return 0;
 }
 
 static int app_resume(void *data)
 {
-	struct appdata *ad = data;
-
 	return 0;
 }
 
@@ -121,7 +86,7 @@ static int app_reset(bundle *b, void *data)
 
 	if (syspopup_has_popup(b)) {
 		_D("has popup\n");
-
+		_app_reset(b, data);
 	} else {
 		_D("has not popup\n");
 		_app_reset(b, data);

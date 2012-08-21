@@ -6,6 +6,7 @@ SET(SRCS
 	src/_util_efl.c
 	src/_logic.c
 	src/_sound.c
+	src/_button.c
 )
 
 SET(VENDOR "tizen")
@@ -16,7 +17,7 @@ SET(BINDIR "${PREFIX}/bin")
 SET(RESDIR "${PREFIX}/res")
 SET(DATADIR "${PREFIX}/data")
 SET(LOCALEDIR "${RESDIR}/locale")
-SET(ICONDIR "${RESDIR}/icons/default/small")
+SET(ICONDIR "/opt/share/icons/default/small")
 SET(IMAGEDIR "${RESDIR}/images/${PACKAGE}")
 SET(EDJDIR "${RESDIR}/edje")
 
@@ -42,6 +43,7 @@ pkg_check_modules(pkgs REQUIRED
 	bundle
 	svi
 	glib-2.0
+	ui-gadget-1
 )
 
 FOREACH(flag ${pkgs_CFLAGS})
@@ -79,8 +81,8 @@ TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${pkgs_LDFLAGS} -lm)
 INSTALL(TARGETS ${PROJECT_NAME} DESTINATION ${BINDIR})
 
 # install desktop file & icon
-CONFIGURE_FILE(${PKGNAME}.desktop.in ${CMAKE_BINARY_DIR}/${PKGNAME}.desktop)
-INSTALL(FILES ${CMAKE_BINARY_DIR}/${PKGNAME}.desktop DESTINATION /opt/share/applications)
+#CONFIGURE_FILE(${PKGNAME}.desktop.in ${CMAKE_BINARY_DIR}/${PKGNAME}.desktop)
+INSTALL(FILES ${CMAKE_BINARY_DIR}/${PKGNAME}.xml DESTINATION /opt/share/packages)
 INSTALL(FILES ${CMAKE_SOURCE_DIR}/${PKGNAME}.png DESTINATION ${ICONDIR})
 
 # data

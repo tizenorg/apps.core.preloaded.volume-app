@@ -1,50 +1,45 @@
-Name:       org.tizen.volume
-Summary:    volume
-Version:	0.2.0
-Release:    3
-Group:      Applications
-License:    Flora Software License
-Source0:    %{name}-%{version}.tar.gz
-BuildRequires: pkgconfig(appcore-efl)
-BuildRequires: pkgconfig(bundle)
-BuildRequires: pkgconfig(ecore)
-BuildRequires: pkgconfig(ecore-input)
-BuildRequires: pkgconfig(ecore-x)
-BuildRequires: pkgconfig(edje)
-BuildRequires: pkgconfig(evas)
-BuildRequires: pkgconfig(glib-2.0)
-BuildRequires: pkgconfig(mm-sound)
-BuildRequires: pkgconfig(svi)
-BuildRequires: pkgconfig(syspopup)
-BuildRequires: pkgconfig(utilX)
-BuildRequires: pkgconfig(vconf)
+#sbs-git:slp/pkgs/v/volume-app volume-app 0.1.2 226202351de9fefb43756c36d215ca74f52431d0
+Name:	org.tizen.volume
+Summary:	Volume application (EFL)
+Version:	0.2.4
+Release:	1
+Group:	TO_BE/FILLED_IN
+License:	Flora Software License
+Source0:	%{name}-%{version}.tar.gz
+BuildRequires:  pkgconfig(appcore-efl)
+BuildRequires:  pkgconfig(elementary)
+BuildRequires:  pkgconfig(utilX)
+BuildRequires:  pkgconfig(syspopup)
+BuildRequires:  pkgconfig(dlog)
+BuildRequires:  pkgconfig(svi)
+BuildRequires:  pkgconfig(ui-gadget-1)
 
 BuildRequires:  cmake
-BuildRequires:  edje-tools
+BuildRequires:  edje-bin
 BuildRequires:  embryo-bin
-BuildRequires:  gettext-tools
+BuildRequires:  gettext-devel
 
 %description
-Volume App
-
+volume.
 
 %prep
-%setup -q -n %{name}-%{version}
+%setup -q
 
+%define PREFIX /opt/apps/org.tizen.volume
 
 %build
-RPM_OPT=`echo $CFLAGS|sed -n 's/-Wp,-D_FORTIFY_SOURCE=2//'`
+RPM_OPT=`echo $CFLAGS|sed 's/-Wp,-D_FORTIFY_SOURCE=2//'`
 export CFLAGS=$RPM_OPT
-cmake  -DCMAKE_INSTALL_PREFIX="/opt/apps/org.tizen.volume"
+cmake  -DCMAKE_INSTALL_PREFIX="%{PREFIX}"
 make %{?jobs:-j%jobs}
 
 %install
 rm -rf %{buildroot}
 %make_install
 
-%find_lang volume
-
-%files -f volume.lang
-/opt/apps/org.tizen.volume/bin/*
-/opt/apps/org.tizen.volume/res/*
-/opt/share/applications/*
+%files
+%defattr(-,root,root,-)
+%{PREFIX}/bin/*
+%{PREFIX}/res/*
+/opt/share/packages/org.tizen.volume.xml
+/opt/share/icons/default/small/org.tizen.volume.png

@@ -1,18 +1,19 @@
- /*
-  * Copyright 2012  Samsung Electronics Co., Ltd
-  *
-  * Licensed under the Flora License, Version 1.0 (the License);
-  * you may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at
-  *
-  *     http://www.tizenopensource.org/license
-  *
-  * Unless required by applicable law or agreed to in writing, software
-  * distributed under the License is distributed on an AS IS BASIS,
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
-  */
+/*
+ * Copyright 2012  Samsung Electronics Co., Ltd
+ * 
+ * Licensed under the Flora License, Version 1.0 (the License);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.tizenopensource.org/license
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an AS IS BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 
 #include <appcore-common.h>
 #include <mm_sound.h>
@@ -23,6 +24,8 @@
 #include "_util_log.h"
 #include "_logic.h"
 
+#define STRBUF_SIZE 64
+#define PATHBUF_SIZE 256
 
 void _play_vib(int handle)
 {
@@ -57,7 +60,6 @@ int _init_svi(void *data)
 
 int _set_slider_value(void *data, int val)
 {
-	double angle;
 	struct appdata *ad = (struct appdata *)data;
 	retvm_if(ad == NULL, -1, "Invalid argument: appdata is NULL\n");
 
@@ -74,8 +76,9 @@ int _set_slider_value(void *data, int val)
 
 int _set_icon(void *data, int val)
 {
-	int snd, vib;
-	double angle;
+	int snd=0, vib=0;
+	char buf[PATHBUF_SIZE] = {0, };
+	char *img;
 	struct appdata *ad = (struct appdata *)data;
 	retvm_if(ad == NULL, -1, "Invalid argument: appdata is NULL\n");
 
@@ -85,60 +88,90 @@ int _set_icon(void *data, int val)
 	if (val == 0) {
 		if (vib) {
 			if (ad->type == VOLUME_TYPE_MEDIA) {
-				edje_object_signal_emit(elm_layout_edje_get(ad->ly), "mute", "icon");
+				_D("media and mute\n");
+				img = "00_volume_icon_Mute.png";
 			} else {
-				edje_object_signal_emit(elm_layout_edje_get(ad->ly), "vib", "icon");
+				_D("Not media and vib\n");
+				img = "00_volume_icon_Vibrat.png";
 				_play_vib(ad->sh);
 			}
-
 		} else {
-			edje_object_signal_emit(elm_layout_edje_get(ad->ly), "mute", "icon");
-
+			_D("vib\n");
+			img = "00_volume_icon_Mute.png";
 		}
-
 	} else {
-		edje_object_signal_emit(elm_layout_edje_get(ad->ly), "default", "icon");
-
+		_D("default volume\n");
+		img = "00_volume_icon.png";
 	}
 
+	if(!snd){
+		if(ad->type != VOLUME_TYPE_MEDIA){
+			_D("Not media and mute\n");
+			img = "00_volume_icon_Mute.png";
+		}
+	}
+
+
+	snprintf(buf, sizeof(buf), "%s/%s", IMAGEDIR, img);
+	if (ad->ic ) {
+		elm_icon_file_set(ad->ic, buf, NULL);
+	}
+	return 1;
 }
 
-void _set_popup_title(void *data, int type)
+void _set_device_warning(void *data, int val, int device)
 {
-	char buf[64] = {0, };
-	char name[64] = {0, };
 	struct appdata *ad = (struct appdata *)data;
 	retm_if(ad == NULL, "Invalid argument: appdata is NULL\n");
 
-	_get_title(type, buf, sizeof(buf));
-	elm_object_part_text_set(ad->pu, "title,text", buf);
-
+	switch (device) {
+		case SYSTEM_AUDIO_ROUTE_PLAYBACK_DEVICE_EARPHONE:
+			if (val >= 13) {
+				if(ad->flag_warning) return;
+				ad->flag_warning = true;
+				elm_object_content_unset(ad->pu);
+				elm_object_part_content_set(ad->warn_ly, "elm.swallow.slider1", ad->sl);
+				elm_object_content_set(ad->pu, ad->warn_ly);
+				evas_object_show(ad->warn_ly);
+				DEL_TIMER(ad->warntimer);
+				ADD_TIMER(ad->warntimer, 3.0, _unset_layout, data);
+			}
+			else {
+				ad->flag_warning = false;
+				_unset_layout(data);
+			}
+			break;
+		default:
+			ad->flag_warning = false;
+			_unset_layout(data);
+			break;
+	}
 }
 
 int _get_title(volume_type_t type, char *label, int size)
 {
 	char *text = NULL;
 
-	text = D_("IDS_COM_BODY_UNKNOWN");
+	text = S_("IDS_COM_BODY_UNKNOWN");
 
 	switch (type) {
 	case VOLUME_TYPE_SYSTEM:
-		text = D_("IDS_COM_BODY_SYSTEM");
+		text = S_("IDS_COM_BODY_SYSTEM");
 		break;
 	case VOLUME_TYPE_NOTIFICATION:
-		text = D_("IDS_COM_HEADER_NOTIFICATION");
+		text = S_("IDS_COM_HEADER_NOTIFICATION");
 		break;
 	case VOLUME_TYPE_ALARM:
-		text = D_("IDS_COM_BODY_ALARM");
+		text = S_("IDS_COM_BODY_ALARM");
 		break;
 	case VOLUME_TYPE_RINGTONE:
-		text = D_("IDS_COM_BODY_RINGTONE");
+		text = S_("IDS_COM_BODY_RINGTONE");
 		break;
 	case VOLUME_TYPE_MEDIA:
 		text = T_("IDS_COM_BODY_MEDIA");
 		break;
 	case VOLUME_TYPE_CALL:
-		text = D_("IDS_COM_BODY_CALL");
+		text = S_("IDS_COM_BODY_CALL");
 		break;
 	case VOLUME_TYPE_EXT_ANDROID:
 		/* this enum is different from mm_sound.h and avsys-audio.h */
@@ -148,7 +181,7 @@ int _get_title(volume_type_t type, char *label, int size)
 		text = T_("IDS_COM_BODY_JAVA");
 		break;
 	default:
-		text = D_("IDS_COM_BODY_SYSTEM");
+		text = S_("IDS_COM_BODY_SYSTEM");
 		break;
 	}
 	snprintf(label, size, "%s", text);
@@ -157,34 +190,55 @@ int _get_title(volume_type_t type, char *label, int size)
 	return 0;
 }
 
-
-
-double _get_angle_with_value(int val, int step)
+void _set_popup_title(void *data, int type, int device)
 {
-_D("func\n");
-	double angle;
+	char buf[STRBUF_SIZE] = {0, };
+	char name[STRBUF_SIZE] = {0, };
+	struct appdata *ad = (struct appdata *)data;
+	retm_if(ad == NULL, "Invalid argument: appdata is NULL\n");
 
-	angle = 360.0 * (val + 1) / step;
-	return angle;
+	_get_title(type, buf, sizeof(buf));
+
+	switch (device) {
+		case SYSTEM_AUDIO_ROUTE_PLAYBACK_DEVICE_EARPHONE:
+			snprintf(name, sizeof(name), "%s (%s)", buf, T_("IDS_COM_OPT_HEADPHONES_ABB"));
+			elm_object_part_text_set(ad->pu, "title,text", name);
+			break;
+		default:
+			elm_object_part_text_set(ad->pu, "title,text", buf);
+			break;
+	}
+}
+
+int _get_step(int type)
+{
+	int ret, step;
+	ret = mm_sound_volume_get_step(type, &step);
+	retvm_if(ret < 0, -1, "Failed to get step\n");
+	step -= 1;
+	return step;
 }
 
 void _mm_func(void *data)
 {
-	int type, val;
+	_D("%s\n", __func__);
+	int val;
+	system_audio_route_device_t device = 0;
 	struct appdata *ad = (struct appdata *)data;
 	retm_if(ad == NULL, "Invalid argument: appdata is NULL\n");
 
+	retm_if(ad->win == NULL, "Failed to get window\n");
+
 	/* function could be activated when window exists */
-	if (ad->win) {
-		ad->step = _get_step(ad->type);
-		mm_sound_volume_get_value(ad->type, &val);
+	ad->step = _get_step(ad->type);
+	mm_sound_volume_get_value(ad->type, (unsigned int*)(&val));
+	mm_sound_route_get_playing_device(&device);
 
-		_set_slider_value(ad, val);
-		_set_popup_title(ad, ad->type);
-		_set_icon(ad, val);
-		_D("type(%d) val(%d)\n", ad->type, val);
-
-	}
+	_set_slider_value(ad, val);
+	_set_popup_title(ad, ad->type, device);
+	_set_device_warning(ad, val, device);
+	_set_icon(ad, val);
+	_D("type(%d) val(%d)\n", ad->type, val);
 }
 
 void _mm_system_cb(void *data)
@@ -234,7 +288,6 @@ int _get_volume_type_max(void)
 
 int _init_mm_sound(void *data)
 {
-	int i;
 	struct appdata *ad = (struct appdata *)data;
 	retvm_if(ad == NULL, -1, "Invalid argument: appdata is NULL\n");
 
@@ -260,7 +313,7 @@ int _init_mm_sound(void *data)
 
 int _get_sound_level(volume_type_t type, int *val)
 {
-	mm_sound_volume_get_value(type, val);
+	mm_sound_volume_get_value(type, (unsigned int*)val);
 	return 0;
 }
 
@@ -269,15 +322,3 @@ int _set_sound_level(volume_type_t type, int val)
 	mm_sound_volume_set_value(type, val);
 	return 0;
 }
-
-int _get_step(int type)
-{
-	int ret, step;
-
-	ret = mm_sound_volume_get_step(type, &step);
-	retvm_if(ret < 0, -1, "Failed to get step\n");
-	step -= 1;
-	return step;
-}
-
-

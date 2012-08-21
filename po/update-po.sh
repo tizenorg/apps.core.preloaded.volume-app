@@ -4,8 +4,8 @@ PACKAGE=volume
 SRCROOT=../src
 POTFILES=POTFILES.in
 
-#ALL_LINGUAS= am az be ca cs da de el en_CA en_GB es et fi fr hr hu it ja ko lv mk ml ms nb ne nl pa pl pt pt_BR ru rw sk sl sr sr@Latn sv ta tr uk vi zh_CN zh_TW
-ALL_LINGUAS="de_DE el_GR en_US en_GB es_ES fr_FR it_IT ja_JP ko_KR nl_NL pt_PT ru_RU tr_TR zh_CN zh_HK zh_TW"
+#ALL_LINGUAS= ar bg ca cs da de_DE el_GR en en_GB en_US es_ES fi fr_FR he hi hr hu id it_IT ja_JP ko_KR lt lv ms nl_NL no pl pt_PT ro ru_RU sk sl sr sv th tr_TR uk vi zh_CN zh_HK zh_TW
+ALL_LINGUAS="ar bg ca cs da de_DE el_GR en en_GB en_US es_ES fi fr_FR he hi hr hu id it_IT ja_JP ko_KR lt lv ms nl_NL no pl pt_PT ro ru_RU sk sl sr sv th tr_TR uk vi zh_CN zh_HK zh_TW"
 
 XGETTEXT=/usr/bin/xgettext
 MSGMERGE=/usr/bin/msgmerge

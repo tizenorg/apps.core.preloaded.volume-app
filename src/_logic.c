@@ -587,9 +587,9 @@ int _app_reset(bundle *b, void *data)
 		_set_level(type);
 
 		win = _add_window(PACKAGE);
-		elm_win_alpha_set(win, EINA_TRUE);
 		retvm_if(win == NULL, -1, "Failed add window\n");
 		ad->win = win;
+
 		_grab_key(ad);
 
 		pu = _add_popup(win, "volumebarstyle");
@@ -647,11 +647,12 @@ int _app_reset(bundle *b, void *data)
 int _app_pause(struct appdata *ad)
 {
 	_D("%s\n", __func__);
-	ug_destroy_all();
 	if(ad->ug){
+		ug_destroy_all();
 		ad->ug = NULL;
-		_close_volume(ad);
+		ecore_x_netwm_window_type_set(elm_win_xwindow_get(ad->win), ECORE_X_WINDOW_TYPE_NOTIFICATION);
 		utilx_set_window_opaque_state(ecore_x_display_get(), elm_win_xwindow_get(ad->win), UTILX_OPAQUE_STATE_OFF);
 	}
+	_close_volume(ad);
 	return 0;
 }

@@ -53,13 +53,14 @@ static void button_ug_destroy_cb(ui_gadget_h ug, void *priv)
 	ug_destroy(ug);
 	ad->ug = NULL;
 
+	ecore_x_netwm_window_type_set(elm_win_xwindow_get(ad->win), ECORE_X_WINDOW_TYPE_NOTIFICATION);
 	utilx_set_window_opaque_state(ecore_x_display_get(), elm_win_xwindow_get(ad->win), UTILX_OPAQUE_STATE_OFF);
 	_close_volume(ad);
 }
 
 ui_gadget_h create_button_ug(void *data)
 {
-	ui_gadget_h ug;
+	ui_gadget_h ug = NULL;
 	struct ug_cbs cbs = {0};
 	struct appdata *ad = (struct appdata *)data;
 	retvm_if(ad == NULL, 0, "Invalid argument:appdata is NULL\n");
@@ -68,6 +69,7 @@ ui_gadget_h create_button_ug(void *data)
 	cbs.destroy_cb = button_ug_destroy_cb;
 	cbs.priv = (void *)data;
 
+	ecore_x_netwm_window_type_set(elm_win_xwindow_get(ad->win), ECORE_X_WINDOW_TYPE_NORMAL);
 	utilx_set_window_opaque_state(ecore_x_display_get(), elm_win_xwindow_get(ad->win), UTILX_OPAQUE_STATE_ON);
 	ug = ug_create(NULL, "setting-profile-efl", UG_MODE_FULLVIEW, NULL, &cbs);
 

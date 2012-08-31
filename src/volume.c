@@ -84,8 +84,6 @@ static int app_reset(bundle *b, void *data)
 	}
 	ad->flag_launching = EINA_TRUE;
 
-	if (syspopup_has_popup(b))
-		syspopup_reset(b);
 	_app_reset(b, data);
 
 	/* appcore measure time example */

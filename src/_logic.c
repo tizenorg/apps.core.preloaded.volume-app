@@ -580,6 +580,8 @@ int _app_reset(bundle *b, void *data)
 			evas_object_show(ad->pu);
 			evas_object_show(ad->win);
 			_mm_func(data);
+			if(syspopup_has_popup(b))
+				syspopup_reset(b);
 			return 0;
 		}
 		ad->step = _get_step(type);

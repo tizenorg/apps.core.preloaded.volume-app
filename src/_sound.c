@@ -43,7 +43,7 @@ void _play_sound(int type, int handle)
 
 int _init_svi(void *data)
 {
-	int ret, handle;
+	int ret = -1, handle = -1;
 
 	struct appdata *ad = (struct appdata *)data;
 	retvm_if(ad == NULL, -1, "Invaild argument: appdata is NULL\n");
@@ -78,47 +78,57 @@ int _set_icon(void *data, int val)
 {
 	int snd=0, vib=0;
 	char buf[PATHBUF_SIZE] = {0, };
-	char *img;
+	char *img = NULL;
 	struct appdata *ad = (struct appdata *)data;
 	retvm_if(ad == NULL, -1, "Invalid argument: appdata is NULL\n");
+
+	system_audio_route_device_t device = 0;
+	mm_sound_route_get_playing_device(&device);
 
 	vconf_get_bool(VCONFKEY_SETAPPL_SOUND_STATUS_BOOL, &snd);
 	vconf_get_bool(VCONFKEY_SETAPPL_VIBRATION_STATUS_BOOL, &vib);
 
-	if (val == 0) {
-		if (vib) {
-			if (ad->type == VOLUME_TYPE_MEDIA) {
-				_D("media and mute\n");
-				img = "00_volume_icon_Mute.png";
-			} else {
-				_D("Not media and vib\n");
-				img = "00_volume_icon_Vibrat.png";
-				_play_vib(ad->sh);
+	switch(ad->type){
+		case VOLUME_TYPE_RINGTONE:
+			img = IMG_VOLUME_ICON_CALL;
+			if(val == 0){
+				if(vib)
+					img = IMG_VOLUME_ICON_VIB;
+				else
+					img = IMG_VOLUME_ICON_MUTE;
 			}
-		} else {
-			_D("vib\n");
-			img = "00_volume_icon_Mute.png";
-		}
-	} else {
-		_D("default volume\n");
-		img = "00_volume_icon.png";
+			if(!snd){
+				img = IMG_VOLUME_ICON_MUTE;
+				if(vib)img = IMG_VOLUME_ICON_VIB;
+			}
+			break;
+		case VOLUME_TYPE_MEDIA:
+			if(device == SYSTEM_AUDIO_ROUTE_PLAYBACK_DEVICE_EARPHONE)
+				img = IMG_VOLUME_ICON_HEADPHONE;
+			else
+				img = IMG_VOLUME_ICON_MEDIA;
+			break;
+		default:
+			img = IMG_VOLUME_ICON;
+			if(val == 0){
+				if(vib)
+					img = IMG_VOLUME_ICON_VIB;
+				else
+					img = IMG_VOLUME_ICON_MUTE;
+			}
+			if(!snd){
+				img = IMG_VOLUME_ICON_MUTE;
+				if(vib)img = IMG_VOLUME_ICON_VIB;
+			}
+			break;
 	}
-
-	if(!snd){
-		if(ad->type != VOLUME_TYPE_MEDIA){
-			_D("Not media and mute\n");
-			img = "00_volume_icon_Mute.png";
-		}
-	}
-
-
-	snprintf(buf, sizeof(buf), "%s/%s", IMAGEDIR, img);
+	snprintf(buf, sizeof(buf), "%s%s", IMAGEDIR, img);
 	if (ad->ic ) {
 		elm_icon_file_set(ad->ic, buf, NULL);
 	}
 	return 1;
 }
-
+/*
 void _set_device_warning(void *data, int val, int device)
 {
 	struct appdata *ad = (struct appdata *)data;
@@ -147,7 +157,7 @@ void _set_device_warning(void *data, int val, int device)
 			break;
 	}
 }
-
+*/
 int _get_title(volume_type_t type, char *label, int size)
 {
 	char *text = NULL;
@@ -190,29 +200,9 @@ int _get_title(volume_type_t type, char *label, int size)
 	return 0;
 }
 
-void _set_popup_title(void *data, int type, int device)
-{
-	char buf[STRBUF_SIZE] = {0, };
-	char name[STRBUF_SIZE] = {0, };
-	struct appdata *ad = (struct appdata *)data;
-	retm_if(ad == NULL, "Invalid argument: appdata is NULL\n");
-
-	_get_title(type, buf, sizeof(buf));
-
-	switch (device) {
-		case SYSTEM_AUDIO_ROUTE_PLAYBACK_DEVICE_EARPHONE:
-			snprintf(name, sizeof(name), "%s (%s)", buf, T_("IDS_COM_OPT_HEADPHONES_ABB"));
-			elm_object_part_text_set(ad->pu, "title,text", name);
-			break;
-		default:
-			elm_object_part_text_set(ad->pu, "title,text", buf);
-			break;
-	}
-}
-
 int _get_step(int type)
 {
-	int ret, step;
+	int ret = -1, step = 0;
 	ret = mm_sound_volume_get_step(type, &step);
 	retvm_if(ret < 0, -1, "Failed to get step\n");
 	step -= 1;
@@ -222,7 +212,7 @@ int _get_step(int type)
 void _mm_func(void *data)
 {
 	_D("%s\n", __func__);
-	int val;
+	int val = 0;
 	system_audio_route_device_t device = 0;
 	struct appdata *ad = (struct appdata *)data;
 	retm_if(ad == NULL, "Invalid argument: appdata is NULL\n");
@@ -235,8 +225,6 @@ void _mm_func(void *data)
 	mm_sound_route_get_playing_device(&device);
 
 	_set_slider_value(ad, val);
-	_set_popup_title(ad, ad->type, device);
-	_set_device_warning(ad, val, device);
 	_set_icon(ad, val);
 	_D("type(%d) val(%d)\n", ad->type, val);
 }
@@ -322,3 +310,4 @@ int _set_sound_level(volume_type_t type, int val)
 	mm_sound_volume_set_value(type, val);
 	return 0;
 }
+

@@ -23,8 +23,8 @@
 
 Evas_Object *_add_window(const char *name)
 {
-	Evas_Object *eo;
-	int w, h;
+	Evas_Object *eo = NULL;
+	int w = -1, h = -1;
 	eo = elm_win_add(NULL, name, ELM_WIN_NOTIFICATION);
 	if (eo) {
 		elm_win_title_set(eo, name);
@@ -33,6 +33,10 @@ Evas_Object *_add_window(const char *name)
 		ecore_x_window_size_get(
 				ecore_x_window_root_first_get(),
 				&w, &h);
+		if(w == -1 || h == -1){
+			_E("ecore_x_window_seiz_get() is failed\n");
+			return NULL;
+		}
 		evas_object_resize(eo, w, h);
 	}
 	return eo;
@@ -40,7 +44,7 @@ Evas_Object *_add_window(const char *name)
 
 Evas_Object *_add_slider(Evas_Object *parent, int min, int max, int val)
 {
-	Evas_Object *sl;
+	Evas_Object *sl = NULL;
 	sl = elm_slider_add(parent);
 	retvm_if(sl == NULL, NULL, "Failed to add slider\n");
 	elm_slider_horizontal_set(sl, EINA_TRUE);
@@ -56,8 +60,8 @@ Evas_Object *_add_slider(Evas_Object *parent, int min, int max, int val)
 Evas_Object *_add_layout(Evas_Object *parent, const char *file,
 			     const char *group)
 {
-	Evas_Object *eo;
-	int r;
+	Evas_Object *eo = NULL;
+	int r = -1;
 
 	retvm_if(parent == NULL, NULL, "Invalid argument: parent is NULL\n");
 	retvm_if(file == NULL, NULL, "Invalid argument: file is NULL\n");
@@ -81,7 +85,7 @@ Evas_Object *_add_layout(Evas_Object *parent, const char *file,
 
 Evas_Object *_add_button(Evas_Object *parent, const char *style, const char *text)
 {
-	Evas_Object *bt;
+	Evas_Object *bt = NULL;
 	bt = elm_button_add(parent);
 	retvm_if(bt == NULL, NULL, "Failed to add button\n");
 	if (style) elm_object_style_set(bt, style);
@@ -93,7 +97,7 @@ Evas_Object *_add_button(Evas_Object *parent, const char *style, const char *tex
 
 Evas_Object *_add_popup(Evas_Object *parent, const char *style)
 {
-	Evas_Object *pu;
+	Evas_Object *pu = NULL;
 	pu = elm_popup_add(parent);
 	retvm_if(pu == NULL, NULL, "[Error] Failed to add popup\n");
 	evas_object_size_hint_weight_set(pu, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
@@ -103,7 +107,7 @@ Evas_Object *_add_popup(Evas_Object *parent, const char *style)
 }
 Evas_Object *_add_label(Evas_Object *parent, const char *style, const char *text)
 {
-	Evas_Object *lb;
+	Evas_Object *lb = NULL;
 	lb = elm_label_add(parent);
 	retvm_if(lb == NULL, NULL, "Failed to add label\n");
 	elm_object_style_set(lb, style);

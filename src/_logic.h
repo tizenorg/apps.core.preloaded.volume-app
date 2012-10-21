@@ -24,10 +24,13 @@
 int _close_volume(void *data);
 int _app_create(struct appdata *ad);
 int _app_pause(struct appdata *ad);
+int _rotate_func(void *data);
 int _app_reset(bundle *b, void *data);
 Eina_Bool popup_timer_cb(void *data);
 Eina_Bool _unset_layout(void *data);
 int _lang_changed(void *data);
+void _init_press_timers(void *data);
 
 #endif
+
 /* __VOLUME_LOGIC_H__ */

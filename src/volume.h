@@ -30,7 +30,7 @@
 #endif
 
 #if !defined(RESDIR)
-#  define RESDIR "/opt/apps/org.tizen.volume/res"
+#  define RESDIR "/opt/apps/com.samsung.volume/res"
 #endif
 
 #if !defined(LOCALEDIR)
@@ -41,11 +41,24 @@
 #  define EDJDIR RESDIR"/edje"
 #endif
 
-#define EDJ_FILE EDJDIR"/"PACKAGE".edj"
-#define GRP_MAIN "main"
 #define EDJ_THEME EDJDIR"/volume_popup.edj"
 #define GRP_VOLUME_SLIDER "popup_slider_style"
 #define GRP_VOLUME_SLIDER_WITH_WARNING "popup_slider_text_style_with_warn_label"
+#define EDJ_APP EDJDIR"/volume_app.edj"
+#define GRP_VOLUME_BLOCKEVENTS "block_events"
+#define GRP_VOLUME_LAYOUT "volumeLayout"
+#define GRP_VOLUME_CONTENT "volumeLayoutContent"
+#define GRP_VOLUME_SLIDER_HORIZONTAL "volumeHorizontalSlider"
+
+#define IMG_VOLUME_ICON "/00_volume_icon.png"
+#define IMG_VOLUME_ICON_CALL "/00_volume_icon_Call.png"
+#define IMG_VOLUME_ICON_MUTE "/00_volume_icon_Mute.png"
+#define IMG_VOLUME_ICON_VIB "/00_volume_icon_Vibrat.png"
+#define IMG_VOLUME_ICON_HEADPHONE "/00_volume_icon_headphone.png"
+#define IMG_VOLUME_ICON_MEDIA "/00_volume_icon_media.png"
+#define IMG_VOLUME_ICON_SETTINGS "/00_volume_icon_settings.png"
+#define IMG_VOLUME_ICON_SETTINGS_PRESSED "/00_volume_icon_settings_pressed.png"
+#define IMG_VOLUME_WINSET_DIVIDER_LINE "/00_winset_divider_line.png"
 
 #define S_(str) dgettext("sys_string", str)
 #define T_(str) dgettext(PACKAGE, str)
@@ -61,15 +74,16 @@
 
 struct appdata
 {
-	Evas_Object *win, *pu, *bt, *sl, *ic, *warn_lb, *warn_ly;
+	Evas_Object *win, *block_events, *ly, *sl, *ic, *ic_settings, *warn_lb;
 
 	Ecore_Timer *ptimer;
 	Ecore_Timer *stimer;	/* slider timer */
 	Ecore_Timer *sutimer, *sdtimer, *lutimer, *ldtimer;	/* long press */
 	Ecore_Timer *warntimer;	/* warning message timer */
+	Ecore_Timer *luwarmtimer, *ldwarmtimer;
 	volume_type_t type;
 	int step;
-	int before_mute[32];
+	int angle;
 
 	/* ug handler */
 	ui_gadget_h ug;
@@ -78,7 +92,7 @@ struct appdata
 	int sh;	/* svi handle */
 	int flag_pressing;	/* to set hard key press */
 	int flag_touching;
-	int flag_launching;	/* to block double launching by double click */
+	int flag_launching;
 	int flag_deleting;
 	int flag_warning;	/* set device warning flag */
 };

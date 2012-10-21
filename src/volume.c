@@ -32,6 +32,22 @@ static int lang_changed(void *data)
 	return _lang_changed(data);
 }
 
+static Eina_Bool rotate_cb(void *data, int type, void *event)
+{
+	struct appdata *ad = data;
+	Ecore_X_Event_Client_Message *ev = event;
+
+	retvm_if(ad == NULL, -1, "Invalid argument: appdata is NULL\n");
+	if (!event){
+		return ECORE_CALLBACK_RENEW;
+	}
+
+	if (ev->message_type == ECORE_X_ATOM_E_ILLUME_ROTATE_ROOT_ANGLE && ad->ug == NULL){
+		_rotate_func(data);
+	}
+	return ECORE_CALLBACK_RENEW;
+}
+
 static int app_create(void *data)
 {
 	struct appdata *ad = data;
@@ -45,6 +61,10 @@ static int app_create(void *data)
 	/* add system event callback */
 	appcore_set_event_callback(APPCORE_EVENT_LANG_CHANGE,
 			lang_changed, ad);
+
+	/* add rotation event callback */
+	ecore_event_handler_add(ECORE_X_EVENT_CLIENT_MESSAGE,
+					rotate_cb, (void *)data);
 
 	/* appcore measure time example */
 	printf("from AUL to %s(): %d msec\n", __func__,
@@ -77,15 +97,18 @@ static int app_resume(void *data)
 
 static int app_reset(bundle *b, void *data)
 {
+	_D("%s\n", __func__);
 	struct appdata *ad = data;
+	retvm_if(ad == NULL, -1, "Invalid argument: appdata is NULL\n");
 
-	if (ad->flag_launching == EINA_TRUE) {
+	if(ad->flag_launching == EINA_TRUE || evas_object_visible_get(ad->win))
+	{
+		_init_press_timers(ad);
 		return 0;
 	}
 	ad->flag_launching = EINA_TRUE;
 
 	_app_reset(b, data);
-
 	/* appcore measure time example */
 	printf("from AUL to %s(): %d msec\n", __func__,
 			appcore_measure_time_from("APP_START_TIME"));
@@ -94,8 +117,6 @@ static int app_reset(bundle *b, void *data)
 
 	if (ad->win)
 		elm_win_activate(ad->win);
-
-	ad->flag_launching = EINA_FALSE;
 
 	return 0;
 }
@@ -111,13 +132,13 @@ int main(int argc, char *argv[])
 		.reset = app_reset,
 	};
 
-	/* appcore measure time example */
-	printf("from AUL to %s(): %d msec\n", __func__,
-			appcore_measure_time_from("APP_START_TIME"));
+	/*elm_init(argc, argv);
+	elm_config_preferred_engine_set("opengl_x11");*/
 
 	memset(&ad, 0x0, sizeof(struct appdata));
 	ops.data = &ad;
 
 	return appcore_efl_main(PACKAGE, &argc, &argv, &ops);
 }
+
 

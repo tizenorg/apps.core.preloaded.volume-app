@@ -25,11 +25,14 @@
 static void button_ug_layout_cb(ui_gadget_h ug,
 		enum ug_mode mode, void *priv)
 {
-	Evas_Object *base;
-	Evas_Object *win;
+	Evas_Object *base = NULL;
+	Evas_Object *win = NULL;
 
 	base = ug_get_layout(ug);
 	win = ug_get_window();
+
+	retm_if(ug == NULL, "ug_get_layout API is failed\n");
+	retm_if(ug == NULL, "ug_get_window API is failed\n");
 
 	switch (mode) {
 		case UG_MODE_FULLVIEW:
@@ -47,7 +50,6 @@ static void button_ug_destroy_cb(ui_gadget_h ug, void *priv)
 {
 	_D("%s\n", __func__);
 	struct appdata *ad = (struct appdata *)priv;
-
 	retm_if(ug == NULL, "Invalid argument: ug is NULL\n");
 
 	ug_destroy(ug);
@@ -94,3 +96,4 @@ int _open_ug(void *data)
 
 	return 0;
 }
+

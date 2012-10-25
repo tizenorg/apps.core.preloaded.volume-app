@@ -38,6 +38,7 @@ rm -rf %{buildroot}
 %make_install
 
 %files
+%manifest volume.manifest
 %defattr(-,root,root,-)
 %{PREFIX}/bin/*
 %{PREFIX}/res/*

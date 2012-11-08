@@ -25,7 +25,7 @@ volume.
 %prep
 %setup -q
 
-%define PREFIX /opt/apps/org.tizen.volume
+%define PREFIX /usr/apps/org.tizen.volume
 
 %build
 RPM_OPT=`echo $CFLAGS|sed 's/-Wp,-D_FORTIFY_SOURCE=2//'`
@@ -42,5 +42,5 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %{PREFIX}/bin/*
 %{PREFIX}/res/*
-/opt/share/packages/org.tizen.volume.xml
 /opt/share/icons/default/small/org.tizen.volume.png
+/usr/share/packages/org.tizen.volume.xml

@@ -6,6 +6,6 @@
 		<domain name="volume"/>
 	</request>
 	<assign>
-		<filesystem path="/opt/apps/org.tizen.volume/bin/volume" exec_label="volume"/>
+		<filesystem path="/usr/apps/org.tizen.volume/bin/volume" exec_label="volume"/>
 	</assign>
 </manifest>

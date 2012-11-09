@@ -1,4 +1,4 @@
-/*
+/* test
  * Copyright 2012  Samsung Electronics Co., Ltd
  *
  * Licensed under the Flora License, Version 1.0 (the License);
@@ -25,6 +25,7 @@
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
 
+#include"_logic.h"
 #include "volume.h"
 #include "_util_log.h"
 #include "_util_efl.h"
@@ -39,8 +40,6 @@ enum {
 	IDLELOCK_ON,
 	IDLELOCK_MAX,
 };
-
-void _ungrab_key(struct appdata *ad);
 
 int _close_volume(void *data)
 {
@@ -129,7 +128,7 @@ Eina_Bool _sd_timer_cb(void *data)
 static Eina_Bool _key_press_cb(void *data, int type, void *event)
 {
 	_D("%s\n", __func__);
-	int val=0, snd=0;
+	int val=0, snd=0, vib=0;
 	Ecore_Event_Key *ev = event;
 	struct appdata *ad = (struct appdata *)data;
 
@@ -141,42 +140,40 @@ static Eina_Bool _key_press_cb(void *data, int type, void *event)
 		return ECORE_CALLBACK_CANCEL;
 	}
 
-	vconf_get_bool(VCONFKEY_SETAPPL_SOUND_STATUS_BOOL, &snd);
-
 	ad->flag_pressing = EINA_TRUE;
 
 	DEL_TIMER(ad->ptimer)
+	vconf_get_bool(VCONFKEY_SETAPPL_SOUND_STATUS_BOOL, &snd);
+	vconf_get_bool(VCONFKEY_SETAPPL_VIBRATION_STATUS_BOOL, &vib);
+
+	/* If sound is set off, only RINGTONE, MEDIA types are able to change. */
+	if(!snd && ad->type != VOLUME_TYPE_MEDIA && ad->type != VOLUME_TYPE_RINGTONE){
+		if(vib)_play_vib(ad->sh);
+		return ECORE_CALLBACK_CANCEL;
+	}
 
 	if (!strcmp(ev->keyname, KEY_VOLUMEUP)) {
 		_get_sound_level(ad->type, &val);
 		if (val == ad->step) {
 			_set_sound_level(ad->type, ad->step);
-			_play_sound(ad->type, ad->sh);
+			if(snd)_play_sound(ad->type, ad->sh);
 			return ECORE_CALLBACK_CANCEL;
 		}
-		if(!snd){
-			_D("mute and volume up key pressed\n");
-			vconf_set_bool(VCONFKEY_SETAPPL_SOUND_STATUS_BOOL, EINA_TRUE);
-		}
 		_set_sound_level(ad->type, val + 1);
-		_play_sound(ad->type, ad->sh);
+		if(snd)_play_sound(ad->type, ad->sh);
 		DEL_TIMER(ad->sutimer)
 		ADD_TIMER(ad->sutimer, 0.5, _su_timer_cb, ad)
 
 		_D("set volume %d -> [%d]\n", val, val+1);
 
 	} else if (!strcmp(ev->keyname, KEY_VOLUMEDOWN)) {
-		if(!snd){
-			/* Do nothing */
-			return ECORE_CALLBACK_CANCEL;
-		}
 		_get_sound_level(ad->type, &val);
 		if (val == 0) {
-			_play_vib(ad->sh);
+			if(vib)_play_vib(ad->sh);
 			return ECORE_CALLBACK_CANCEL;
 		}
 		_set_sound_level(ad->type, val - 1);
-		_play_sound(ad->type, ad->sh);
+		if(snd)_play_sound(ad->type, ad->sh);
 		DEL_TIMER(ad->sdtimer)
 		ADD_TIMER(ad->sdtimer, 0.5, _sd_timer_cb, ad)
 
@@ -293,10 +290,10 @@ volume_type_t _get_volume_type(void)
 			break;
 		case MM_ERROR_SOUND_VOLUME_NO_INSTANCE:
 		case MM_ERROR_SOUND_VOLUME_CAPTURE_ONLY:
-			type = VOLUME_TYPE_SYSTEM;
+			type = VOLUME_TYPE_RINGTONE;
 			break;
 		default:
-			fprintf(stderr, "Failed to get sound type(errno:%x)\n", ret);
+			_D("Failed to get sound type(errno:%x)\n", ret);
 			return -1;
 	}
 	return type;
@@ -496,7 +493,6 @@ void _set_level(int type)
 
 static void _block_clicked_cb(void *data, Evas_Object *o, const char *emission, const char *source)
 {
-	_D("%s\n", __func__);
 	_close_volume(data);
 }
 
@@ -608,7 +604,7 @@ Eina_Bool _ld_warmup_timer_cb(void *data)
 void _init_press_timers(void *data)
 {
 	struct appdata *ad = (struct appdata *)data;
-	retvm_if(ad == NULL, ECORE_CALLBACK_CANCEL, "Invalid argument: appdata is NULL\n");
+	retm_if(ad == NULL, "Invalid argument: appdata is NULL\n");
 	DEL_TIMER(ad->sdtimer)
 	DEL_TIMER(ad->ldtimer)
 	DEL_TIMER(ad->ldwarmtimer)
@@ -625,7 +621,6 @@ int _handle_bundle(bundle *b, struct appdata *ad)
 	bval = bundle_get_val(b, "LONG_PRESS");
 	if (bval) {
 		_D("val(%s)\n", bval);
-		Ecore_X_Display* disp = ecore_x_display_get();
 
 		if (!strncmp(bval, "VOLUME_UP", strlen("LONG_PRESS"))) {
 			_D("volume up long press\n");
@@ -645,14 +640,14 @@ int _handle_bundle(bundle *b, struct appdata *ad)
 	return 0;
 }
 
-static void _button_mouse_down_cb(void *data, Evas_Object *obj, void *event_info)
+static void _button_mouse_down_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)
 {
 	_D("%s\n", __func__);
 	struct appdata *ad = (struct appdata *)data;
 	retm_if(ad == NULL, "Invalid argument: appdata is NULL\n");
 	char buf[PATHBUF_SIZE] = {0, };
-	snprintf(buf, sizeof(buf), "%s%s", IMAGEDIR, IMG_VOLUME_ICON_SETTINGS_PRESSED);
-	elm_icon_file_set(ad->ic_settings, buf, NULL);
+	snprintf(buf, sizeof(buf), "%s/%s", IMAGEDIR, IMG_VOLUME_ICON_SETTINGS_PRESSED);
+	elm_icon_file_set(obj, buf, NULL);
 }
 
 static void _button_cb(void *data, Evas_Object *obj, void *event_info)
@@ -661,40 +656,12 @@ static void _button_cb(void *data, Evas_Object *obj, void *event_info)
 	struct appdata *ad = (struct appdata *)data;
 	retm_if(ad == NULL, "Invalid argument: appdata is NULL\n");
 	char buf[PATHBUF_SIZE] = {0, };
-	snprintf(buf, sizeof(buf), "%s%s", IMAGEDIR, IMG_VOLUME_ICON_SETTINGS);
-	elm_icon_file_set(ad->ic_settings, buf, NULL);
+	snprintf(buf, sizeof(buf), "%s/%s", IMAGEDIR, IMG_VOLUME_ICON_SETTINGS);
+	elm_icon_file_set(obj, buf, NULL);
 	if(evas_object_visible_get(ad->win)){
 		DEL_TIMER(ad->ptimer)
 		_open_ug(ad);
 	}
-}
-/*
-Eina_Bool _unset_layout(void *data)
-{
-	struct appdata *ad = (struct appdata *)data;
-	retvm_if(ad == NULL, EINA_FALSE,"Invalid argument: appdata is NULL\n");
-
-	DEL_TIMER(ad->warntimer);
-	if(elm_object_content_get(ad->pu)==ad->warn_ly){
-		elm_object_content_unset(ad->pu);
-		elm_object_content_set(ad->pu, ad->sl);
-		evas_object_hide(ad->warn_ly);
-	}
-	return ECORE_CALLBACK_CANCEL;
-}
-*/
-int _lang_changed(void *data){
-	_D("%s\n", __func__);
-	struct appdata *ad = (struct appdata *)data;
-	char buf[STRBUF_SIZE] = {0, };
-
-	retvm_if(ad == NULL, -1, "Invalid argument: appdata is NULL\n");
-	retvm_if(ad->win == NULL, -1, "Invalid argument: window is NULL\n");
-
-	snprintf(buf, sizeof(buf), "<font_size=32><b>%s</b></font_size>",
-			T_("IDS_COM_BODY_HIGH_VOLUMES_MAY_HARM_YOUR_HEARING_IF_YOU_LISTEN_FOR_A_LONG_TIME"));
-	elm_object_text_set(ad->warn_lb, buf);
-	return 0;
 }
 
 int _app_reset(bundle *b, void *data)
@@ -707,8 +674,6 @@ int _app_reset(bundle *b, void *data)
 	/* volume-app layout */
 	Elm_Theme *th;
 	Evas_Object *outer, *inner, *block;
-	/* warn message layout */
-	//Evas_Object *label, *warn_ly;
 	char buf[PATHBUF_SIZE] = {0, };
 	struct appdata *ad = (struct appdata *)data;
 	retvm_if(ad == NULL, -1, "Invalid argument: appdata is NULL\n");
@@ -741,6 +706,7 @@ int _app_reset(bundle *b, void *data)
 		ad->win = win;
 
 		_grab_key(ad);
+		mm_sound_route_get_playing_device(&(ad->device));
 
 		th = elm_theme_new();
 		elm_theme_ref_set(th, NULL);
@@ -770,7 +736,8 @@ int _app_reset(bundle *b, void *data)
 		ic_settings = elm_icon_add(win);
 		evas_object_size_hint_aspect_set(ic_settings, EVAS_ASPECT_CONTROL_VERTICAL, 1, 1);
 		elm_icon_resizable_set(ic_settings, EINA_FALSE, EINA_FALSE);
-		snprintf(buf, sizeof(buf), "%s%s", IMAGEDIR, IMG_VOLUME_ICON_SETTINGS);
+		snprintf(buf, sizeof(buf), "%s/%s", IMAGEDIR, IMG_VOLUME_ICON_SETTINGS);
+		_D("%s\n", buf);
 		elm_icon_file_set(ic_settings, buf, NULL);
 		elm_object_part_content_set(sl, "end", ic_settings);
 		evas_object_event_callback_add(ic_settings, EVAS_CALLBACK_MOUSE_DOWN, _button_mouse_down_cb, ad);
@@ -788,22 +755,6 @@ int _app_reset(bundle *b, void *data)
 		ad->ic = ic;
 		_set_icon(ad, val);
 
-		/* Make a Layout for volume slider with warning text. */
-		/*
-		snprintf(buf, sizeof(buf), "<font_size=32><b>%s</b></font_size>",
-			T_("IDS_COM_BODY_HIGH_VOLUMES_MAY_HARM_YOUR_HEARING_IF_YOU_LISTEN_FOR_A_LONG_TIME"));
-		label = _add_label(inner, "popup/default", buf);
-		//elm_object_part_content_set(inner, "elm.swallow.warn_label", label);
-		elm_object_part_content_set(outer, "elm.swallow.warn_label", label);
-		evas_object_show(label);
-		ad->warn_lb = label;
-		_D("%s\n", buf);*/
-
-		/*warn_ly = _add_layout(ad->pu, EDJ_THEME, GRP_VOLUME_SLIDER_WITH_WARNING);
-		elm_object_part_content_set(warn_ly, "elm.swallow.warn_label", ad->warn_lb);
-		ad->warn_ly = warn_ly;
-		evas_object_hide(ad->warn_ly);*/
-
 		ret = syspopup_create(b, &handler, ad->win, ad);
 		retvm_if(ret < 0, -1, "Failed to create syspopup\n");
 
@@ -811,13 +762,6 @@ int _app_reset(bundle *b, void *data)
 
 		_rotate_func(ad);
 		evas_object_show(ad->win);
-
-		if(evas_object_visible_get(ad->win))
-			_D("window is visible\n");
-		else{
-			_D("window is invisible, close volume\n");
-			_close_volume(ad);
-		}
 	}
 	ad->flag_launching = EINA_FALSE;
 	return 0;

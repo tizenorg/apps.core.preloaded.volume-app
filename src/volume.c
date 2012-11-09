@@ -1,12 +1,12 @@
 /*
  * Copyright 2012  Samsung Electronics Co., Ltd
- * 
+ *
  * Licensed under the Flora License, Version 1.0 (the License);
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.tizenopensource.org/license
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an AS IS BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,11 +26,6 @@ struct text_part {
 	char *part;
 	char *msgid;
 };
-
-static int lang_changed(void *data)
-{
-	return _lang_changed(data);
-}
 
 static Eina_Bool rotate_cb(void *data, int type, void *event)
 {
@@ -55,12 +50,6 @@ static int app_create(void *data)
 	retvm_if(ad == NULL, -1, "Invalid argument: appdata is NULL\n");
 
 	_app_create(ad);
-
-	lang_changed(ad);
-
-	/* add system event callback */
-	appcore_set_event_callback(APPCORE_EVENT_LANG_CHANGE,
-			lang_changed, ad);
 
 	/* add rotation event callback */
 	ecore_event_handler_add(ECORE_X_EVENT_CLIENT_MESSAGE,
@@ -132,13 +121,14 @@ int main(int argc, char *argv[])
 		.reset = app_reset,
 	};
 
-	/*elm_init(argc, argv);
-	elm_config_preferred_engine_set("opengl_x11");*/
+
+	/* appcore measure time example */
+	printf("from AUL to %s(): %d msec\n", __func__,
+			appcore_measure_time_from("APP_START_TIME"));
 
 	memset(&ad, 0x0, sizeof(struct appdata));
 	ops.data = &ad;
 
 	return appcore_efl_main(PACKAGE, &argc, &argv, &ops);
 }
-
 

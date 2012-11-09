@@ -1,12 +1,12 @@
 /*
  * Copyright 2012  Samsung Electronics Co., Ltd
- * 
+ *
  * Licensed under the Flora License, Version 1.0 (the License);
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.tizenopensource.org/license
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an AS IS BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,6 +26,8 @@
 
 #define STRBUF_SIZE 64
 #define PATHBUF_SIZE 256
+
+int _set_sound_level(volume_type_t type, int val);
 
 void _play_vib(int handle)
 {
@@ -77,7 +79,6 @@ int _set_slider_value(void *data, int val)
 int _set_icon(void *data, int val)
 {
 	int snd=0, vib=0;
-	char buf[PATHBUF_SIZE] = {0, };
 	char *img = NULL;
 	struct appdata *ad = (struct appdata *)data;
 	retvm_if(ad == NULL, -1, "Invalid argument: appdata is NULL\n");
@@ -122,13 +123,58 @@ int _set_icon(void *data, int val)
 			}
 			break;
 	}
-	snprintf(buf, sizeof(buf), "%s%s", IMAGEDIR, img);
 	if (ad->ic ) {
-		elm_icon_file_set(ad->ic, buf, NULL);
+		elm_icon_file_set(ad->ic, EDJ_APP, img);
 	}
 	return 1;
 }
-/*
+
+Eina_Bool _delete_message_ticker_notification(void *data)
+{
+	notification_error_e noti_err = NOTIFICATION_ERROR_NONE;
+	struct appdata *ad = (struct appdata *)data;
+	retvm_if(ad == NULL, -1, "Invalid argument: appdata is NULL\n");
+
+	if(ad->noti){
+		noti_err = notification_delete(ad->noti);
+		retvm_if(noti_err != NOTIFICATION_ERROR_NONE, ECORE_CALLBACK_RENEW, "Fail to notification_delete : %d\n", noti_err);
+	}
+	ad->noti = NULL;
+	return ECORE_CALLBACK_CANCEL;
+}
+
+notification_h _insert_message_ticker_notification(const char* pTickerMsg, const char* pLocaleTickerMsg)
+{
+	notification_h noti = NULL;
+	notification_error_e noti_err = NOTIFICATION_ERROR_NONE;
+
+	noti = notification_new(NOTIFICATION_TYPE_NOTI, NOTIFICATION_GROUP_ID_NONE, NOTIFICATION_PRIV_ID_NONE);
+	retvm_if(noti == NULL, NULL, "notification_new is failed\n");
+
+	noti_err = notification_set_application(noti, PKGNAME);
+	retvm_if(noti_err != NOTIFICATION_ERROR_NONE, NULL, "Fail to notification_set_application : %d\n", noti_err);
+
+	noti_err = notification_set_image(noti, NOTIFICATION_IMAGE_TYPE_ICON, IMG_VOLUME_PACKAGE_ICON);
+	retvm_if(noti_err != NOTIFICATION_ERROR_NONE, NULL, "Fail to notification_set_image : %d\n", noti_err);
+
+	noti_err = notification_set_text_domain(noti, "volume-app", LOCALEDIR);
+	retvm_if(noti_err != NOTIFICATION_ERROR_NONE, NULL, "Fail to notification_set_text_domain : %d\n", noti_err);
+
+	noti_err = notification_set_text(noti, NOTIFICATION_TEXT_TYPE_TITLE, pTickerMsg, T_(pLocaleTickerMsg), NOTIFICATION_VARIABLE_TYPE_NONE);
+	retvm_if(noti_err != NOTIFICATION_ERROR_NONE, NULL, "Fail to notification_set_text : %d\n", noti_err);
+
+	noti_err = notification_set_text(noti, NOTIFICATION_TEXT_TYPE_CONTENT_FOR_DISPLAY_OPTION_IS_OFF, pTickerMsg, T_(pLocaleTickerMsg), NOTIFICATION_VARIABLE_TYPE_NONE);
+	retvm_if(noti_err != NOTIFICATION_ERROR_NONE, NULL, "Fail to notification_set_text : %d\n", noti_err);
+
+	noti_err = notification_set_display_applist(noti, NOTIFICATION_DISPLAY_APP_TICKER);
+	retvm_if(noti_err != NOTIFICATION_ERROR_NONE, NULL, "Fail to notification_set_display_applist : %d\n", noti_err);
+
+	noti_err = notification_insert(noti, NULL);
+	retvm_if(noti_err != NOTIFICATION_ERROR_NONE, NULL, "Fail to notification_set_text_domain : %d\n", noti_err);
+
+	return noti;
+}
+
 void _set_device_warning(void *data, int val, int device)
 {
 	struct appdata *ad = (struct appdata *)data;
@@ -136,28 +182,23 @@ void _set_device_warning(void *data, int val, int device)
 
 	switch (device) {
 		case SYSTEM_AUDIO_ROUTE_PLAYBACK_DEVICE_EARPHONE:
-			if (val >= 13) {
-				if(ad->flag_warning) return;
-				ad->flag_warning = true;
-				elm_object_content_unset(ad->pu);
-				elm_object_part_content_set(ad->warn_ly, "elm.swallow.slider1", ad->sl);
-				elm_object_content_set(ad->pu, ad->warn_ly);
-				evas_object_show(ad->warn_ly);
+			if (val >= 10) {
+				if(ad->noti == NULL){
+					ad->noti = _insert_message_ticker_notification(IDS_WARNING_MSG, STR_WARNING_MSG);
+				}
 				DEL_TIMER(ad->warntimer);
-				ADD_TIMER(ad->warntimer, 3.0, _unset_layout, data);
+				ADD_TIMER(ad->warntimer, 2.0, _delete_message_ticker_notification, data);
 			}
 			else {
-				ad->flag_warning = false;
-				_unset_layout(data);
+				_delete_message_ticker_notification(data);
 			}
 			break;
 		default:
-			ad->flag_warning = false;
-			_unset_layout(data);
+			_delete_message_ticker_notification(data);
 			break;
 	}
 }
-*/
+
 int _get_title(volume_type_t type, char *label, int size)
 {
 	char *text = NULL;
@@ -221,11 +262,26 @@ void _mm_func(void *data)
 
 	/* function could be activated when window exists */
 	ad->step = _get_step(ad->type);
-	mm_sound_volume_get_value(ad->type, (unsigned int*)(&val));
 	mm_sound_route_get_playing_device(&device);
+	mm_sound_volume_get_value(ad->type, (unsigned int*)(&val));
+
+	/* apply earphone safety concept */
+	if(ad->device != device){
+		if(device == SYSTEM_AUDIO_ROUTE_PLAYBACK_DEVICE_EARPHONE && val > 9)
+			val = 9;
+			_set_sound_level(ad->type, val);
+		ad->device = device;
+	}
+	if(ad->type == VOLUME_TYPE_RINGTONE){
+		if(val == 0)
+			vconf_set_bool(VCONFKEY_SETAPPL_SOUND_STATUS_BOOL, EINA_FALSE);
+		else
+			vconf_set_bool(VCONFKEY_SETAPPL_SOUND_STATUS_BOOL, EINA_TRUE);
+	}
 
 	_set_slider_value(ad, val);
 	_set_icon(ad, val);
+	_set_device_warning(ad, val, device);
 	_D("type(%d) val(%d)\n", ad->type, val);
 }
 
@@ -310,4 +366,3 @@ int _set_sound_level(volume_type_t type, int val)
 	mm_sound_volume_set_value(type, val);
 	return 0;
 }
-

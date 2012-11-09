@@ -1,12 +1,12 @@
 /*
  * Copyright 2012  Samsung Electronics Co., Ltd
- * 
+ *
  * Licensed under the Flora License, Version 1.0 (the License);
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.tizenopensource.org/license
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an AS IS BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,10 +27,8 @@ int _app_pause(struct appdata *ad);
 int _rotate_func(void *data);
 int _app_reset(bundle *b, void *data);
 Eina_Bool popup_timer_cb(void *data);
-Eina_Bool _unset_layout(void *data);
-int _lang_changed(void *data);
 void _init_press_timers(void *data);
+void _ungrab_key(struct appdata *ad);
 
 #endif
-
 /* __VOLUME_LOGIC_H__ */

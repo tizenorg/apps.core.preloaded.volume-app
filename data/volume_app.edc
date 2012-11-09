@@ -13,7 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+#define RESOURCE_IMAGE( FILE_NAME ) \
+        group { \
+                name : FILE_NAME; \
+                images.image: FILE_NAME COMP; \
+                parts { \
+                        part { name: "image"; \
+                                description { \
+                                        state : "default" 0.0; \
+                                        image.normal : FILE_NAME; \
+                                        aspect : 1 1; \
+                                        aspect_preference : BOTH; \
+                                } \
+                        } \
+                } \
+        }
+
+
 collections {
+
+RESOURCE_IMAGE("00_volume_icon.png");
+RESOURCE_IMAGE("00_volume_icon_Call.png");
+RESOURCE_IMAGE("00_volume_icon_Mute.png");
+RESOURCE_IMAGE("00_volume_icon_Vibrat.png");
+RESOURCE_IMAGE("00_volume_icon_headphone.png");
+RESOURCE_IMAGE("00_volume_icon_media.png");
 
 	#define SLIDER_INDICATOR_TEXT_COLOR_INC      42 109 140 255
 	#define SLIDER_UNITS_TEXT_COLOR_INC          100 100 100 255

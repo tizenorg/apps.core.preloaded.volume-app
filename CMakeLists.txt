@@ -44,6 +44,7 @@ pkg_check_modules(pkgs REQUIRED
 	svi
 	glib-2.0
 	ui-gadget-1
+	notification
 )
 
 FOREACH(flag ${pkgs_CFLAGS})

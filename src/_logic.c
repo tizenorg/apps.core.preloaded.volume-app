@@ -455,6 +455,7 @@ int _efl_rotate(Display *dpy, void *data)
 
 int _rotate_func(void *data)
 {
+	_D("%s\n", __func__);
 	struct appdata *ad = (struct appdata *)data;
 	Display *d = NULL;
 	int ret = 0;
@@ -666,6 +667,7 @@ static void _button_cb(void *data, Evas_Object *obj, void *event_info)
 
 int _app_reset(bundle *b, void *data)
 {
+	_D("%s\n", __func__);
 	int ret = -1, status = -1, val = 0;
 	int type = MM_ERROR_SOUND_VOLUME_CAPTURE_ONLY;
 	int lock = IDLELOCK_ON;
@@ -687,11 +689,12 @@ int _app_reset(bundle *b, void *data)
 
 	if (status == 0) {
 		if(ad->win){
+			_D("window exists", __func__);
 			_grab_key(ad);
 			_handle_bundle(b, ad);
-			_rotate_func(data);
+			_rotate_func(ad);
 			evas_object_show(ad->win);
-			_mm_func(data);
+			_mm_func(ad);
 			if (syspopup_has_popup(b))
 				syspopup_reset(b);
 			ad->flag_launching = EINA_FALSE;
@@ -771,10 +774,11 @@ int _app_pause(struct appdata *ad)
 {
 	_D("%s\n", __func__);
 	if(ad->ug){
-		ug_destroy_all();
+		_D("%d\n", ug_destroy(ad->ug));
 		ad->ug = NULL;
 		ecore_x_netwm_window_type_set(elm_win_xwindow_get(ad->win), ECORE_X_WINDOW_TYPE_NOTIFICATION);
 		utilx_set_window_opaque_state(ecore_x_display_get(), elm_win_xwindow_get(ad->win), UTILX_OPAQUE_STATE_OFF);
+		elm_win_indicator_mode_set(ad->win, ELM_WIN_INDICATOR_HIDE);
 	}
 	_close_volume(ad);
 	return 0;

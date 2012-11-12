@@ -121,7 +121,6 @@ int main(int argc, char *argv[])
 		.reset = app_reset,
 	};
 
-
 	/* appcore measure time example */
 	printf("from AUL to %s(): %d msec\n", __func__,
 			appcore_measure_time_from("APP_START_TIME"));

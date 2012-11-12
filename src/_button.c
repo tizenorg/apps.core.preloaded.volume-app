@@ -58,6 +58,7 @@ static void button_ug_destroy_cb(ui_gadget_h ug, void *priv)
 
 	ecore_x_netwm_window_type_set(elm_win_xwindow_get(ad->win), ECORE_X_WINDOW_TYPE_NOTIFICATION);
 	utilx_set_window_opaque_state(ecore_x_display_get(), elm_win_xwindow_get(ad->win), UTILX_OPAQUE_STATE_OFF);
+	elm_win_indicator_mode_set(ad->win, ELM_WIN_INDICATOR_HIDE);
 
 	_close_volume(ad);
 	elm_exit();
@@ -78,6 +79,9 @@ ui_gadget_h create_button_ug(void *data)
 	utilx_set_window_opaque_state(ecore_x_display_get(), elm_win_xwindow_get(ad->win), UTILX_OPAQUE_STATE_ON);
 	ug = ug_create(NULL, "setting-profile-efl", UG_MODE_FULLVIEW, NULL, &cbs);
 
+	ecore_x_e_illume_quickpanel_state_send(ecore_x_e_illume_zone_get(elm_win_xwindow_get(ad->win)),
+		ECORE_X_ILLUME_QUICKPANEL_STATE_OFF);
+
 	return ug;
 }
 
@@ -90,6 +94,7 @@ int _open_ug(void *data)
 	retvm_if(ad->win == NULL, -1, "Invalid argument: window is NULL\n");
 
 	UG_INIT_EFL(ad->win, UG_OPT_INDICATOR_PORTRAIT_ONLY);
+	elm_win_indicator_mode_set(ad->win, ELM_WIN_INDICATOR_SHOW);
 	ug = create_button_ug(ad);
 	_ungrab_key(ad);
 

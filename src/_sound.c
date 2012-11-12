@@ -36,7 +36,7 @@ void _play_vib(int handle)
 
 void _play_sound(int type, int handle)
 {
-	if (type == VOLUME_TYPE_MEDIA) {
+	if (type == VOLUME_TYPE_MEDIA || type == VOLUME_TYPE_RINGTONE) {
 
 	} else {
 		svi_play_sound(handle, SVI_SND_TOUCH_TOUCH1);

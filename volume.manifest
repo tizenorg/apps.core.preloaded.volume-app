@@ -1,11 +1,21 @@
 <manifest>
-	<define>
-		<domain name="volume"/>
-	</define>
-	<request>
-		<domain name="volume"/>
-	</request>
-	<assign>
-		<filesystem path="/usr/apps/org.tizen.volume/bin/volume" exec_label="volume"/>
-	</assign>
+    <define>
+        <domain name="org.tizen.volume"/>
+        <request>
+            <smack request="system::app_logging" type="w"/>
+            <smack request="system::homedir" type="arwxt"/>
+            <smack request="net-config" type="r"/>
+            <smack request="xorg" type="w"/>
+            <smack request="isf" type="w"/>
+            <smack request="ail::db" type="rw"/>
+            <smack request="system::vconf" type="arwxt"/>
+            <smack request="sound_server" type="rw"/>
+            <smack request="syspopup::db" type="rw"/>
+            <smack request="dbus" type="w"/>
+            <smack request="pulseaudio" type="wx"/>
+        </request>
+    </define>
+    <request>
+        <domain name="org.tizen.volume"/>
+    </request>
 </manifest>

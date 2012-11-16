@@ -45,6 +45,7 @@ pkg_check_modules(pkgs REQUIRED
 	glib-2.0
 	ui-gadget-1
 	notification
+	capi-system-info
 )
 
 FOREACH(flag ${pkgs_CFLAGS})

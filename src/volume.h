@@ -31,7 +31,7 @@
 #endif
 
 #if !defined(RESDIR)
-#  define RESDIR "/usr/apps/com.samsung.volume/res"
+#  define RESDIR "/usr/apps/org.samsung.volume/res"
 #endif
 
 #if !defined(LOCALEDIR)
@@ -65,6 +65,9 @@
 #define IDS_WARNING_MSG "IDS_COM_BODY_HIGH_VOLUMES_MAY_HARM_YOUR_HEARING_IF_YOU_LISTEN_FOR_A_LONG_TIME"
 #define STR_WARNING_MSG "High volumes may harm your hearing if you listen for a long time"
 
+#define IDS_MEDIA_MSG "IDS_COM_BODY_MEDIA"
+#define STR_MEDIA_MSG "Media"
+
 #define S_(str) dgettext("sys_string", str)
 #define T_(str) dgettext(PACKAGE, str)
 
@@ -92,7 +95,8 @@ struct appdata
 	int angle;
 
 	/* ticker notification handler */
-	notification_h noti;
+	int noti_id;
+	bool noti_seen;
 
 	/* ug handler */
 	ui_gadget_h ug;

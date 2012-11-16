@@ -24,6 +24,7 @@
 #include <ui-gadget.h>
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
+#include <system_info.h>
 
 #include"_logic.h"
 #include "volume.h"
@@ -408,7 +409,8 @@ int _volume_popup_resize(void *data, int angle)
 	else
 		rotation = angle;
 
-	ecore_x_window_size_get(ecore_x_window_root_first_get(), &w, &h);
+	system_info_get_value_int(SYSTEM_INFO_KEY_SCREEN_WIDTH, &w);
+	system_info_get_value_int(SYSTEM_INFO_KEY_SCREEN_HEIGHT, &h);
 
 	switch(rotation){
 		case 90 :
@@ -671,7 +673,6 @@ int _app_reset(bundle *b, void *data)
 	int ret = -1, status = -1, val = 0;
 	int type = MM_ERROR_SOUND_VOLUME_CAPTURE_ONLY;
 	int lock = IDLELOCK_ON;
-	int w, h;
 	Evas_Object *win, *sl, *ic, *ic_settings;
 	/* volume-app layout */
 	Elm_Theme *th;
@@ -681,6 +682,7 @@ int _app_reset(bundle *b, void *data)
 	retvm_if(ad == NULL, -1, "Invalid argument: appdata is NULL\n");
 
 	ad->flag_touching = EINA_FALSE;
+	ad->noti_seen = EINA_FALSE;
 
 	_init_mm_sound(ad);
 	status = _check_status(&lock, &type);
@@ -716,11 +718,6 @@ int _app_reset(bundle *b, void *data)
 		elm_theme_extension_add(th, EDJ_APP);
 
 		block = _add_layout(win, EDJ_APP, GRP_VOLUME_BLOCKEVENTS);
-		ecore_x_window_size_get(
-				ecore_x_window_root_first_get(),
-				&w, &h);
-		evas_object_resize(block, w, h);
-		evas_object_show(block);
 		edje_object_signal_callback_add(elm_layout_edje_get(block), "clicked", "*", _block_clicked_cb, ad);
 		outer = _add_layout(win, EDJ_APP, GRP_VOLUME_LAYOUT);
 		inner = _add_layout(win, EDJ_APP, GRP_VOLUME_CONTENT);

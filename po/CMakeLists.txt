@@ -1,6 +1,6 @@
 # for i18n
 
-SET(POFILES ar.po bg.po ca.po cs.po da.po de_DE.po el_GR.po en.po en_GB.po en_US.po es_ES.po fi.po fr_FR.po he.po hi.po hr.po hu.po id.po it_IT.po ja_JP.po ko_KR.po lt.po lv.po ms.po nl_NL.po no.po pl.po pt_PT.po ro.po ru_RU.po sk.po sl.po sr.po sv.po th.po tr_TR.po uk.po vi.po zh_CN.po zh_HK.po zh_TW.po)
+SET(POFILES hy.po az.po eu.po bg.po ca.po zh_CN.po zh_HK.po zh_TW.po hr.po cs.po da.po nl_NL.po en.po en_US.po et.po fi.po fr_FR.po gl.po ka.po de_DE.po el_GR.po hu.po is.po ga.po it_IT.po ja_JP.po kk.po ko_KR.po lv.po lt.po mk.po nb.po pl.po pt_PT.po pt_BR.po ro.po ru_RU.po sr.po sk.po sl.po es_ES.po es_US.po sv.po  tr_TR.po uk.po uz.po ar.po zh_SG.po hi.po en_PH.po fr_CA.po)
 
 SET(MSGFMT "/usr/bin/msgfmt")
 

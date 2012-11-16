@@ -135,44 +135,43 @@ Eina_Bool _delete_message_ticker_notification(void *data)
 	struct appdata *ad = (struct appdata *)data;
 	retvm_if(ad == NULL, -1, "Invalid argument: appdata is NULL\n");
 
-	if(ad->noti){
-		noti_err = notification_delete(ad->noti);
+	if(ad->noti_id != 0)
+	{
+		noti_err = notification_delete_by_priv_id(PKGNAME, NOTIFICATION_TYPE_NOTI, ad->noti_id);
 		retvm_if(noti_err != NOTIFICATION_ERROR_NONE, ECORE_CALLBACK_RENEW, "Fail to notification_delete : %d\n", noti_err);
 	}
-	ad->noti = NULL;
+	ad->noti_id = 0;
 	return ECORE_CALLBACK_CANCEL;
 }
 
-notification_h _insert_message_ticker_notification(const char* pTickerMsg, const char* pLocaleTickerMsg)
+int _insert_message_ticker_notification(void)
 {
 	notification_h noti = NULL;
 	notification_error_e noti_err = NOTIFICATION_ERROR_NONE;
+	int priv_id = 0;
 
 	noti = notification_new(NOTIFICATION_TYPE_NOTI, NOTIFICATION_GROUP_ID_NONE, NOTIFICATION_PRIV_ID_NONE);
-	retvm_if(noti == NULL, NULL, "notification_new is failed\n");
+	retvm_if(noti == NULL, 0, "notification_new is failed\n");
 
 	noti_err = notification_set_application(noti, PKGNAME);
-	retvm_if(noti_err != NOTIFICATION_ERROR_NONE, NULL, "Fail to notification_set_application : %d\n", noti_err);
+	retvm_if(noti_err != NOTIFICATION_ERROR_NONE, 0, "Fail to notification_set_application : %d\n", noti_err);
 
 	noti_err = notification_set_image(noti, NOTIFICATION_IMAGE_TYPE_ICON, IMG_VOLUME_PACKAGE_ICON);
-	retvm_if(noti_err != NOTIFICATION_ERROR_NONE, NULL, "Fail to notification_set_image : %d\n", noti_err);
+	retvm_if(noti_err != NOTIFICATION_ERROR_NONE, 0, "Fail to notification_set_image : %d\n", noti_err);
 
-	noti_err = notification_set_text_domain(noti, "volume-app", LOCALEDIR);
-	retvm_if(noti_err != NOTIFICATION_ERROR_NONE, NULL, "Fail to notification_set_text_domain : %d\n", noti_err);
+	noti_err = notification_set_text_domain(noti, PACKAGE, LOCALEDIR);
+	retvm_if(noti_err != NOTIFICATION_ERROR_NONE, 0, "Fail to notification_set_text_domain : %d\n", noti_err);
 
-	noti_err = notification_set_text(noti, NOTIFICATION_TEXT_TYPE_TITLE, pTickerMsg, T_(pLocaleTickerMsg), NOTIFICATION_VARIABLE_TYPE_NONE);
-	retvm_if(noti_err != NOTIFICATION_ERROR_NONE, NULL, "Fail to notification_set_text : %d\n", noti_err);
+	noti_err = notification_set_text(noti, NOTIFICATION_TEXT_TYPE_CONTENT, STR_MEDIA_MSG, IDS_MEDIA_MSG, NOTIFICATION_VARIABLE_TYPE_NONE);
+	retvm_if(noti_err != NOTIFICATION_ERROR_NONE, 0, "Fail to notification_set_text : %d\n", noti_err);
 
-	noti_err = notification_set_text(noti, NOTIFICATION_TEXT_TYPE_CONTENT_FOR_DISPLAY_OPTION_IS_OFF, pTickerMsg, T_(pLocaleTickerMsg), NOTIFICATION_VARIABLE_TYPE_NONE);
-	retvm_if(noti_err != NOTIFICATION_ERROR_NONE, NULL, "Fail to notification_set_text : %d\n", noti_err);
+	noti_err = notification_set_text(noti, NOTIFICATION_TEXT_TYPE_TITLE, STR_WARNING_MSG, IDS_WARNING_MSG, NOTIFICATION_VARIABLE_TYPE_NONE);
+	retvm_if(noti_err != NOTIFICATION_ERROR_NONE, 0, "Fail to notification_set_text : %d\n", noti_err);
 
-	noti_err = notification_set_display_applist(noti, NOTIFICATION_DISPLAY_APP_TICKER);
-	retvm_if(noti_err != NOTIFICATION_ERROR_NONE, NULL, "Fail to notification_set_display_applist : %d\n", noti_err);
+	noti_err = notification_insert(noti, &priv_id);
+	retvm_if(noti_err != NOTIFICATION_ERROR_NONE, 0, "Fail to notification_set_text_domain : %d\n", noti_err);
 
-	noti_err = notification_insert(noti, NULL);
-	retvm_if(noti_err != NOTIFICATION_ERROR_NONE, NULL, "Fail to notification_set_text_domain : %d\n", noti_err);
-
-	return noti;
+	return priv_id;
 }
 
 void _set_device_warning(void *data, int val, int device)
@@ -182,19 +181,22 @@ void _set_device_warning(void *data, int val, int device)
 
 	switch (device) {
 		case SYSTEM_AUDIO_ROUTE_PLAYBACK_DEVICE_EARPHONE:
-			if (val >= 10) {
-				if(ad->noti == NULL){
-					ad->noti = _insert_message_ticker_notification(IDS_WARNING_MSG, STR_WARNING_MSG);
+			if (val >= 10 && ad->type == VOLUME_TYPE_MEDIA) {
+				if(ad->noti_id == 0 && ad->noti_seen == EINA_FALSE){
+					ad->noti_id = _insert_message_ticker_notification();
+					DEL_TIMER(ad->warntimer);
+					ADD_TIMER(ad->warntimer, 2.0, _delete_message_ticker_notification, data);
+					ad->noti_seen = EINA_TRUE;
 				}
-				DEL_TIMER(ad->warntimer);
-				ADD_TIMER(ad->warntimer, 2.0, _delete_message_ticker_notification, data);
 			}
 			else {
 				_delete_message_ticker_notification(data);
+				ad->noti_seen = EINA_FALSE;
 			}
 			break;
 		default:
 			_delete_message_ticker_notification(data);
+			ad->noti_seen = EINA_FALSE;
 			break;
 	}
 }
@@ -261,6 +263,7 @@ void _mm_func(void *data)
 	retm_if(ad->win == NULL, "Failed to get window\n");
 
 	/* function could be activated when window exists */
+	ad->type = _get_volume_type();
 	ad->step = _get_step(ad->type);
 	mm_sound_route_get_playing_device(&device);
 	mm_sound_volume_get_value(ad->type, (unsigned int*)(&val));

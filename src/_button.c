@@ -16,11 +16,18 @@
 
 
 #include <ui-gadget.h>
+#include <vconf.h>
 
 #include "_util_log.h"
 #include "volume.h"
 #include "_sound.h"
 #include "_logic.h"
+
+enum {
+	IDLELOCK_OFF = 0x0,
+	IDLELOCK_ON,
+	IDLELOCK_MAX,
+};
 
 static void button_ug_layout_cb(ui_gadget_h ug,
 		enum ug_mode mode, void *priv)
@@ -61,7 +68,6 @@ static void button_ug_destroy_cb(ui_gadget_h ug, void *priv)
 	elm_win_indicator_mode_set(ad->win, ELM_WIN_INDICATOR_HIDE);
 
 	_close_volume(ad);
-	elm_exit();
 }
 
 ui_gadget_h create_button_ug(void *data)
@@ -69,13 +75,25 @@ ui_gadget_h create_button_ug(void *data)
 	ui_gadget_h ug = NULL;
 	struct ug_cbs cbs = {0};
 	struct appdata *ad = (struct appdata *)data;
+	int vconf_status = -1;
+	int lock = -1, type = -1;
 	retvm_if(ad == NULL, 0, "Invalid argument:appdata is NULL\n");
 
 	cbs.layout_cb = button_ug_layout_cb;
 	cbs.destroy_cb = button_ug_destroy_cb;
 	cbs.priv = (void *)data;
 
-	ecore_x_netwm_window_type_set(elm_win_xwindow_get(ad->win), ECORE_X_WINDOW_TYPE_NORMAL);
+	vconf_get_int(VCONFKEY_PWLOCK_STATE, &vconf_status);
+
+	lock = _get_vconf_idlelock();
+	type = _get_volume_type();
+
+	if(vconf_status == VCONFKEY_PWLOCK_BOOTING_LOCK || (lock == IDLELOCK_ON && type == VOLUME_TYPE_MEDIA)){
+		ecore_x_netwm_window_type_set(elm_win_xwindow_get(ad->win), ECORE_X_WINDOW_TYPE_NOTIFICATION);
+	}
+	else{
+		ecore_x_netwm_window_type_set(elm_win_xwindow_get(ad->win), ECORE_X_WINDOW_TYPE_NORMAL);
+	}
 	utilx_set_window_opaque_state(ecore_x_display_get(), elm_win_xwindow_get(ad->win), UTILX_OPAQUE_STATE_ON);
 	ug = ug_create(NULL, "setting-profile-efl", UG_MODE_FULLVIEW, NULL, &cbs);
 

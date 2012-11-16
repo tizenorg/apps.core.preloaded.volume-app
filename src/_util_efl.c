@@ -17,6 +17,7 @@
 
 #include <Ecore.h>
 #include <Ecore_X.h>
+#include <system_info.h>
 
 #include "volume.h"
 #include "_util_log.h"
@@ -30,9 +31,8 @@ Evas_Object *_add_window(const char *name)
 		elm_win_title_set(eo, name);
 		elm_win_borderless_set(eo, EINA_TRUE);
 		elm_win_alpha_set(eo, EINA_TRUE);
-		ecore_x_window_size_get(
-				ecore_x_window_root_first_get(),
-				&w, &h);
+		system_info_get_value_int(SYSTEM_INFO_KEY_SCREEN_WIDTH, &w);
+		system_info_get_value_int(SYSTEM_INFO_KEY_SCREEN_HEIGHT, &h);
 		if(w == -1 || h == -1){
 			_E("ecore_x_window_seiz_get() is failed\n");
 			return NULL;

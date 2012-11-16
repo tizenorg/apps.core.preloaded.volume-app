@@ -21,6 +21,8 @@
 #include "volume.h"
 #include <bundle.h>
 
+int _get_vconf_idlelock(void);
+volume_type_t _get_volume_type(void);
 int _close_volume(void *data);
 int _app_create(struct appdata *ad);
 int _app_pause(struct appdata *ad);

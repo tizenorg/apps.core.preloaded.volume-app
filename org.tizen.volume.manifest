@@ -1,4 +1,4 @@
-<manifest>
+fest>
     <define>
         <domain name="org.tizen.volume"/>
         <request>
@@ -13,6 +13,7 @@
             <smack request="syspopup::db" type="rw"/>
             <smack request="dbus" type="w"/>
             <smack request="pulseaudio" type="wx"/>
+            <smack request="org.tizen.music-player" type="rw"/>
         </request>
     </define>
     <request>

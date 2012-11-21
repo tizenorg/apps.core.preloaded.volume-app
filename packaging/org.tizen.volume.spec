@@ -40,7 +40,7 @@ rm -rf %{buildroot}
 %make_install
 
 %files
-%manifest volume.manifest
+%manifest org.tizen.volume.manifest
 %defattr(-,root,root,-)
 %{PREFIX}/bin/*
 %{PREFIX}/res/*

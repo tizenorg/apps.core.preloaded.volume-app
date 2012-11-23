@@ -695,6 +695,7 @@ int _app_reset(bundle *b, void *data)
 			_grab_key(ad);
 			_handle_bundle(b, ad);
 			_rotate_func(ad);
+			elm_win_indicator_mode_set(ad->win, ELM_WIN_INDICATOR_HIDE);
 			evas_object_show(ad->win);
 			_mm_func(ad);
 			if (syspopup_has_popup(b))

@@ -108,8 +108,8 @@ int _open_ug(void *data)
 	retvm_if(ad == NULL, -1, "Invalid argument: appdata is NULL\n");
 	retvm_if(ad->win == NULL, -1, "Invalid argument: window is NULL\n");
 
-	UG_INIT_EFL(ad->win, UG_OPT_INDICATOR_PORTRAIT_ONLY);
 	elm_win_indicator_mode_set(ad->win, ELM_WIN_INDICATOR_SHOW);
+	UG_INIT_EFL(ad->win, UG_OPT_INDICATOR_ENABLE);
 	ug = create_button_ug(ad);
 	if(ug!=NULL){
 		ecore_x_e_illume_quickpanel_state_send(ecore_x_e_illume_zone_get(elm_win_xwindow_get(ad->win)),

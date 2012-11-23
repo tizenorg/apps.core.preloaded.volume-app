@@ -255,7 +255,7 @@ int _get_step(int type)
 void _mm_func(void *data)
 {
 	_D("%s\n", __func__);
-	int val = 0;
+	int val = 0, snd = 0;
 	system_audio_route_device_t device = 0;
 	struct appdata *ad = (struct appdata *)data;
 	retm_if(ad == NULL, "Invalid argument: appdata is NULL\n");
@@ -278,8 +278,12 @@ void _mm_func(void *data)
 	if(ad->type == VOLUME_TYPE_RINGTONE){
 		if(val == 0)
 			vconf_set_bool(VCONFKEY_SETAPPL_SOUND_STATUS_BOOL, EINA_FALSE);
-		else
-			vconf_set_bool(VCONFKEY_SETAPPL_SOUND_STATUS_BOOL, EINA_TRUE);
+		else{
+			vconf_get_bool(VCONFKEY_SETAPPL_SOUND_STATUS_BOOL, &snd);
+			if(snd == EINA_FALSE){
+				vconf_set_bool(VCONFKEY_SETAPPL_SOUND_STATUS_BOOL, EINA_TRUE);
+			}
+		}
 	}
 
 	_set_slider_value(ad, val);

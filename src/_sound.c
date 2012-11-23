@@ -153,6 +153,9 @@ int _insert_message_ticker_notification(void)
 	noti = notification_new(NOTIFICATION_TYPE_NOTI, NOTIFICATION_GROUP_ID_NONE, NOTIFICATION_PRIV_ID_NONE);
 	retvm_if(noti == NULL, 0, "notification_new is failed\n");
 
+	noti_err = notification_set_display_applist(noti, NOTIFICATION_DISPLAY_APP_TICKER);
+	retvm_if(noti == NULL, 0, "notification_set_display_applist\n");
+
 	noti_err = notification_set_application(noti, PKGNAME);
 	retvm_if(noti_err != NOTIFICATION_ERROR_NONE, 0, "Fail to notification_set_application : %d\n", noti_err);
 

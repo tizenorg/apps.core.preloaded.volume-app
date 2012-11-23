@@ -31,7 +31,7 @@
 #endif
 
 #if !defined(RESDIR)
-#  define RESDIR "/usr/apps/org.samsung.volume/res"
+#  define RESDIR "/usr/apps/org.tizen.volume/res"
 #endif
 
 #if !defined(LOCALEDIR)

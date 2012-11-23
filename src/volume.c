@@ -97,7 +97,11 @@ static int app_reset(bundle *b, void *data)
 	}
 	ad->flag_launching = EINA_TRUE;
 
-	_app_reset(b, data);
+	if(_app_reset(b, data) == -1){
+		_D("_app_reset() if failed\n");
+		ad->flag_launching = EINA_FALSE;
+		return -1;
+	}
 	/* appcore measure time example */
 	printf("from AUL to %s(): %d msec\n", __func__,
 			appcore_measure_time_from("APP_START_TIME"));
@@ -120,6 +124,7 @@ int main(int argc, char *argv[])
 		.resume = app_resume,
 		.reset = app_reset,
 	};
+
 
 	/* appcore measure time example */
 	printf("from AUL to %s(): %d msec\n", __func__,

@@ -237,9 +237,11 @@ int _grab_key(struct appdata *ad)
 
 	ret = utilx_grab_key(disp, xwin, KEY_VOLUMEDOWN, TOP_POSITION_GRAB);
 	retvm_if(ret < 0, -1, "Failed to grab key down\n");
+	retvm_if(ret == 1, -1, "Already grab\n");
 
 	ret = utilx_grab_key(disp, xwin, KEY_VOLUMEUP, TOP_POSITION_GRAB);
 	retvm_if(ret < 0, -1, "Failed to grab key up\n");
+	retvm_if(ret == 1, -1, "Already grab\n");
 
 	ecore_event_handler_add(ECORE_EVENT_KEY_DOWN, _key_press_cb, ad);
 	ecore_event_handler_add(ECORE_EVENT_KEY_UP, _key_release_cb, ad);
@@ -692,7 +694,7 @@ int _app_reset(bundle *b, void *data)
 	if (status == 0) {
 		if(ad->win){
 			_D("window exists", __func__);
-			_grab_key(ad);
+			if(_grab_key(ad)==-1)return -1;
 			_handle_bundle(b, ad);
 			_rotate_func(ad);
 			elm_win_indicator_mode_set(ad->win, ELM_WIN_INDICATOR_HIDE);

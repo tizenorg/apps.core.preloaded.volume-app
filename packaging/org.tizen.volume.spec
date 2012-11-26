@@ -9,6 +9,7 @@ Source0:	%{name}-%{version}.tar.gz
 BuildRequires:  pkgconfig(appcore-efl)
 BuildRequires:  pkgconfig(elementary)
 BuildRequires:  pkgconfig(utilX)
+BuildRequires:  pkgconfig(mm-sound)
 BuildRequires:  pkgconfig(syspopup)
 BuildRequires:  pkgconfig(dlog)
 BuildRequires:  pkgconfig(svi)

@@ -1,4 +1,4 @@
-fest>
+<manifest>
     <define>
         <domain name="org.tizen.volume"/>
         <request>

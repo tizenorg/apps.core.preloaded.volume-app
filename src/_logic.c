@@ -31,7 +31,6 @@
 #include "_util_log.h"
 #include "_util_efl.h"
 #include "_sound.h"
-#include "_button.h"
 
 #define STRBUF_SIZE 128
 #define PATHBUF_SIZE 256
@@ -40,6 +39,13 @@ enum {
 	IDLELOCK_OFF = 0x0,
 	IDLELOCK_ON,
 	IDLELOCK_MAX,
+};
+
+/* _check_status() return value */
+enum{
+	LOCK_AND_NOT_MEDIA = -0x1,
+	UNLOCK_STATUS,
+	LOCK_AND_MEIDA,
 };
 
 int _close_volume(void *data)
@@ -51,7 +57,8 @@ int _close_volume(void *data)
 	_D("start closing volume\n");
 	ad->flag_deleting = EINA_TRUE;
 
-	_ungrab_key(ad);
+	_ungrab_key_new(ad);
+	_grab_key_new(ad, ad->input_win, SHARED_GRAB);
 
 	DEL_TIMER(ad->sutimer)
 	DEL_TIMER(ad->lutimer)
@@ -59,11 +66,13 @@ int _close_volume(void *data)
 	DEL_TIMER(ad->ldtimer)
 	DEL_TIMER(ad->ptimer)
 
-	if (ad->win)
+	if (ad->win){
 		evas_object_hide(ad->win);
+	}
 	appcore_flush_memory();
 
 	ad->flag_deleting = EINA_FALSE;
+	ad->flag_launching = EINA_FALSE;
 	_D("end closing volume\n");
 	return 0;
 }
@@ -126,18 +135,74 @@ Eina_Bool _sd_timer_cb(void *data)
 	return ECORE_CALLBACK_CANCEL;
 }
 
+Eina_Bool _volume_show(void *data)
+{
+	_D("%s\n", __func__);
+	int status = -1;
+	int type = MM_ERROR_SOUND_VOLUME_CAPTURE_ONLY;
+	int lock = IDLELOCK_ON;
+	struct appdata *ad = (struct appdata *)data;
+	retvm_if(ad == NULL, EINA_FALSE, "Invalid argument: appdata is NULL\n");
+
+	status = _check_status(&lock, &type);
+	if(status != LOCK_AND_NOT_MEDIA && ad->win)
+	{
+		_init_mm_sound(ad);
+		/* ungrab SHARED_GRAB */
+		_ungrab_key_new(ad);
+
+		if(status == UNLOCK_STATUS)
+		{
+			_grab_key_new(ad, -1, TOP_POSITION_GRAB);
+
+			_rotate_func(ad);
+			elm_win_indicator_mode_set(ad->win, ELM_WIN_INDICATOR_HIDE);
+			evas_object_show(ad->win);
+			if(syspopup_has_popup(ad->volume_bundle))
+				syspopup_reset(ad->volume_bundle);
+		}
+		else if(status == LOCK_AND_MEIDA)
+		{
+			_grab_key_new(ad, ad->input_win, EXCLUSIVE_GRAB);
+		}
+		ad->flag_launching = EINA_TRUE;
+		_mm_func(ad);
+		return EINA_TRUE;
+	}
+	else if(!ad->win)
+	{
+		/* recreate window */
+	}
+
+	_D("status == LOCK_AND_NOT_MEDIA\n");
+	return EINA_FALSE;
+}
+
 static Eina_Bool _key_press_cb(void *data, int type, void *event)
 {
 	_D("%s\n", __func__);
 	int val=0, snd=0, vib=0;
 	Ecore_Event_Key *ev = event;
+	int status = -1;
+	int mtype = MM_ERROR_SOUND_VOLUME_CAPTURE_ONLY;
+        int lock = IDLELOCK_ON;
 	struct appdata *ad = (struct appdata *)data;
+
+	status = _check_status(&lock, &mtype);
 
 	retvm_if(ev == NULL, ECORE_CALLBACK_CANCEL, "Invalid arguemnt: event is NULL\n");
 	retvm_if(ad == NULL, ECORE_CALLBACK_CANCEL, "Invalid argument: appdata is NULL\n");
 	retvm_if(ad->win == NULL, ECORE_CALLBACK_CANCEL, "Invalid argument: window is NULL\n");
 
-	if (ad->flag_touching == EINA_TRUE) {
+	if(!ad->flag_launching)
+	{
+		if(_volume_show(data) != EINA_TRUE)
+		{
+			return ECORE_CALLBACK_CANCEL;
+		}
+	}
+
+	if(ad->flag_touching == EINA_TRUE) {
 		return ECORE_CALLBACK_CANCEL;
 	}
 
@@ -213,60 +278,91 @@ static Eina_Bool _key_release_cb(void *data, int type, void *event)
 
 	DEL_TIMER(ad->ptimer)
 
-	/* In UG, This Callback should not be called. */
-	if ( ad->ug == NULL )
-		ADD_TIMER(ad->ptimer, 3.0, popup_timer_cb, ad)
+	ADD_TIMER(ad->ptimer, 3.0, popup_timer_cb, ad)
 
 	return ECORE_CALLBACK_CANCEL;
 }
 
-int _grab_key(struct appdata *ad)
+int _grab_key_new(struct appdata *ad, Ecore_X_Window _xwin, int grab_mode)
 {
-	Ecore_X_Window xwin = 0;
+	_D("%s\n", __func__);
 	Ecore_X_Display *disp = NULL;
+	Ecore_X_Window xwin = 0;
 	int ret = -1;
 
-	retvm_if(ad == NULL, -1, "Invalid argument: appdata is NULL\n");
+	/* ALREADY GRAB check */
+	switch(grab_mode)
+	{
+		case SHARED_GRAB : if(ad->flag_shared_grabed)return -1;
+			break;
+		case EXCLUSIVE_GRAB : if(ad->flag_exclusive_grabed)return -1;
+			break;
+		case TOP_POSITION_GRAB : if(ad->flag_top_positioni_grabed)return -1;
+			break;
+	}
 
 	disp = ecore_x_display_get();
 	retvm_if(disp == NULL, -1, "Failed to get display\n");
 
-	retvm_if(ad->win == NULL, -1, "Invalid argument: ad->win is NULL\n");
-	xwin = elm_win_xwindow_get(ad->win);
-	retvm_if(xwin == 0, -1, "Failed to get xwindow\n");
+	if(_xwin == -1)
+	{
+		/* TOP_POSITION_GRAB */
+		xwin = elm_win_xwindow_get(ad->win);
+		retvm_if(xwin == 0, -1, "elm_win_xwindow_get() failed\n");
+	}
+	else
+		xwin = _xwin;
 
-	ret = utilx_grab_key(disp, xwin, KEY_VOLUMEDOWN, TOP_POSITION_GRAB);
+	ret = utilx_grab_key(disp, xwin, KEY_VOLUMEDOWN, grab_mode);
 	retvm_if(ret < 0, -1, "Failed to grab key down\n");
 	retvm_if(ret == 1, -1, "Already grab\n");
 
-	ret = utilx_grab_key(disp, xwin, KEY_VOLUMEUP, TOP_POSITION_GRAB);
+	ret = utilx_grab_key(disp, xwin, KEY_VOLUMEUP, grab_mode);
 	retvm_if(ret < 0, -1, "Failed to grab key up\n");
 	retvm_if(ret == 1, -1, "Already grab\n");
 
-	ecore_event_handler_add(ECORE_EVENT_KEY_DOWN, _key_press_cb, ad);
-	ecore_event_handler_add(ECORE_EVENT_KEY_UP, _key_release_cb, ad);
-	_D("key grabed\n");
+	switch(grab_mode)
+	{
+		case SHARED_GRAB :
+			ad->flag_shared_grabed = EINA_TRUE;
+			break;
+		case EXCLUSIVE_GRAB :
+			ad->flag_exclusive_grabed = EINA_TRUE;
+			break;
+		case TOP_POSITION_GRAB :
+			ad->flag_top_positioni_grabed = EINA_TRUE;
+			break;
+	}
+
 	return 0;
 }
 
-void _ungrab_key(struct appdata *ad)
+int _ungrab_key_new(struct appdata *ad)
 {
 	Ecore_X_Window xwin = 0;
 	Ecore_X_Display *disp = NULL;
 
-	retm_if(ad == NULL, "Invalid argument: appdata is NULL\n");
-	retm_if(ad->win == NULL, "Invalid argument: ad->win is NULL\n");
+	retvm_if(ad == NULL, -1, "Invalid argument: appdata is NULL\n");
+	retvm_if(ad->input_win == 0, -1, "Invalid argument: ad->win is NULL\n");
 
 	xwin = elm_win_xwindow_get(ad->win);
-	retm_if(xwin == 0, "Failed to get xwindow\n");
+	retvm_if(xwin == 0, -1, "Failed to get xwindow\n");
 
 	disp = ecore_x_display_get();
-	retm_if(disp == NULL, "Failed to get display\n");
+	retvm_if(disp == NULL, -1, "Failed to get display\n");
 
-	if (disp && xwin) {
-		utilx_ungrab_key(disp, xwin, KEY_VOLUMEUP);
-		utilx_ungrab_key(disp, xwin, KEY_VOLUMEDOWN);
-	}
+	utilx_ungrab_key(disp, ad->input_win, KEY_VOLUMEUP);
+	utilx_ungrab_key(disp, ad->input_win, KEY_VOLUMEDOWN);
+	_D("key ungrabed\n");
+
+	if(ad->flag_exclusive_grabed)
+		ad->flag_exclusive_grabed = EINA_FALSE;
+	else if(ad->flag_top_positioni_grabed)
+		ad->flag_top_positioni_grabed = EINA_FALSE;
+	else if(ad->flag_shared_grabed)
+		ad->flag_shared_grabed = EINA_FALSE;
+
+	return 0;
 }
 
 int _get_vconf_idlelock(void)
@@ -299,6 +395,8 @@ volume_type_t _get_volume_type(void)
 			_D("Failed to get sound type(errno:%x)\n", ret);
 			return -1;
 	}
+	if(type == VOLUME_TYPE_NOTIFICATION || type == VOLUME_TYPE_SYSTEM)
+		type = VOLUME_TYPE_RINGTONE;
 	return type;
 }
 
@@ -318,14 +416,61 @@ int _check_status(int *lock, int *type)
 		_D("lock is set, not in media\n");
 		return -1;
 	}
+
+	if (*lock == IDLELOCK_ON && *type == VOLUME_TYPE_MEDIA) {
+		_D("lock is set, in media\n");
+		return 1;
+	}
+	_D("unlock status, normal case\n");
 	return 0;
+}
+
+void _starter_user_volume_key_vconf_changed_cb(keynode_t *key, void *data){
+	_D("%s\n", __func__);
+	int ret = EINA_FALSE;
+	vconf_get_int(VCONFKEY_STARTER_USE_VOLUME_KEY, &ret);
+	if(ret != 0)
+	{
+		_D("any other App grab volume hard key\n", __func__);
+		_close_volume(data);
+		vconf_set_int(VCONFKEY_STARTER_USE_VOLUME_KEY, 0);
+	}
+}
+
+void _idle_lock_state_vconf_chnaged_cb(keynode_t *key, void *data){
+	_close_volume(data);
 }
 
 int _app_create(struct appdata *ad)
 {
+	_D("%s\n", __func__);
+	int ret = 0;
 	_init_svi(ad);
 
-	return 0;
+	/* create input_window */
+	ad->input_win = _add_input_window();
+	retvm_if(ad->input_win == 0, -1, "Failed to create input window\n");
+
+	/* vconf changed callback */
+	vconf_notify_key_changed(VCONFKEY_STARTER_USE_VOLUME_KEY,
+				 _starter_user_volume_key_vconf_changed_cb, ad);
+
+	/* Lock screen status vconf changed callback */
+	vconf_notify_key_changed(VCONFKEY_IDLE_LOCK_STATE,
+				_idle_lock_state_vconf_chnaged_cb, ad);
+
+	/* grab volume shared grab */
+	ret = _grab_key_new(ad, ad->input_win, SHARED_GRAB);
+
+	/* ecore event handler add once */
+	if(ad->event_volume_down == NULL)
+		ad->event_volume_down = ecore_event_handler_add(ECORE_EVENT_KEY_DOWN, _key_press_cb, ad);
+	if(ad->event_volume_up == NULL)
+		ad->event_volume_up = ecore_event_handler_add(ECORE_EVENT_KEY_UP, _key_release_cb, ad);
+
+	_init_mm_sound(ad);
+
+	return ret;
 }
 
 int __utilx_ss_get_window_property(Display *dpy, Window win, Atom atom,
@@ -527,7 +672,7 @@ static void _slider_start_cb(void *data, Evas_Object *obj, void *event_info)
 	if (ad->flag_pressing == EINA_TRUE) {
 		return;
 	}
-	ad->flag_touching = EINA_FALSE;
+	ad->flag_touching = EINA_TRUE;
 
 	DEL_TIMER(ad->ptimer)
 
@@ -665,7 +810,19 @@ static void _button_cb(void *data, Evas_Object *obj, void *event_info)
 	elm_icon_file_set(obj, buf, NULL);
 	if(evas_object_visible_get(ad->win)){
 		DEL_TIMER(ad->ptimer)
-		_open_ug(ad);
+		if(ecore_x_e_illume_quickpanel_state_get(
+			ecore_x_e_illume_zone_get(elm_win_xwindow_get(ad->win))) != ECORE_X_ILLUME_QUICKPANEL_STATE_OFF)
+		{
+			_D("Quickpanel is hide\n");
+			ecore_x_e_illume_quickpanel_state_send(
+				ecore_x_e_illume_zone_get(elm_win_xwindow_get(ad->win)), ECORE_X_ILLUME_QUICKPANEL_STATE_OFF);
+		}
+		service_h svc;
+		service_create(&svc);
+		service_add_extra_data(svc, "view_to_jump", "IDS_COM_BODY_SOUNDS");
+		service_set_package(svc, "org.tizen.setting");
+		service_send_launch_request(svc, NULL, NULL);
+		_app_pause(ad);
 	}
 }
 
@@ -683,103 +840,71 @@ int _app_reset(bundle *b, void *data)
 	struct appdata *ad = (struct appdata *)data;
 	retvm_if(ad == NULL, -1, "Invalid argument: appdata is NULL\n");
 
-	ad->flag_touching = EINA_FALSE;
 	ad->noti_seen = EINA_FALSE;
+	ad->flag_launching = EINA_FALSE;
+	ad->flag_pressing = EINA_FALSE;
+	ad->flag_touching = EINA_FALSE;
 
-	_init_mm_sound(ad);
 	status = _check_status(&lock, &type);
 	ad->type = type;
 	mm_sound_volume_get_value(type, (unsigned int*)(&val));
 
-	if (status == 0) {
-		if(ad->win){
-			_D("window exists", __func__);
-			if(_grab_key(ad)==-1)return -1;
-			_handle_bundle(b, ad);
-			_rotate_func(ad);
-			elm_win_indicator_mode_set(ad->win, ELM_WIN_INDICATOR_HIDE);
-			evas_object_show(ad->win);
-			_mm_func(ad);
-			if (syspopup_has_popup(b))
-				syspopup_reset(b);
-			ad->flag_launching = EINA_FALSE;
-			return 0;
-		}
-		ad->step = _get_step(type);
+	win = _add_window(PACKAGE);
+	retvm_if(win == NULL, -1, "Failed add window\n");
+	ad->win = win;
 
-		_set_level(type);
+	th = elm_theme_new();
+	elm_theme_ref_set(th, NULL);
+	elm_theme_extension_add(th, EDJ_APP);
 
-		win = _add_window(PACKAGE);
-		retvm_if(win == NULL, -1, "Failed add window\n");
-		ad->win = win;
+	block = _add_layout(win, EDJ_APP, GRP_VOLUME_BLOCKEVENTS);
+	edje_object_signal_callback_add(elm_layout_edje_get(block), "clicked", "*", _block_clicked_cb, ad);
+	outer = _add_layout(win, EDJ_APP, GRP_VOLUME_LAYOUT);
+	inner = _add_layout(win, EDJ_APP, GRP_VOLUME_CONTENT);
+	ad->block_events = block;
+	ad->ly = outer;
 
-		_grab_key(ad);
-		mm_sound_route_get_playing_device(&(ad->device));
+	elm_object_part_content_set(outer, "elm.swallow.content", inner);
 
-		th = elm_theme_new();
-		elm_theme_ref_set(th, NULL);
-		elm_theme_extension_add(th, EDJ_APP);
+	sl = _add_slider(win, 0, ad->step, val);
+	elm_object_theme_set(sl, th);
+	elm_object_style_set(sl, GRP_VOLUME_SLIDER_HORIZONTAL);
+	evas_object_smart_callback_add(sl, "slider,drag,start", _slider_start_cb, ad);
+	evas_object_smart_callback_add(sl, "changed", _slider_changed_cb, ad);
+	evas_object_smart_callback_add(sl, "slider,drag,stop", _slider_stop_cb, ad);
 
-		block = _add_layout(win, EDJ_APP, GRP_VOLUME_BLOCKEVENTS);
-		edje_object_signal_callback_add(elm_layout_edje_get(block), "clicked", "*", _block_clicked_cb, ad);
-		outer = _add_layout(win, EDJ_APP, GRP_VOLUME_LAYOUT);
-		inner = _add_layout(win, EDJ_APP, GRP_VOLUME_CONTENT);
-		ad->block_events = block;
-		ad->ly = outer;
+	ic_settings = elm_icon_add(win);
+	evas_object_size_hint_aspect_set(ic_settings, EVAS_ASPECT_CONTROL_VERTICAL, 1, 1);
+	elm_icon_resizable_set(ic_settings, EINA_FALSE, EINA_FALSE);
+	snprintf(buf, sizeof(buf), "%s/%s", IMAGEDIR, IMG_VOLUME_ICON_SETTINGS);
+	_D("%s\n", buf);
+	elm_icon_file_set(ic_settings, buf, NULL);
+	elm_object_part_content_set(sl, "end", ic_settings);
+	evas_object_event_callback_add(ic_settings, EVAS_CALLBACK_MOUSE_DOWN, _button_mouse_down_cb, ad);
+	evas_object_smart_callback_add(ic_settings, "clicked", _button_cb, ad);
+	evas_object_show(ic_settings);
+	ad->ic_settings = ic_settings;
 
-		elm_object_part_content_set(outer, "elm.swallow.content", inner);
+	ad->sl = sl;
+	elm_object_part_content_set(inner, "elm.swallow.content", sl);
 
-		sl = _add_slider(win, 0, ad->step, val);
-		elm_object_theme_set(sl, th);
-		elm_object_style_set(sl, GRP_VOLUME_SLIDER_HORIZONTAL);
-		evas_object_smart_callback_add(sl, "slider,drag,start", _slider_start_cb, ad);
-		evas_object_smart_callback_add(sl, "changed", _slider_changed_cb, ad);
-		evas_object_smart_callback_add(sl, "slider,drag,stop", _slider_stop_cb, ad);
+	ic = elm_icon_add(win);
+	evas_object_size_hint_aspect_set(ic, EVAS_ASPECT_CONTROL_VERTICAL, 1, 1);
+	elm_icon_resizable_set(ic, EINA_FALSE, EINA_FALSE);
+	elm_object_part_content_set(ad->sl, "icon", ic);
+	ad->ic = ic;
+	_set_icon(ad, val);
 
-		ic_settings = elm_icon_add(win);
-		evas_object_size_hint_aspect_set(ic_settings, EVAS_ASPECT_CONTROL_VERTICAL, 1, 1);
-		elm_icon_resizable_set(ic_settings, EINA_FALSE, EINA_FALSE);
-		snprintf(buf, sizeof(buf), "%s/%s", IMAGEDIR, IMG_VOLUME_ICON_SETTINGS);
-		_D("%s\n", buf);
-		elm_icon_file_set(ic_settings, buf, NULL);
-		elm_object_part_content_set(sl, "end", ic_settings);
-		evas_object_event_callback_add(ic_settings, EVAS_CALLBACK_MOUSE_DOWN, _button_mouse_down_cb, ad);
-		evas_object_smart_callback_add(ic_settings, "clicked", _button_cb, ad);
-		evas_object_show(ic_settings);
-		ad->ic_settings = ic_settings;
+	ret = syspopup_create(b, &handler, ad->win, ad);
+	retvm_if(ret < 0, -1, "Failed to create syspopup\n");
+	ad->volume_bundle = bundle_dup(b);
 
-		ad->sl = sl;
-		elm_object_part_content_set(inner, "elm.swallow.content", sl);
-
-		ic = elm_icon_add(win);
-		evas_object_size_hint_aspect_set(ic, EVAS_ASPECT_CONTROL_VERTICAL, 1, 1);
-		elm_icon_resizable_set(ic, EINA_FALSE, EINA_FALSE);
-		elm_object_part_content_set(ad->sl, "icon", ic);
-		ad->ic = ic;
-		_set_icon(ad, val);
-
-		ret = syspopup_create(b, &handler, ad->win, ad);
-		retvm_if(ret < 0, -1, "Failed to create syspopup\n");
-
-		_handle_bundle(b, ad);
-
-		_rotate_func(ad);
-		evas_object_show(ad->win);
-	}
-	ad->flag_launching = EINA_FALSE;
 	return 0;
 }
 
 int _app_pause(struct appdata *ad)
 {
 	_D("%s\n", __func__);
-	if(ad->ug){
-		_D("%d\n", ug_destroy(ad->ug));
-		ad->ug = NULL;
-		ecore_x_netwm_window_type_set(elm_win_xwindow_get(ad->win), ECORE_X_WINDOW_TYPE_NOTIFICATION);
-		utilx_set_window_opaque_state(ecore_x_display_get(), elm_win_xwindow_get(ad->win), UTILX_OPAQUE_STATE_OFF);
-		elm_win_indicator_mode_set(ad->win, ELM_WIN_INDICATOR_HIDE);
-	}
 	_close_volume(ad);
 	return 0;
 }

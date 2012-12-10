@@ -28,6 +28,7 @@
 #define PATHBUF_SIZE 256
 
 int _set_sound_level(volume_type_t type, int val);
+int _get_sound_level(volume_type_t type, int * val);
 
 void _play_vib(int handle)
 {
@@ -36,10 +37,16 @@ void _play_vib(int handle)
 
 void _play_sound(int type, int handle)
 {
-	if (type == VOLUME_TYPE_MEDIA || type == VOLUME_TYPE_RINGTONE) {
+	int ringtone_val = -1;
+	int system_val = -1;
+	if (type == VOLUME_TYPE_MEDIA) {
 
 	} else {
+		_get_sound_level(type, &ringtone_val);
+		_get_sound_level(VOLUME_TYPE_SYSTEM, &system_val);
+		_set_sound_level(VOLUME_TYPE_SYSTEM, ringtone_val);
 		svi_play_sound(handle, SVI_SND_TOUCH_TOUCH1);
+		_set_sound_level(VOLUME_TYPE_SYSTEM, system_val);
 	}
 }
 
@@ -92,16 +99,6 @@ int _set_icon(void *data, int val)
 	switch(ad->type){
 		case VOLUME_TYPE_RINGTONE:
 			img = IMG_VOLUME_ICON_CALL;
-			if(val == 0){
-				if(vib)
-					img = IMG_VOLUME_ICON_VIB;
-				else
-					img = IMG_VOLUME_ICON_MUTE;
-			}
-			if(!snd){
-				img = IMG_VOLUME_ICON_MUTE;
-				if(vib)img = IMG_VOLUME_ICON_VIB;
-			}
 			break;
 		case VOLUME_TYPE_MEDIA:
 			if(device == SYSTEM_AUDIO_ROUTE_PLAYBACK_DEVICE_EARPHONE)
@@ -111,16 +108,6 @@ int _set_icon(void *data, int val)
 			break;
 		default:
 			img = IMG_VOLUME_ICON;
-			if(val == 0){
-				if(vib)
-					img = IMG_VOLUME_ICON_VIB;
-				else
-					img = IMG_VOLUME_ICON_MUTE;
-			}
-			if(!snd){
-				img = IMG_VOLUME_ICON_MUTE;
-				if(vib)img = IMG_VOLUME_ICON_VIB;
-			}
 			break;
 	}
 	if (ad->ic ) {
@@ -258,10 +245,12 @@ int _get_step(int type)
 void _mm_func(void *data)
 {
 	_D("%s\n", __func__);
-	int val = 0, snd = 0;
+	int val = 0;
 	system_audio_route_device_t device = 0;
 	struct appdata *ad = (struct appdata *)data;
 	retm_if(ad == NULL, "Invalid argument: appdata is NULL\n");
+
+	_set_device_warning(ad, val, device);
 
 	retm_if(ad->win == NULL, "Failed to get window\n");
 
@@ -278,20 +267,9 @@ void _mm_func(void *data)
 			_set_sound_level(ad->type, val);
 		ad->device = device;
 	}
-	if(ad->type == VOLUME_TYPE_RINGTONE){
-		if(val == 0)
-			vconf_set_bool(VCONFKEY_SETAPPL_SOUND_STATUS_BOOL, EINA_FALSE);
-		else{
-			vconf_get_bool(VCONFKEY_SETAPPL_SOUND_STATUS_BOOL, &snd);
-			if(snd == EINA_FALSE){
-				vconf_set_bool(VCONFKEY_SETAPPL_SOUND_STATUS_BOOL, EINA_TRUE);
-			}
-		}
-	}
 
 	_set_slider_value(ad, val);
 	_set_icon(ad, val);
-	_set_device_warning(ad, val, device);
 	_D("type(%d) val(%d)\n", ad->type, val);
 }
 

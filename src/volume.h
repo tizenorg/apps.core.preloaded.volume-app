@@ -43,7 +43,7 @@
 #endif
 
 #if !defined(PKGNAME)
-#  define PKGNAME "com.samsung.volume"
+#  define PKGNAME "org.tizen.volume"
 #endif
 
 #define EDJ_APP EDJDIR"/volume_app.edj"
@@ -52,7 +52,7 @@
 #define GRP_VOLUME_CONTENT "volumeLayoutContent"
 #define GRP_VOLUME_SLIDER_HORIZONTAL "volumeHorizontalSlider"
 
-#define IMG_VOLUME_PACKAGE_ICON "/usr/share/icons/default/small/com.samsung.volume.png"
+#define IMG_VOLUME_PACKAGE_ICON "/usr/share/icons/default/small/org.tizen.volume.png"
 #define IMG_VOLUME_ICON "00_volume_icon.png"
 #define IMG_VOLUME_ICON_CALL "00_volume_icon_Call.png"
 #define IMG_VOLUME_ICON_MUTE "00_volume_icon_Mute.png"
@@ -82,6 +82,7 @@
 
 struct appdata
 {
+	Ecore_X_Window input_win;
 	Evas_Object *win, *block_events, *ly, *sl, *ic, *ic_settings, *warn_lb;
 
 	Ecore_Timer *ptimer;
@@ -94,19 +95,27 @@ struct appdata
 	int step;
 	int angle;
 
+	/* bundle */
+	bundle *volume_bundle;
+
 	/* ticker notification handler */
 	int noti_id;
 	bool noti_seen;
 
-	/* ug handler */
-	ui_gadget_h ug;
-
 	/* add more variables here */
 	int sh;	/* svi handle */
-	int flag_pressing;	/* to set hard key press */
-	int flag_touching;
-	int flag_launching;
-	int flag_deleting;
+	int flag_pressing;	/* EINA_TRUE : hw key pressing, block slider cb */
+	int flag_touching;	/* EINA_TRUE : slider indicator pressing, block hw key cb */
+	int flag_launching;	/* EINA_TRUE : volume is launcing block double lauch*/
+	int flag_deleting;	/* EINA_TRUE : closing volume, block double close_volume() */
+	int flag_media;
+	int flag_shared_grabed;
+	int flag_top_positioni_grabed;
+	int flag_exclusive_grabed;
+
+	/* Ecore event handler */
+	Ecore_Event_Handler *event_volume_up;
+	Ecore_Event_Handler *event_volume_down;
 };
 
 #endif /* __VOLUME_H__ */

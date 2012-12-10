@@ -37,7 +37,7 @@ static Eina_Bool rotate_cb(void *data, int type, void *event)
 		return ECORE_CALLBACK_RENEW;
 	}
 
-	if (ev->message_type == ECORE_X_ATOM_E_ILLUME_ROTATE_ROOT_ANGLE && ad->ug == NULL){
+	if (ev->message_type == ECORE_X_ATOM_E_ILLUME_ROTATE_ROOT_ANGLE){
 		_rotate_func(data);
 	}
 	return ECORE_CALLBACK_RENEW;
@@ -49,17 +49,15 @@ static int app_create(void *data)
 
 	retvm_if(ad == NULL, -1, "Invalid argument: appdata is NULL\n");
 
-	_app_create(ad);
+	if(_app_create(ad)!=0){
+		_E("_app_create() if failed\n");
+		return -1;
+	}
 
 	/* add rotation event callback */
 	ecore_event_handler_add(ECORE_X_EVENT_CLIENT_MESSAGE,
 					rotate_cb, (void *)data);
 
-	/* appcore measure time example */
-	printf("from AUL to %s(): %d msec\n", __func__,
-			appcore_measure_time_from("APP_START_TIME"));
-
-	appcore_measure_start();
 	return 0;
 }
 
@@ -90,24 +88,10 @@ static int app_reset(bundle *b, void *data)
 	struct appdata *ad = data;
 	retvm_if(ad == NULL, -1, "Invalid argument: appdata is NULL\n");
 
-	if(ad->flag_launching == EINA_TRUE || evas_object_visible_get(ad->win))
-	{
-		_init_press_timers(ad);
-		return 0;
-	}
-	ad->flag_launching = EINA_TRUE;
-
 	if(_app_reset(b, data) == -1){
 		_D("_app_reset() if failed\n");
-		ad->flag_launching = EINA_FALSE;
 		return -1;
 	}
-	/* appcore measure time example */
-	printf("from AUL to %s(): %d msec\n", __func__,
-			appcore_measure_time_from("APP_START_TIME"));
-	printf("from create to %s(): %d msec\n", __func__,
-			appcore_measure_time());
-
 	if (ad->win)
 		elm_win_activate(ad->win);
 
@@ -124,7 +108,6 @@ int main(int argc, char *argv[])
 		.resume = app_resume,
 		.reset = app_reset,
 	};
-
 
 	/* appcore measure time example */
 	printf("from AUL to %s(): %d msec\n", __func__,

@@ -6,7 +6,6 @@ SET(SRCS
 	src/_util_efl.c
 	src/_logic.c
 	src/_sound.c
-	src/_button.c
 )
 
 SET(VENDOR "tizen")

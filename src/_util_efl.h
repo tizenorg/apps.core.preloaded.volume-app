@@ -20,6 +20,7 @@
 
 #include <Elementary.h>
 
+Ecore_X_Window *_add_input_window(void);
 Evas_Object *_add_window(const char *name);
 Evas_Object *_add_slider(Evas_Object *parent, int min, int max, int val);
 Evas_Object *_add_layout(Evas_Object *parent, const char *file, const char *group);

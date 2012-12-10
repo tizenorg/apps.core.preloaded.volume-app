@@ -30,7 +30,9 @@ int _rotate_func(void *data);
 int _app_reset(bundle *b, void *data);
 Eina_Bool popup_timer_cb(void *data);
 void _init_press_timers(void *data);
-void _ungrab_key(struct appdata *ad);
+int _check_status(int *lock, int *type);
+int _ungrab_key_new(struct appdata *ad);
+int _grab_key_new(struct appdata *ad, Ecore_X_Window _xwin, int grab_mode);
 
 #endif
 /* __VOLUME_LOGIC_H__ */

@@ -22,6 +22,23 @@
 #include "volume.h"
 #include "_util_log.h"
 
+Ecore_X_Window _add_input_window(void)
+{
+	Ecore_X_Window win = 0;
+	win = ecore_x_window_input_new(0, 0, 0, 1, 1);
+	if(win){
+		ecore_x_event_mask_unset(win, ECORE_X_EVENT_MASK_NONE);
+		ecore_x_icccm_title_set(win, "volumekey-input-window");
+		ecore_x_netwm_name_set(win, "volumekey-input-window");
+		ecore_x_netwm_pid_set(win, getpid());
+		return win;
+	}
+	else{
+		_E("%s() is failed\n", __func__);
+		return 0;
+	}
+}
+
 Evas_Object *_add_window(const char *name)
 {
 	Evas_Object *eo = NULL;

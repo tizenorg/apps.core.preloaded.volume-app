@@ -48,6 +48,10 @@ enum{
 	LOCK_AND_MEIDA,
 };
 
+#ifndef VCONFKEY_SETAPPL_ACCESSIBILITY_TURN_OFF_ALL_SOUNDS
+#define VCONFKEY_SETAPPL_ACCESSIBILITY_TURN_OFF_ALL_SOUNDS              VCONFKEY_SETAPPL_PREFIX"/accessibility/turn_off_all_sounds"
+#endif
+
 int _close_volume(void *data)
 {
 	struct appdata *ad = (struct appdata *)data;
@@ -185,7 +189,9 @@ static Eina_Bool _key_press_cb(void *data, int type, void *event)
 	Ecore_Event_Key *ev = event;
 	int status = -1;
 	int mtype = MM_ERROR_SOUND_VOLUME_CAPTURE_ONLY;
-        int lock = IDLELOCK_ON;
+	int lock = IDLELOCK_ON;
+	int is_turn_off_all_sounds = 0;
+	int ret = -1;
 	struct appdata *ad = (struct appdata *)data;
 
 	status = _check_status(&lock, &mtype);
@@ -193,6 +199,13 @@ static Eina_Bool _key_press_cb(void *data, int type, void *event)
 	retvm_if(ev == NULL, ECORE_CALLBACK_CANCEL, "Invalid arguemnt: event is NULL\n");
 	retvm_if(ad == NULL, ECORE_CALLBACK_CANCEL, "Invalid argument: appdata is NULL\n");
 	retvm_if(ad->win == NULL, ECORE_CALLBACK_CANCEL, "Invalid argument: window is NULL\n");
+
+	ret = vconf_get_bool(VCONFKEY_SETAPPL_ACCESSIBILITY_TURN_OFF_ALL_SOUNDS, &is_turn_off_all_sounds);
+	if(ret == 0)
+	{
+		retvm_if(is_turn_off_all_sounds == EINA_TRUE, ECORE_CALLBACK_CANCEL,
+			"VCONFKEY_SETAPPL_ACCESSIBILITY_TURN_OFF_ALL_SOUNDS is set, all sound is mute\n");
+	}
 
 	if(!ad->flag_launching)
 	{
@@ -520,6 +533,7 @@ int _x_rotation_get(Display *dpy, void *data)
 	Atom atom_active_win;
 	Atom atom_win_rotate_angle;
 
+	retvm_if(dpy == NULL, -1, "dpy is NULL\n");
 	root_win = XDefaultRootWindow(dpy);
 
 	atom_active_win = XInternAtom(dpy, "_NET_ACTIVE_WINDOW", False);
@@ -654,8 +668,12 @@ Eina_Bool _slider_timer_cb(void *data)
 	if (ad->sl) {
 		val = elm_slider_value_get(ad->sl);
 		val += 0.5;
-		if ((int)val != 0) {	/* 0 value could be dealed with in changed callback */
+		if ((int)val != 0) {
 			_set_sound_level(ad->type, (int)val);
+		}
+		if (val <= 0.5) {
+			elm_slider_value_set(ad->sl, 0);
+			_set_sound_level(ad->type, 0);
 		}
 		return ECORE_CALLBACK_RENEW;
 	}
@@ -692,7 +710,6 @@ static void _slider_start_cb(void *data, Evas_Object *obj, void *event_info)
 
 static void _slider_changed_cb(void *data, Evas_Object *obj, void *event_info)
 {
-	double val = 0;
 	struct appdata *ad = (struct appdata *)data;
 	retm_if(ad == NULL, "Invalid argument: appdata is NULL\n");
 
@@ -702,12 +719,6 @@ static void _slider_changed_cb(void *data, Evas_Object *obj, void *event_info)
 	if (ad->lutimer || ad->ldtimer) {
 		_D("return when long press is working\n");
 		return;
-	}
-	val = elm_slider_value_get(ad->sl);
-	if (val <= 0.5) {
-		elm_slider_value_set(ad->sl, 0);
-		_set_sound_level(ad->type, 0);
-
 	}
 }
 static void _slider_stop_cb(void *data, Evas_Object *obj, void *event_info)
@@ -797,7 +808,7 @@ static void _button_mouse_down_cb(void *data, Evas *e, Evas_Object *obj, void *e
 	retm_if(ad == NULL, "Invalid argument: appdata is NULL\n");
 	char buf[PATHBUF_SIZE] = {0, };
 	snprintf(buf, sizeof(buf), "%s/%s", IMAGEDIR, IMG_VOLUME_ICON_SETTINGS_PRESSED);
-	elm_icon_file_set(obj, buf, NULL);
+	elm_image_file_set(obj, buf, NULL);
 }
 
 static void _button_cb(void *data, Evas_Object *obj, void *event_info)
@@ -807,7 +818,7 @@ static void _button_cb(void *data, Evas_Object *obj, void *event_info)
 	retm_if(ad == NULL, "Invalid argument: appdata is NULL\n");
 	char buf[PATHBUF_SIZE] = {0, };
 	snprintf(buf, sizeof(buf), "%s/%s", IMAGEDIR, IMG_VOLUME_ICON_SETTINGS);
-	elm_icon_file_set(obj, buf, NULL);
+	elm_image_file_set(obj, buf, NULL);
 	if(evas_object_visible_get(ad->win)){
 		DEL_TIMER(ad->ptimer)
 		if(ecore_x_e_illume_quickpanel_state_get(
@@ -820,9 +831,11 @@ static void _button_cb(void *data, Evas_Object *obj, void *event_info)
 		service_h svc;
 		service_create(&svc);
 		service_add_extra_data(svc, "view_to_jump", "IDS_COM_BODY_SOUNDS");
-		service_set_package(svc, "org.tizen.setting");
+		service_set_package(svc, "setting-profile-efl");
 		service_send_launch_request(svc, NULL, NULL);
 		_app_pause(ad);
+
+		service_destroy(svc);
 	}
 }
 
@@ -860,7 +873,7 @@ int _app_reset(bundle *b, void *data)
 	block = _add_layout(win, EDJ_APP, GRP_VOLUME_BLOCKEVENTS);
 	edje_object_signal_callback_add(elm_layout_edje_get(block), "clicked", "*", _block_clicked_cb, ad);
 	outer = _add_layout(win, EDJ_APP, GRP_VOLUME_LAYOUT);
-	inner = _add_layout(win, EDJ_APP, GRP_VOLUME_CONTENT);
+	inner = _add_layout(win, EDJ_APP, "popup_volumebar");
 	ad->block_events = block;
 	ad->ly = outer;
 
@@ -868,18 +881,17 @@ int _app_reset(bundle *b, void *data)
 
 	sl = _add_slider(win, 0, ad->step, val);
 	elm_object_theme_set(sl, th);
-	elm_object_style_set(sl, GRP_VOLUME_SLIDER_HORIZONTAL);
 	evas_object_smart_callback_add(sl, "slider,drag,start", _slider_start_cb, ad);
 	evas_object_smart_callback_add(sl, "changed", _slider_changed_cb, ad);
 	evas_object_smart_callback_add(sl, "slider,drag,stop", _slider_stop_cb, ad);
 
 	ic_settings = elm_icon_add(win);
 	evas_object_size_hint_aspect_set(ic_settings, EVAS_ASPECT_CONTROL_VERTICAL, 1, 1);
-	elm_icon_resizable_set(ic_settings, EINA_FALSE, EINA_FALSE);
+	elm_image_resizable_set(ic_settings, EINA_FALSE, EINA_FALSE);
 	snprintf(buf, sizeof(buf), "%s/%s", IMAGEDIR, IMG_VOLUME_ICON_SETTINGS);
 	_D("%s\n", buf);
-	elm_icon_file_set(ic_settings, buf, NULL);
-	elm_object_part_content_set(sl, "end", ic_settings);
+	elm_image_file_set(ic_settings, buf, NULL);
+	elm_object_part_content_set(inner, "elm.swallow.icon", ic_settings);
 	evas_object_event_callback_add(ic_settings, EVAS_CALLBACK_MOUSE_DOWN, _button_mouse_down_cb, ad);
 	evas_object_smart_callback_add(ic_settings, "clicked", _button_cb, ad);
 	evas_object_show(ic_settings);
@@ -890,7 +902,7 @@ int _app_reset(bundle *b, void *data)
 
 	ic = elm_icon_add(win);
 	evas_object_size_hint_aspect_set(ic, EVAS_ASPECT_CONTROL_VERTICAL, 1, 1);
-	elm_icon_resizable_set(ic, EINA_FALSE, EINA_FALSE);
+	elm_image_resizable_set(ic, EINA_FALSE, EINA_FALSE);
 	elm_object_part_content_set(ad->sl, "icon", ic);
 	ad->ic = ic;
 	_set_icon(ad, val);

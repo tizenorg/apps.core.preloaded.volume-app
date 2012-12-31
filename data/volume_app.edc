@@ -40,566 +40,152 @@ RESOURCE_IMAGE("00_volume_icon_Vibrat.png");
 RESOURCE_IMAGE("00_volume_icon_headphone.png");
 RESOURCE_IMAGE("00_volume_icon_media.png");
 
-	#define SLIDER_INDICATOR_TEXT_COLOR_INC      42 137 194 255
-	#define SLIDER_UNITS_TEXT_COLOR_INC          0 0 0 255
-	#define SLIDER_UNITS_TEXT_SIZE_INC  30
-	#define SLIDER_INDICATOR_TEXT_SIZE_INC  40
-	#define SLIDER_BASE_HEIGHT_INC  34
-	#define SLIDER_BASE_MIN_WIDTH_INC 375
-	#define SLIDER_SWALLOW_BAR_MIN_WIDTH_INC  72
-	#define SLIDER_SWALLOW_BAR_HEIGHT_INC  74
-	#define SLIDER_INDICATOR_MAX_WIDTH_INC 90
-	#define SLIDER_INDICATOR_WIDTH_INC 72
-	#define SLIDER_INDICATOR_HEIGHT_INC 72
 
-	group { name: "elm/slider/horizontal/indicator/default";
-			alias: "elm/slider/horizontal/indicator/disabled";
-			alias: "elm/slider/vertical/indicator/default";
-			alias: "elm/slider/vertical/indicator/disabled";
-			alias: "elm/slider/horizontal/indicator/tap_to_drag";
-		images {
-			image: "00_slider_handle.png" COMP;
-			image: "00_slider_handle_dim.png" COMP;
-			image: "00_slider_handle_press.png" COMP;
-		}
-
-		parts {
-			part { name: "button_events";
-				type: RECT;
-				mouse_events: 1;
-				scale: 1;
-				description { state: "default" 0.0;
-					fixed: 1 1;
-					min: 2*SLIDER_INDICATOR_WIDTH_INC 1.5*SLIDER_INDICATOR_HEIGHT_INC;
-					aspect: 1.0 1.0;
-					aspect_preference: VERTICAL;
-					color: 0 0 0 0;
-				}
-				description { state: "disabled" 0.0;
-					inherit: "default" 0.0;
-					visible: 0;
-				}
-			}
-
-			part { name: "button0";
-				mouse_events: 0;
-				scale: 1;
-				description { state: "default" 0.0;
-					fixed: 1 1;
-					min: SLIDER_INDICATOR_WIDTH_INC SLIDER_INDICATOR_HEIGHT_INC;
-					max: SLIDER_INDICATOR_MAX_WIDTH_INC SLIDER_INDICATOR_HEIGHT_INC;
-					rel1 {
-						to: "elm.indicator";
-						offset: -2 -2;
-					}
-					rel2 {
-						to: "elm.indicator";
-						offset: 2 2;
-					}
-					image {
-						normal: "00_slider_handle.png";
-						border: 3 3 3 3;
-						border_scale: 1;
-					}
-				}
-				description { state: "pressed" 0.0;
-					inherit: "default" 0.0;
-					image {
-						normal: "00_slider_handle_press.png";
-					}
-				}
-				description { state: "disabled" 0.0;
-					inherit: "default" 0.0;
-					image {
-						normal: "00_slider_handle_dim.png";
-					}
-				}
-			} /* "button0" end */
-
-			part { name: "elm.indicator";
-				type: TEXT;
-				mouse_events: 0;
-				scale: 1;
-				description { state: "default" 0.0;
-					visible: 1;
-					color: SLIDER_INDICATOR_TEXT_COLOR_INC;
-					text {
-						font: "SLP:style=Medium";
-						size: SLIDER_INDICATOR_TEXT_SIZE_INC;
-						min: 1 1;
-						align: 0.5 0.5;
-						text_class: "slp_medium";
-					}
-				}
-				description { state: "hide" 0.0;
-					inherit: "default" 0.0;
-					visible: 0;
-				}
-			} /* "elm.indicator" end */
-		} /* parts of "elm/slider/horizontal/indicator/default" end */
-
-		programs {
-			program { name: "set_val_show";
-				signal: "elm,state,val,show";
-				source: "elm";
-				action:  STATE_SET "default" 0.0;
-				target: "elm.indicator";
-			}
-			program { name: "set_val_hide";
-				signal: "elm,state,val,hide";
-				source: "elm";
-				action:  STATE_SET "hide" 0.0;
-				target: "elm.indicator";
-			}
-			program { name: "slider_disable";
-				signal: "elm,state,disabled";
-				source: "elm";
-				action:  STATE_SET "disabled" 0.0;
-				target: "button0";
-				target: "button_events";
-			}
-			program { name: "slider_enable";
-				signal: "elm,state,enabled";
-				source: "elm";
-				action:  STATE_SET "default" 0.0;
-				target: "button0";
-				target: "button_events";
-			}
-			program { name: "mouse_down";
-	            signal: "mouse,down,*";
-	            source: "button_events";
-	            action:  STATE_SET "pressed" 0.0;
-	            target: "button0";
-	         }
-	         program { name: "mouse_up";
-	            signal: "mouse,up,*";
-	            source: "button_events";
-	            action:  STATE_SET "default" 0.0;
-	            target: "button0";
-	         }
-		}
-	}
-	/* END group "elm/slider/horizontal/indicator/default" */
-
-	group { name: "elm/slider/horizontal/volumeHorizontalSlider";
-		images {
-			image: "00_progress_bg.png" COMP;
-			image: "00_progress_bar.png" COMP;
-			image: "00_divider_line.png" COMP;
-		}
-
-		script {
-			public invert_on = 0;
-			public set_invert_on() {
-				set_state(PART:"level", "inverted", 0.0);
-				set_state(PART:"level2", "inverted", 0.0);
-				set_int(invert_on, 1);
-			}
-			public set_invert_off() {
-				set_state(PART:"level", "default", 0.0);
-				set_state(PART:"level2", "default", 0.0);
-				set_int(invert_on, 0);
-			}
-			public thumb_down() {
-				if(get_int(invert_on) == 0)
-				set_state(PART:"level", "pressed", 0.0);
-				else if(get_int(invert_on) == 1)
-				set_state(PART:"level2", "pressed", 0.0);
-			}
-			public thumb_up() {
-				if(get_int(invert_on) == 0)
-				set_state(PART:"level", "default", 0.0);
-				else if(get_int(invert_on) == 1)
-				set_state(PART:"level2", "inverted", 0.0);
-			}
-		}
-
-		parts {
-			part { name: "base";
-				mouse_events: 0;
-				scale: 1;
-				description { state: "default" 0.0;
-					min: 488 34;
-					max: 99999 34;
-					rel1.to: "bg";
-					rel2.to: "bg";
-					image.normal: "00_progress_bg.png";
-					image.border: 16 16 0 0;
-					image.border_scale: 1;
-				}
-			} /* "base" end */
-
-			part { name: "level";
-				mouse_events: 0;
-				scale: 1;
-				clip_to: "clipper";
-				description { state: "default" 0.0;
-					fixed: 1 1;
-					rel1.to: "base";
-					rel2 {
-						to_y: "base";
-						to_x: "elm.dragable.slider";
-						relative: 0.5 1.0;
-					}
-					image.normal: "00_progress_bar.png";
-					image.border: 16 16 0 0;
-					image.border_scale: 1;
-				}
-				description { state: "inverted" 0.0;
-					inherit: "default" 0.0;
-					visible: 0;
-				}
-				description { state: "pressed" 0.0;
-					inherit: "default" 0.0;
-					image.normal: "00_progress_bar.png";
-				}
-			} /* "level" end */
-
-			part { name: "level2";
-				mouse_events: 0;
-				scale: 1;
-				clip_to: "clipper";
-				description { state: "default" 0.0;
-					fixed: 1 1;
-					visible: 0;
-					rel1 {
-						to_y: "base";
-						to_x: "elm.dragable.slider";
-						relative: 0.5 0.0;
-					}
-					rel2.to: "base";
-					image.normal: "00_progress_bar.png";
-					image.border: 0 0 4 4;
-					image.border_scale: 1;
-				}
-				description { state: "inverted" 0.0;
-					inherit: "default" 0.0;
-					visible: 1;
-				}
-				description { state: "pressed" 0.0;
-					inherit: "default" 0.0;
-					visible: 1;
-					image.normal: "00_progress_bar.png";
-				}
-			} /* "level" end */
-
-			part { name: "bg";
-				type: RECT;
-				mouse_events: 0;
-				scale: 1;
-				description { state: "default" 0.0;
-					visible: 0;
-					rel1.to: "elm.swallow.bar";
-					rel2.to: "elm.swallow.bar";
-				}
-			} /* "bg" end */
-
-			part { name: "elm.swallow.bar";
-				type: SWALLOW;
-				mouse_events: 0;
-				scale: 1;
-				description { state: "default" 0.0;
-					min: 72 70;
-					max: 488 72;
-					align: 1.0 0.5;
-					rel1 {
-						to_x: "bar_left_padding";
-						relative: 1.0 0.0;
-					}
-					rel2 {
-						to_x: "bar_right_padding";
-						relative: 0.0 1.0;
-					}
-				}
-			} /* "elm.swallow.bar" end */
-
-			part { name: "bar_left_padding";
-				type: RECT;
-				scale: 1;
-				description {
-					state: "default" 0.0;
-					visible: 1;
-					min: 16 0;
-					fixed: 1 1;
-					color : 255 0 0 255;
-					rel1 {
-						relative: 1.0  0.5;
-						to_x: "elm.text";
-					}
-					rel2 {
-						relative: 1.0  0.5;
-						to_x: "elm.text";
-					}
-					align: 0.0 0.5;
-				}
-			} /* "bar_left_padding" end */
-
-			part {
-				name: "bar_right_padding";
-				type: RECT;
-				scale: 1;
-				description {
-					state: "default" 0.0;
-					visible: 1;
-					min: 16 0;
-					fixed: 1 1;
-					color : 0 255 0 255;
-					rel1 {
-						relative: 0.0  0.5;
-						to_x: "divider";
-					}
-					rel2 {
-						relative: 0.0  0.5;
-						to_x: "divider";
-					}
-					align: 1.0 0.5;
-				}
-			} /* "bar_right_padding" end */
-
-			part { name: "divider";
-				mouse_events: 0;
-				scale: 1;
-				description { state: "default" 0.0;
-					fixed: 1 1;
-					min: 4 94;
-					max: 4 94;
-					align: 1.0 0.5;
-					rel1 {
-						relative: 0.0  0.5;
-						to_x: "bar_right_right_padding";
-					}
-					rel2 {
-						relative: 0.0  0.5;
-						to_x: "bar_right_right_padding";
-					}
-					image {
-						normal: "00_divider_line.png";
-						border: 0 0 0 2;
-						border_scale: 1;
-					}
-				}
-			} /* "divider" end */
-
-			part {
-				name: "bar_right_right_padding";
-				type: RECT;
-				scale: 1;
-				description {
-					state: "default" 0.0;
-					visible: 1;
-					color : 255 0 0 200;
-					min: 16 0;
-					fixed: 1 1;
-					rel1 {
-						relative: 0.0  0.5;
-						to_x: "elm.swallow.end";
-					}
-					rel2 {
-						relative: 0.0  0.5;
-						to_x: "elm.swallow.end";
-					}
-					align: 1.0 0.5;
-				}
-			} /* "bar_right_right_padding" end */
-
-			part { name: "elm.swallow.icon";
-				type: SWALLOW;
-				scale: 1;
-				description { state: "default" 0.0;
-					visible: 0;
-					align: 0.0 0.5;
-					rel1 {
-						to_y: "elm.swallow.bar";
-					}
-					rel2 {
-						relative: 0.0 1.0;
-						to_y: "elm.swallow.bar";
-					}
-				}
-				description { state: "visible" 0.0;
-					inherit: "default" 0.0;
-					visible: 1;
-					aspect: 1.0 1.0;
-					aspect_preference: VERTICAL;
-				}
-			} /* "elm.swallow.icon" end */
-
-			part { name: "elm.text";
-				type: TEXT;
-				mouse_events: 0;
-				scale: 1;
-				description { state: "default" 0.0;
-					visible: 0;
-					fixed: 1 1;
-					align: 0.0 0.5;
-					rel1.to_x: "elm.swallow.icon";
-					rel1.relative: 1.0 0.0;
-					rel2.to_x: "elm.swallow.icon";
-					color: SLIDER_UNITS_TEXT_COLOR_INC;
-					text {
-						font: "SLP:style=Medium";
-						size: SLIDER_UNITS_TEXT_SIZE_INC;
-						min: 0 0;
-						align: 0.0 0.5;
-						text_class: "slp_medium";
-					}
-				}
-				description { state: "visible" 0.0;
-					inherit: "default" 0.0;
-					visible: 1;
-					text.min: 1 1;
-				}
-			} /* "elm.text" end */
-
-			part { name: "elm.swallow.end";
-				type: SWALLOW;
-				scale: 1;
-				description { state: "default" 0.0;
-					visible: 0;
-					align: 1.0 0.5;
-					rel1 {
-						relative: 1.0 0.0;
-						to_y: "elm.swallow.bar";
-					}
-					rel2 {
-						relative: 1.0 1.0;
-						to_y: "elm.swallow.bar";
-					}
-				}
-				description { state: "visible" 0.0;
-					inherit: "default" 0.0;
-					visible: 1;
-					aspect: 1.0 1.0;
-					aspect_preference: VERTICAL;
-				}
-			} /* "elm.swallow.end" end */
-
-			part { name: "elm.dragable.slider";
-				type: GROUP;
-				source: "elm/slider/horizontal/indicator/default";
-				mouse_events: 1;
-				scale: 1;
-				dragable {
-					x: 1 1 0;
-					y: 0 0 0;
-					confine: "bg";
-				}
-				description { state: "default" 0.0;
-					min: SLIDER_INDICATOR_WIDTH_INC SLIDER_INDICATOR_HEIGHT_INC;
-					fixed: 1 1;
-					align: 0.5 0.5;
-					color: 0 0 0 0;
-				}
-			} /* "elm.dragable.slider" end */
-
-			part { name: "disabler";
-				type: RECT;
-				mouse_events: 1;
-				repeat_events: 0;
-				scale: 1;
-				description { state: "default" 0.0;
-					visible: 0;
-					color: 0 0 0 0;
-				}
-				description { state: "disabled" 0.0;
-					inherit: "default" 0.0;
-					visible: 1;
-				}
-			} /* "disabler" end */
-
-			part { name: "clipper";
-				type: RECT;
-				description { state: "default" 0.0;
-					color: 255 255 255 255;
-				}
-				description { state: "disabled" 0.0;
-					color: 255 255 255 102;
-					}
-				}
-			} /* "clipper" end */
-
-		programs {
-			program { name: "text_show";
-				signal: "elm,state,text,visible";
-				source: "elm";
-				action:  STATE_SET "visible" 0.0;
-				target: "elm.text";
-			}
-			program { name: "text_hide";
-				signal: "elm,state,text,hidden";
-				source: "elm";
-				action:  STATE_SET "default" 0.0;
-				target: "elm.text";
-			}
-			program { name: "icon_show";
-				signal: "elm,state,icon,visible";
-				source: "elm";
-				action:  STATE_SET "visible" 0.0;
-				target: "elm.swallow.icon";
-			}
-			program { name: "icon_hide";
-				signal: "elm,state,icon,hidden";
-				source: "elm";
-				action:  STATE_SET "default" 0.0;
-				target: "elm.swallow.icon";
-			}
-			program { name: "end_show";
-				signal: "elm,state,end,visible";
-				source: "elm";
-				action:  STATE_SET "visible" 0.0;
-				target: "elm.swallow.end";
-			}
-			program { name: "end_hide";
-				signal: "elm,state,end,hidden";
-				source: "elm";
-				action:  STATE_SET "default" 0.0;
-				target: "elm.swallow.end";
-			}
-			program { name: "invert_on";
-				signal: "elm,state,inverted,on";
-				source: "elm";
-				script {
-					set_invert_on();
-				}
-			}
-			program { name: "invert_off";
-				signal: "elm,state,inverted,off";
-				source: "elm";
-				script {
-					set_invert_off();
-				}
-			}
-			program { name: "val_show";
-				signal: "mouse,down,*";
-				source: "elm.dragable.slider";
-				script {
-					thumb_down();
-				}
-			}
-			program { name: "val_hide";
-				signal: "mouse,up,*";
-				source: "elm.dragable.slider";
-				script {
-					thumb_up();
-				}
-			}
-			program { name: "slider_disable";
-				signal: "elm,state,disabled";
-				source: "elm";
-				action:  STATE_SET "disabled" 0.0;
-				target: "disabler";
-				target: "clipper";
-			}
-			program { name: "slider_enable";
-				signal: "elm,state,enabled";
-				source: "elm";
-				action:  STATE_SET "default" 0.0;
-				target: "disabler";
-				target: "clipper";
-			}
-		}
-	}
-	/* END group "elm/slider/horizontal/volumeHorizontalSlider" */
+group { name: "popup_volumebar";
+   images {
+      image: "00_divider_line.png" COMP;
+   }
+   parts {
+      part { name:"bg";
+         type: RECT;
+         scale : 1;
+         description { state: "default" 0.0;
+            min: 668 134;
+            align: 0.5 0.5;
+            fixed: 1 1;
+            visible: 0;
+            rel1 { relative: 0.5 0.5; offset: 0 -10; }
+            rel2 { relative: 0.5 0.5; offset: 0 -10; }
+         }
+      }
+      part { name: "pad_l";
+         type: RECT;
+         scale: 1;
+         description { state: "default" 0.0;
+            min : 0 20;
+            max : 0 20;
+            fixed: 1 1;
+            rel1.to: "bg";
+            rel2.to: "bg";
+            visible: 0;
+            align: 0.0 0.0;
+         }
+      }
+      part { name: "pad_r";
+         type: RECT;
+         scale: 1;
+         description { state: "default" 0.0;
+            min : 0 20;
+            max : 0 20;
+            fixed: 1 1;
+            rel1.to: "bg";
+            rel2.to: "bg";
+            visible: 0;
+            align: 1.0 1.0;
+         }
+      }
+      part { name: "elm.swallow.content";
+         type: SWALLOW;
+         scale: 1;
+         description { state: "default" 0.0;
+            min : 568 134;
+             fixed: 1 1;
+            rel1 {
+               relative: 1.0 0.5;
+               to_x: "pad_l";
+               to_y: "bg";
+            }
+            rel2 {
+               relative: 0.0 0.5;
+               to_x: "pad_after_content";
+               to_y: "bg";
+            }
+            align: 0.5 0.5;
+         }
+      }
+      part { name: "pad_after_content";
+         type: RECT;
+         scale: 1;
+         description { state: "default" 0.0;
+            min: 16 0;
+            fixed: 1 0;
+            rel1 {
+               relative: 0.0 0.5;
+               to_x: "divider";
+               to_y: "bg";
+            }
+            rel2 {
+               relative: 0.0 0.5;
+               to_x: "divider";
+               to_y: "bg";
+            }
+            align: 1.0 0.5;
+            visible: 0;
+         }
+      }
+      part { name: "divider";
+         scale: 1;
+         description { state: "default" 0.0;
+            min: 4 18;
+            max: 4 99999;
+            fixed: 1 1;
+            rel1 {
+               relative: 0.0 1.0;
+               to_x: "pad_after_divider";
+               to_y: "pad_l";
+            }
+            rel2 {
+               relative: 0.0 0.0;
+               to_x: "pad_after_divider";
+               to_y: "pad_r";
+            }
+            image.normal: "00_divider_line.png";
+            align: 1.0 0.5;
+         }
+      }
+      part { name: "pad_after_divider";
+         type: RECT;
+         scale: 1;
+         description { state: "default" 0.0;
+            min: 16 0;
+            max: 16 0;
+            fixed: 1 1;
+            visible: 0;
+            rel1 {
+               relative: 0.0 0.5;
+               to_x: "elm.swallow.icon";
+               to_y: "bg";
+            }
+            rel2 {
+               relative: 0.0 0.5;
+               to_x: "elm.swallow.icon";
+               to_y: "bg";
+            }
+            align: 1.0 0.5;
+         }
+      }
+      part { name: "elm.swallow.icon";
+         type: SWALLOW;
+         scale: 1;
+         description { state: "default" 0.0;
+            min: 64 64;
+            max: 64 64;
+            fixed: 1 1;
+            rel1 {
+               relative: 0.0 0.5;
+               to_x: "pad_r";
+               to_y: "bg";
+            }
+            rel2 {
+               relative: 0.0 0.5;
+               to_x: "pad_r";
+               to_y: "bg";
+            }
+            align: 1.0 0.5;
+         }
+      }
+   }
+}
 
 	group { name : "block_events";
 		parts{
@@ -659,88 +245,5 @@ RESOURCE_IMAGE("00_volume_icon_media.png");
 		}
 	}
 	/* END group "volumeLayout" */
-
-	group { name : "volumeLayoutContent";
-		parts{
-			part { name : "pad_t";
-				type : RECT;
-				scale : 1;
-				mouse_events : 0;
-				description { state: "default" 0.0;
-					align: 0.5 0.0;
-					min: 0 49;
-					fixed: 0 1;
-					visible: 0;
-					rel1 {
-						relative: 1.0 0.0;
-						to_x: "pad_l";
-					}
-					rel2 {
-						relative: 0.0 0.0;
-						to_x: "pad_r";
-					}
-				}
-			} /* "pad_t" end */
-
-			part { name : "pad_l";
-				type: RECT;
-				scale: 1;
-				description { state: "default" 0.0;
-					min : 26 0;
-					fixed: 1 0;
-					rel2.relative: 0.0 1.0;
-					visible: 0;
-					align: 0.0 0.0;
-				}
-			} /* "pad_l" end */
-
-			part { name: "pad_r";
-				type: RECT;
-				scale: 1;
-				description { state: "default" 0.0;
-					min : 26 0;
-					fixed: 1 0;
-					rel1.relative: 1.0 0.0;
-					visible: 0;
-					align: 1.0 0.0;
-				}
-			} /* "pad_r" end */
-
-			part{ name:"elm.swallow.content";
-				type: SWALLOW;
-				scale : 1;
-				description { state: "default" 0.0;
-					min: 568 0;
-					fixed: 1 0;
-					rel1 {
-						relative: 0.5 1.0;
-						to: "pad_t";
-					}
-					rel2 {
-						relative: 0.5 0.0;
-						to: "pad_b";
-					}
-				}
-			} /* "elm.swallow.content" end */
-
-			part { name: "pad_b";
-				type: RECT;
-				scale : 1;
-				mouse_events: 0;
-				description { state: "default" 0.0;
-					align: 0.5 1.0;
-					min: 0 69;
-					fixed: 0 1;
-					visible: 0;
-					rel1 {
-						relative: 0.0 1.0;
-						to_x: "pad_l";
-					}
-					rel2.to_x: "pad_r";
-				}
-			}
-		}
-	}
-	/* END group "volumeLayoutContent" */
 
 }

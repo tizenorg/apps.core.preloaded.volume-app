@@ -111,7 +111,7 @@ int _set_icon(void *data, int val)
 			break;
 	}
 	if (ad->ic ) {
-		elm_icon_file_set(ad->ic, EDJ_APP, img);
+		elm_image_file_set(ad->ic, EDJ_APP, img);
 	}
 	return 1;
 }
@@ -161,6 +161,7 @@ int _insert_message_ticker_notification(void)
 	noti_err = notification_insert(noti, &priv_id);
 	retvm_if(noti_err != NOTIFICATION_ERROR_NONE, 0, "Fail to notification_set_text_domain : %d\n", noti_err);
 
+	notification_free(noti);
 	return priv_id;
 }
 
@@ -194,8 +195,6 @@ void _set_device_warning(void *data, int val, int device)
 int _get_title(volume_type_t type, char *label, int size)
 {
 	char *text = NULL;
-
-	text = S_("IDS_COM_BODY_UNKNOWN");
 
 	switch (type) {
 	case VOLUME_TYPE_SYSTEM:
@@ -250,8 +249,6 @@ void _mm_func(void *data)
 	struct appdata *ad = (struct appdata *)data;
 	retm_if(ad == NULL, "Invalid argument: appdata is NULL\n");
 
-	_set_device_warning(ad, val, device);
-
 	retm_if(ad->win == NULL, "Failed to get window\n");
 
 	/* function could be activated when window exists */
@@ -267,7 +264,7 @@ void _mm_func(void *data)
 			_set_sound_level(ad->type, val);
 		ad->device = device;
 	}
-
+	_set_device_warning(ad, val, device);
 	_set_slider_value(ad, val);
 	_set_icon(ad, val);
 	_D("type(%d) val(%d)\n", ad->type, val);

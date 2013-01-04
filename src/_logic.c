@@ -830,7 +830,6 @@ static void _button_cb(void *data, Evas_Object *obj, void *event_info)
 		}
 		service_h svc;
 		service_create(&svc);
-		service_add_extra_data(svc, "view_to_jump", "IDS_COM_BODY_SOUNDS");
 		service_set_package(svc, "setting-profile-efl");
 		service_send_launch_request(svc, NULL, NULL);
 		_app_pause(ad);

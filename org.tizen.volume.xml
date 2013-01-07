@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns="http://tizen.org/ns/packages" package="org.tizen.volume" version="0.2.4" install-location="internal-only">
+<manifest xmlns="http://tizen.org/ns/packages" package="org.tizen.volume" version="0.2.5" install-location="internal-only">
 	<label>Volume</label>
 	<author email="hhh.kwon@samsung.com" href="www.samsung.com">Hong Kwon</author>
 	<description>Volume Application</description>

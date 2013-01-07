@@ -1,3 +1,10 @@
+volume (0.2.5-1) unstable; urgency=low
+
+  * Fix some issues
+  * Git : apps/home/volume-app
+
+ -- minho07.kim <minho07.kim@samsung.com>  Mon, 07 Jan 2013 15:42:55 +0900
+
 volume (0.2.4-1) unstable; urgency=low
 
   * Remove unused files

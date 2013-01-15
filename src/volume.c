@@ -1,4 +1,5 @@
 /*
+ * org.tizen.volume
  * Copyright 2012  Samsung Electronics Co., Ltd
  *
  * Licensed under the Flora License, Version 1.0 (the License);

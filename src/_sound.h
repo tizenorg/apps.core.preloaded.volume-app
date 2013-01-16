@@ -32,7 +32,6 @@ void _play_sound(int type, int handle);
 void _mm_func(void *data);
 int _set_icon(void * data, int val);
 int _set_sound_level(volume_type_t type, int val);
-int _delete_message_ticker_notification(void *data);
 
 #endif
 /* __VOLUME_SOUND_H__ */

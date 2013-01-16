@@ -64,10 +64,6 @@
 #define IMG_VOLUME_ICON_SETTINGS_PRESSED "00_volume_icon_settings_pressed.png"
 
 #define IDS_WARNING_MSG "IDS_COM_BODY_HIGH_VOLUMES_MAY_HARM_YOUR_HEARING_IF_YOU_LISTEN_FOR_A_LONG_TIME"
-#define STR_WARNING_MSG "High volumes may harm your hearing if you listen for a long time"
-
-#define IDS_MEDIA_MSG "IDS_COM_BODY_MEDIA"
-#define STR_MEDIA_MSG "Media"
 
 #define S_(str) dgettext("sys_string", str)
 #define T_(str) dgettext(PACKAGE, str)

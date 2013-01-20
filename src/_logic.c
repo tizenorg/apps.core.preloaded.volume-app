@@ -158,7 +158,7 @@ Eina_Bool _volume_show(void *data)
 
 		if(status == UNLOCK_STATUS)
 		{
-			_grab_key_new(ad, -1, TOP_POSITION_GRAB);
+			_grab_key_new(ad, -1, EXCLUSIVE_GRAB);
 
 			_rotate_func(ad);
 			elm_win_indicator_mode_set(ad->win, ELM_WIN_INDICATOR_HIDE);

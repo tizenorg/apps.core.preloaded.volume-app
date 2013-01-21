@@ -1,3 +1,9 @@
+volume (0.2.6-1) unstable; urgency=low
+
+  * update version to 0.2.6-1
+
+ -- minho07.kim <minho07.kim@samsung.com>  Mon, 21 Jan 2013 13:35:38 +0900
+
 volume (0.2.5-1) unstable; urgency=low
 
   * Fix some issues

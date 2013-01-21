@@ -1,7 +1,7 @@
 #sbs-git:slp/pkgs/v/volume-app volume-app 0.1.2 226202351de9fefb43756c36d215ca74f52431d0
 Name:	org.tizen.volume
 Summary:	Volume application (EFL)
-Version:	0.2.5
+Version:	0.2.6
 Release:	1
 Group:	TO_BE/FILLED_IN
 License:	Flora Software License

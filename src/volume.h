@@ -109,6 +109,7 @@ struct appdata
 	int flag_shared_grabed;
 	int flag_top_positioni_grabed;
 	int flag_exclusive_grabed;
+	int flag_emul; /* EINA_TRUE : emulator, EINA_FALSE : target */
 
 	/* Ecore event handler */
 	Ecore_Event_Handler *event_volume_up;

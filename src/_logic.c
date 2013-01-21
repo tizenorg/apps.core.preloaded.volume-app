@@ -35,6 +35,7 @@
 
 #define STRBUF_SIZE 128
 #define PATHBUF_SIZE 256
+#define EMUL_STR	"Emulator"
 
 enum {
 	IDLELOCK_OFF = 0x0,
@@ -158,7 +159,7 @@ Eina_Bool _volume_show(void *data)
 
 		if(status == UNLOCK_STATUS)
 		{
-			_grab_key_new(ad, -1, EXCLUSIVE_GRAB);
+			_grab_key_new(ad, -1, TOP_POSITION_GRAB);
 
 			_rotate_func(ad);
 			elm_win_indicator_mode_set(ad->win, ELM_WIN_INDICATOR_HIDE);
@@ -839,6 +840,23 @@ static void _button_cb(void *data, Evas_Object *obj, void *event_info)
 	}
 }
 
+static int _check_emul(void)
+{
+	int is_emul = 0;
+	char *info = NULL;
+
+	if (system_info_get_value_string(SYSTEM_INFO_KEY_MODEL, &info) == 0) {
+		if (info == NULL) return 0;
+		if (!strncmp(EMUL_STR, info, strlen(info))) {
+			is_emul = 1;
+		}
+	}
+
+	if (info != NULL) free(info);
+
+	return is_emul;
+}
+
 int _app_reset(bundle *b, void *data)
 {
 	_D("%s\n", __func__);
@@ -870,42 +888,75 @@ int _app_reset(bundle *b, void *data)
 	elm_theme_ref_set(th, NULL);
 	elm_theme_extension_add(th, EDJ_APP);
 
-	block = _add_layout(win, EDJ_APP, GRP_VOLUME_BLOCKEVENTS);
-	edje_object_signal_callback_add(elm_layout_edje_get(block), "clicked", "*", _block_clicked_cb, ad);
-	outer = _add_layout(win, EDJ_APP, GRP_VOLUME_LAYOUT);
-	inner = _add_layout(win, EDJ_APP, "popup_volumebar");
-	ad->block_events = block;
-	ad->ly = outer;
+	ad->flag_emul = _check_emul();
 
-	elm_object_part_content_set(outer, "elm.swallow.content", inner);
+	if(!ad->flag_emul)
+	{
+		block = _add_layout(win, EDJ_APP, GRP_VOLUME_BLOCKEVENTS);
+		edje_object_signal_callback_add(elm_layout_edje_get(block), "clicked", "*", _block_clicked_cb, ad);
+		outer = _add_layout(win, EDJ_APP, GRP_VOLUME_LAYOUT);
+		inner = _add_layout(win, EDJ_APP, "popup_volumebar");
+		ad->block_events = block;
+		ad->ly = outer;
 
-	sl = _add_slider(win, 0, ad->step, val);
-	elm_object_theme_set(sl, th);
-	evas_object_smart_callback_add(sl, "slider,drag,start", _slider_start_cb, ad);
-	evas_object_smart_callback_add(sl, "changed", _slider_changed_cb, ad);
-	evas_object_smart_callback_add(sl, "slider,drag,stop", _slider_stop_cb, ad);
+		elm_object_part_content_set(outer, "elm.swallow.content", inner);
 
-	ic_settings = elm_icon_add(win);
-	evas_object_size_hint_aspect_set(ic_settings, EVAS_ASPECT_CONTROL_VERTICAL, 1, 1);
-	elm_image_resizable_set(ic_settings, EINA_FALSE, EINA_FALSE);
-	snprintf(buf, sizeof(buf), "%s/%s", IMAGEDIR, IMG_VOLUME_ICON_SETTINGS);
-	_D("%s\n", buf);
-	elm_image_file_set(ic_settings, buf, NULL);
-	elm_object_part_content_set(inner, "elm.swallow.icon", ic_settings);
-	evas_object_event_callback_add(ic_settings, EVAS_CALLBACK_MOUSE_DOWN, _button_mouse_down_cb, ad);
-	evas_object_smart_callback_add(ic_settings, "clicked", _button_cb, ad);
-	evas_object_show(ic_settings);
-	ad->ic_settings = ic_settings;
+		sl = _add_slider(win, 0, ad->step, val);
+		elm_object_theme_set(sl, th);
+		evas_object_smart_callback_add(sl, "slider,drag,start", _slider_start_cb, ad);
+		evas_object_smart_callback_add(sl, "changed", _slider_changed_cb, ad);
+		evas_object_smart_callback_add(sl, "slider,drag,stop", _slider_stop_cb, ad);
 
-	ad->sl = sl;
-	elm_object_part_content_set(inner, "elm.swallow.content", sl);
+		ic_settings = elm_icon_add(win);
+		evas_object_size_hint_aspect_set(ic_settings, EVAS_ASPECT_CONTROL_VERTICAL, 1, 1);
+		elm_image_resizable_set(ic_settings, EINA_FALSE, EINA_FALSE);
+		snprintf(buf, sizeof(buf), "%s/%s", IMAGEDIR, IMG_VOLUME_ICON_SETTINGS);
+		_D("%s\n", buf);
+		elm_image_file_set(ic_settings, buf, NULL);
+		elm_object_part_content_set(inner, "elm.swallow.icon", ic_settings);
+		evas_object_event_callback_add(ic_settings, EVAS_CALLBACK_MOUSE_DOWN, _button_mouse_down_cb, ad);
+		evas_object_smart_callback_add(ic_settings, "clicked", _button_cb, ad);
+		evas_object_show(ic_settings);
+		ad->ic_settings = ic_settings;
 
-	ic = elm_icon_add(win);
-	evas_object_size_hint_aspect_set(ic, EVAS_ASPECT_CONTROL_VERTICAL, 1, 1);
-	elm_image_resizable_set(ic, EINA_FALSE, EINA_FALSE);
-	elm_object_part_content_set(ad->sl, "icon", ic);
-	ad->ic = ic;
-	_set_icon(ad, val);
+		ad->sl = sl;
+		elm_object_part_content_set(inner, "elm.swallow.content", sl);
+
+		ic = elm_icon_add(win);
+		evas_object_size_hint_aspect_set(ic, EVAS_ASPECT_CONTROL_VERTICAL, 1, 1);
+		elm_image_resizable_set(ic, EINA_FALSE, EINA_FALSE);
+		elm_object_part_content_set(ad->sl, "icon", ic);
+		ad->ic = ic;
+		_set_icon(ad, val);
+	}
+	else
+	{
+		block = _add_layout(win, EDJ_APP, GRP_VOLUME_BLOCKEVENTS);
+		edje_object_signal_callback_add(elm_layout_edje_get(block), "clicked", "*", _block_clicked_cb, ad);
+		outer = _add_layout(win, EDJ_APP, GRP_VOLUME_LAYOUT);
+		inner = _add_layout(win, EDJ_APP, GRP_VOLUME_CONTENT);
+		ad->block_events = block;
+		ad->ly = outer;
+
+		elm_object_part_content_set(outer, "elm.swallow.content", inner);
+
+		sl = _add_slider(win, 0, ad->step, val);
+		evas_object_smart_callback_add(sl, "slider,drag,start", _slider_start_cb, ad);
+		evas_object_smart_callback_add(sl, "changed", _slider_changed_cb, ad);
+		evas_object_smart_callback_add(sl, "slider,drag,stop", _slider_stop_cb, ad);
+
+		ad->sl = sl;
+		elm_object_part_content_set(inner, "elm.swallow.content", sl);
+		evas_object_show(sl);
+
+		ic = elm_icon_add(win);
+		evas_object_size_hint_aspect_set(ic, EVAS_ASPECT_CONTROL_VERTICAL, 1, 1);
+		elm_image_resizable_set(ic, EINA_FALSE, EINA_FALSE);
+		elm_object_part_content_set(ad->sl, "icon", ic);
+		ad->ic = ic;
+		_set_icon(ad, val);
+	}
+
 
 	ret = syspopup_create(b, &handler, ad->win, ad);
 	retvm_if(ret < 0, -1, "Failed to create syspopup\n");

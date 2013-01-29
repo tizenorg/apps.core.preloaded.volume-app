@@ -20,6 +20,7 @@
 #include <mm_sound.h>
 #include <vconf.h>
 #include <svi.h>
+#include <feedback.h>
 
 #include "volume.h"
 #include "_util_log.h"
@@ -38,17 +39,14 @@ void _play_vib(int handle)
 
 void _play_sound(int type, int handle)
 {
-	int ringtone_val = -1;
-	int system_val = -1;
+	feedback_initialize();
+
 	if (type == VOLUME_TYPE_MEDIA) {
 
 	} else {
-		_get_sound_level(type, &ringtone_val);
-		_get_sound_level(VOLUME_TYPE_SYSTEM, &system_val);
-		_set_sound_level(VOLUME_TYPE_SYSTEM, ringtone_val);
 		svi_play_sound(handle, SVI_SND_TOUCH_TOUCH1);
-		_set_sound_level(VOLUME_TYPE_SYSTEM, system_val);
 	}
+	feedback_deinitialize();
 }
 
 int _init_svi(void *data)

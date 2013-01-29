@@ -41,6 +41,7 @@ pkg_check_modules(pkgs REQUIRED
 	syspopup
 	bundle
 	svi
+	feedback
 	glib-2.0
 	ui-gadget-1
 	notification

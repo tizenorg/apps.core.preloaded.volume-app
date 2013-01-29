@@ -16,6 +16,7 @@ BuildRequires:  pkgconfig(svi)
 BuildRequires:  pkgconfig(ui-gadget-1)
 BuildRequires:	pkgconfig(notification)
 BuildRequires:	pkgconfig(capi-system-info)
+BuildRequires:	pkgconfig(feedback)
 
 BuildRequires:  cmake
 BuildRequires:  edje-bin

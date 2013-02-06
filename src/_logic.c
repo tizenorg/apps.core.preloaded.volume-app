@@ -947,9 +947,16 @@ int _app_reset(bundle *b, void *data)
 	else
 	{
 		block = _add_layout(win, EDJ_APP, GRP_VOLUME_BLOCKEVENTS);
+		retvm_if(block == NULL, -1, "Failed to add block layout\n");
+
 		edje_object_signal_callback_add(elm_layout_edje_get(block), "clicked", "*", _block_clicked_cb, ad);
+
 		outer = _add_layout(win, EDJ_APP, GRP_VOLUME_LAYOUT);
+		retvm_if(outer == NULL, -1, "Failed to add outer layout\n");
+
 		inner = _add_layout(win, EDJ_APP, GRP_VOLUME_CONTENT);
+		retvm_if(inner == NULL, -1, "Failed to add inner layout\n");
+
 		ad->block_events = block;
 		ad->ly = outer;
 

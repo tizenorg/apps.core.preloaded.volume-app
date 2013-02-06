@@ -72,7 +72,8 @@ int _close_volume(void *data)
 	DEL_TIMER(ad->ldtimer)
 	DEL_TIMER(ad->ptimer)
 
-	if (ad->win){
+	if (evas_object_visible_get(ad->win) == EINA_TRUE){
+		_D("hide window\n");
 		evas_object_hide(ad->win);
 	}
 	appcore_flush_memory();
@@ -880,9 +881,16 @@ int _app_reset(bundle *b, void *data)
 	ad->type = type;
 	mm_sound_volume_get_value(type, (unsigned int*)(&val));
 
-	win = _add_window(PACKAGE);
-	retvm_if(win == NULL, -1, "Failed add window\n");
-	ad->win = win;
+	if(ad->win == NULL) {
+		win = _add_window(PACKAGE);
+		retvm_if(win == NULL, -1, "Failed add window\n");
+		_D("create window\n");
+		ad->win = win;
+	}
+	else {
+		_E("window already exist\n");
+		return -1;
+	}
 
 	th = elm_theme_new();
 	elm_theme_ref_set(th, NULL);
@@ -893,9 +901,16 @@ int _app_reset(bundle *b, void *data)
 	if(!ad->flag_emul)
 	{
 		block = _add_layout(win, EDJ_APP, GRP_VOLUME_BLOCKEVENTS);
+		retvm_if(block == NULL, -1, "Failed to add block layout\n");
+
 		edje_object_signal_callback_add(elm_layout_edje_get(block), "clicked", "*", _block_clicked_cb, ad);
+
 		outer = _add_layout(win, EDJ_APP, GRP_VOLUME_LAYOUT);
+		retvm_if(outer== NULL, -1, "Failed to add outer layout\n");
+
 		inner = _add_layout(win, EDJ_APP, "popup_volumebar");
+		retvm_if(inner == NULL, -1, "Failed to add inner layout\n");
+
 		ad->block_events = block;
 		ad->ly = outer;
 

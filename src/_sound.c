@@ -44,7 +44,7 @@ void _play_sound(int type, int handle)
 	if (type == VOLUME_TYPE_MEDIA) {
 
 	} else {
-		svi_play_sound(handle, SVI_SND_TOUCH_TOUCH1);
+		feedback_play(FEEDBACK_PATTERN_VOLUME_KEY);
 	}
 	feedback_deinitialize();
 }

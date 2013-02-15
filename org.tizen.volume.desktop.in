@@ -1,0 +1,8 @@
+Name=@PROJECT_NAME@
+Exec=@BINDIR@/@PROJECT_NAME@
+Icon=@PKGNAME@.png
+Type=Application
+Version=0.1.0-0
+NoDisplay=true
+X-TIZEN-TaskManage=false
+X-TIZEN-Removable=false

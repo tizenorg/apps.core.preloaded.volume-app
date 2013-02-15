@@ -1,0 +1,18 @@
+msgid "IDS_COM_BODY_HIGH_VOLUMES_MAY_HARM_YOUR_HEARING_IF_YOU_LISTEN_FOR_A_LONG_TIME"
+msgstr "Nghe âm lượng to trong thời gian dài có thể làm hại thính giác của bạn"
+
+msgid "IDS_COM_BODY_ANDROID"
+msgstr "Android"
+
+msgid "IDS_COM_BODY_JAVA"
+msgstr "Java"
+
+msgid "IDS_COM_BODY_WARNING"
+msgstr "Cảnh báo"
+
+msgid "IDS_COM_BODY_MEDIA"
+msgstr "Media"
+
+msgid "IDS_COM_OPT_HEADPHONES_ABB"
+msgstr "Tai nghe"
+

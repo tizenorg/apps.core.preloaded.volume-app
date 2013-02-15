@@ -1,0 +1,18 @@
+msgid "IDS_COM_BODY_HIGH_VOLUMES_MAY_HARM_YOUR_HEARING_IF_YOU_LISTEN_FOR_A_LONG_TIME"
+msgstr "ระดับ​เสียง​ที่​สูง​อาจ​เป็น​อันตราย​ต่อ​การ​ฟัง​ของ​คุณ​ได้ หาก​คุณ​ฟัง​เป็น​เวลา​นาน"
+
+msgid "IDS_COM_BODY_ANDROID"
+msgstr "Android"
+
+msgid "IDS_COM_BODY_JAVA"
+msgstr "Java"
+
+msgid "IDS_COM_BODY_WARNING"
+msgstr "เตือน"
+
+msgid "IDS_COM_BODY_MEDIA"
+msgstr "มี​เดีย"
+
+msgid "IDS_COM_OPT_HEADPHONES_ABB"
+msgstr "หู​ฟัง"
+

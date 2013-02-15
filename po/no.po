@@ -1,0 +1,18 @@
+msgid "IDS_COM_BODY_HIGH_VOLUMES_MAY_HARM_YOUR_HEARING_IF_YOU_LISTEN_FOR_A_LONG_TIME"
+msgstr "Høy lydstyrke kan skade hørselen din hvis du lytter til det over lengre perioder"
+
+msgid "IDS_COM_BODY_ANDROID"
+msgstr "Android"
+
+msgid "IDS_COM_BODY_JAVA"
+msgstr "Java"
+
+msgid "IDS_COM_BODY_WARNING"
+msgstr "Advarsel"
+
+msgid "IDS_COM_BODY_MEDIA"
+msgstr "Medier"
+
+msgid "IDS_COM_OPT_HEADPHONES_ABB"
+msgstr "Hodetelefoner"
+

@@ -1,0 +1,18 @@
+msgid "IDS_COM_BODY_HIGH_VOLUMES_MAY_HARM_YOUR_HEARING_IF_YOU_LISTEN_FOR_A_LONG_TIME"
+msgstr "ხანგრძლივი დროით მუსიკის მაღალ ხმაზე მოსმენა შეიძლება გახდეს სმენის დაქვეითების მიზეზი"
+
+msgid "IDS_COM_BODY_MEDIA"
+msgstr "მედია"
+
+msgid "IDS_COM_BODY_ANDROID"
+msgstr "Android"
+
+msgid "IDS_COM_BODY_JAVA"
+msgstr "ჯავა"
+
+msgid "IDS_COM_BODY_WARNING"
+msgstr "გაფრთხილება"
+
+msgid "IDS_COM_OPT_HEADPHONES_ABB"
+msgstr "გარნიტურები"
+

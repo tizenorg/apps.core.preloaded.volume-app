@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns="http://tizen.org/ns/packages" package="org.tizen.volume" version="0.2.6" install-location="internal-only">
+	<label>Volume</label>
+	<author email="hhh.kwon@samsung.com" href="www.samsung.com">Hong Kwon</author>
+	<description>Volume Application</description>
+	<ui-application appid="org.tizen.volume" exec="/usr/apps/org.tizen.volume/bin/volume" nodisplay="true" multiple="false" type="capp" taskmanage="false">
+		<icon>org.tizen.volume.png</icon>
+		<label>Volume</label>
+	</ui-application>
+</manifest>

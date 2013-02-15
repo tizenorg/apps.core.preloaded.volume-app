@@ -1,0 +1,18 @@
+msgid "IDS_COM_BODY_HIGH_VOLUMES_MAY_HARM_YOUR_HEARING_IF_YOU_LISTEN_FOR_A_LONG_TIME"
+msgstr " ​長時間​​大音量​​で​​聴き​​続ける​​と、​​聴力​​を​​損傷​​する​​可能性​​が​​あります"
+
+msgid "IDS_COM_BODY_ANDROID"
+msgstr "Android"
+
+msgid "IDS_COM_BODY_JAVA"
+msgstr "Java"
+
+msgid "IDS_COM_BODY_WARNING"
+msgstr "警告"
+
+msgid "IDS_COM_BODY_MEDIA"
+msgstr "メディア"
+
+msgid "IDS_COM_OPT_HEADPHONES_ABB"
+msgstr "ヘッドホン"
+

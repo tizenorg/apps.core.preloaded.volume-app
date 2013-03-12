@@ -1,0 +1,17 @@
+Source: volume
+Section: devel
+Priority: extra
+Maintainer: Junghyun Kim <jh1114.kim@samsung.com>, hhh.kwon<hhh.kwon@samsung.com>
+Build-Depends: debhelper (>= 5), libappcore-efl-dev, libelm-dev, libmm-sound-dev, dlog-dev, libsvi-dev, libvconf-dev, libslp-utilx-dev, syspopup-dev, libbundle-dev, libglib2.0-dev, libui-gadget-dev
+Standards-Version: 3.7.2
+
+Package: org.tizen.volume
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: volume
+
+Package: org-tizen.volume-dbg
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Volume Debug Symbols
+ Debug symbols for volume

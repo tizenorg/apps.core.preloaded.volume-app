@@ -1,0 +1,18 @@
+msgid "IDS_COM_BODY_HIGH_VOLUMES_MAY_HARM_YOUR_HEARING_IF_YOU_LISTEN_FOR_A_LONG_TIME"
+msgstr "Ұзақ уақыт тыңдайтын болсаңыз, қатты дауыс деңгейі есту мүшеңізді зақымдауы мүмкін"
+
+msgid "IDS_COM_BODY_MEDIA"
+msgstr "Ақпарат"
+
+msgid "IDS_COM_BODY_ANDROID"
+msgstr "Android"
+
+msgid "IDS_COM_BODY_JAVA"
+msgstr "Java"
+
+msgid "IDS_COM_BODY_WARNING"
+msgstr "Ескерту"
+
+msgid "IDS_COM_OPT_HEADPHONES_ABB"
+msgstr "Құлаққаптар"
+

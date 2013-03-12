@@ -1,0 +1,18 @@
+msgid "IDS_COM_BODY_HIGH_VOLUMES_MAY_HARM_YOUR_HEARING_IF_YOU_LISTEN_FOR_A_LONG_TIME"
+msgstr "오랫동안 큰 소리로 음악을 들으면 청각이 손상될 수 있습니다"
+
+msgid "IDS_COM_BODY_ANDROID"
+msgstr "안드로이드"
+
+msgid "IDS_COM_BODY_JAVA"
+msgstr "Java"
+
+msgid "IDS_COM_BODY_WARNING"
+msgstr "경고"
+
+msgid "IDS_COM_BODY_MEDIA"
+msgstr "미디어"
+
+msgid "IDS_COM_OPT_HEADPHONES_ABB"
+msgstr "헤드폰"
+

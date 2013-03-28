@@ -54,6 +54,46 @@ enum{
 #define VCONFKEY_SETAPPL_ACCESSIBILITY_TURN_OFF_ALL_SOUNDS              VCONFKEY_SETAPPL_PREFIX"/accessibility/turn_off_all_sounds"
 #endif
 
+int _cache_flush(void *data)
+{
+	struct appdata *ad = (struct appdata *)data;
+	retvm_if(ad == NULL, -1, "Invalid argument: appdata is NULL\n");
+
+	Evas *evas = NULL;
+
+	int file_cache = -1;
+	int collection_cache = -1;
+	int image_cache = -1;
+	int font_cache = -1;
+
+	evas = evas_object_evas_get(ad->win);
+	retvm_if(evas == NULL, -1, "Evas is NULL\n");
+
+	file_cache = edje_file_cache_get();
+	collection_cache = edje_collection_cache_get();
+	image_cache = evas_image_cache_get(evas);
+	font_cache = evas_font_cache_get(evas);
+
+	edje_file_cache_set(file_cache);
+	edje_collection_cache_set(collection_cache);
+	evas_image_cache_set(evas, 0);
+	evas_font_cache_set(evas, 0);
+
+	evas_image_cache_flush(evas);
+	evas_render_idle_flush(evas);
+	evas_font_cache_flush(evas);
+
+	edje_file_cache_flush();
+	edje_collection_cache_flush();
+
+	edje_file_cache_set(file_cache);
+	edje_collection_cache_set(collection_cache);
+	evas_image_cache_set(evas, image_cache);
+	evas_font_cache_set(evas, font_cache);
+
+	return 0;
+}
+
 int _close_volume(void *data)
 {
 	struct appdata *ad = (struct appdata *)data;
@@ -63,7 +103,18 @@ int _close_volume(void *data)
 	_D("start closing volume\n");
 	ad->flag_deleting = EINA_TRUE;
 
-	_ungrab_key_new(ad);
+	if(ad->flag_exclusive_grabed){
+		_ungrab_key_new(ad);
+	}
+
+	if(ad->flag_top_positioni_grabed){
+		_ungrab_key_new(ad);
+	}
+
+	if(ad->flag_shared_grabed){
+		_ungrab_key_new(ad);
+	}
+
 	_grab_key_new(ad, ad->input_win, SHARED_GRAB);
 
 	DEL_TIMER(ad->sutimer)
@@ -72,10 +123,9 @@ int _close_volume(void *data)
 	DEL_TIMER(ad->ldtimer)
 	DEL_TIMER(ad->ptimer)
 
-	if (evas_object_visible_get(ad->win) == EINA_TRUE){
-		_D("hide window\n");
-		evas_object_hide(ad->win);
-	}
+	_D("hide window\n");
+	evas_object_hide(ad->win);
+
 	appcore_flush_memory();
 
 	ad->flag_deleting = EINA_FALSE;
@@ -95,14 +145,17 @@ Eina_Bool _lu_timer_cb(void *data)
 {
 	int val = -1;
 	struct appdata *ad = (struct appdata *)data;
-	retvm_if(ad == NULL, 0, "Invalid argument: appdata is NULL\n");
-	if (ad->win == NULL || evas_object_visible_get(ad->win) == EINA_FALSE){
-		_D("win is NULL or hide state, so long press pass\n");
-		return ECORE_CALLBACK_CANCEL;
-	}
+	retvm_if(ad == NULL, ECORE_CALLBACK_CANCEL, "Invalid argument: appdata is NULL\n");
+	retvm_if(ad->win == NULL, ECORE_CALLBACK_CANCEL, "window is NULL");
+	retvm_if(evas_object_visible_get(ad->win) == EINA_FALSE, ECORE_CALLBACK_CANCEL, "window is hide\n");
+
 	DEL_TIMER(ad->stimer)
 
 	_get_sound_level(ad->type, &val);
+	if(val == 15){
+		_D("already 15\n");
+		return ECORE_CALLBACK_CANCEL;
+	}
 	_set_sound_level(ad->type, val +1 > ad->step ? ad->step : val + 1);
 	_D("down, type(%d), step(%d) val[%d]\n", ad->type, ad->step, val+1);
 	return ECORE_CALLBACK_RENEW;
@@ -110,24 +163,40 @@ Eina_Bool _lu_timer_cb(void *data)
 
 Eina_Bool _su_timer_cb(void *data)
 {
+	int val = -1;
 	struct appdata *ad = (struct appdata *)data;
-	retvm_if(ad == NULL, 0, "Invalid argument: appdata is NULL\n");
-	ADD_TIMER(ad->lutimer, 0.0, _lu_timer_cb, ad)
-	return ECORE_CALLBACK_CANCEL;
+	retvm_if(ad == NULL, ECORE_CALLBACK_CANCEL, "Invalid argument: appdata is NULL\n");
+	retvm_if(ad->win == NULL, ECORE_CALLBACK_CANCEL, "window is NULL");
+	retvm_if(evas_object_visible_get(ad->win) == EINA_FALSE, ECORE_CALLBACK_CANCEL, "window is hide\n");
+
+	ecore_timer_interval_set(ad->sutimer, 0.1);
+	DEL_TIMER(ad->stimer)
+
+	_get_sound_level(ad->type, &val);
+	if(val == 15){
+		_D("already 15\n");
+		return ECORE_CALLBACK_CANCEL;
+	}
+	_set_sound_level(ad->type, val +1 > ad->step ? ad->step : val + 1);
+	_D("down, type(%d), step(%d) val[%d]\n", ad->type, ad->step, val+1);
+	return ECORE_CALLBACK_RENEW;
 }
 
 Eina_Bool _ld_timer_cb(void *data)
 {
 	int val = 0;
 	struct appdata *ad = (struct appdata *)data;
-	retvm_if(ad == NULL, 0, "Invalid argument: appdata is NULL\n");
-	if (ad->win == NULL || evas_object_visible_get(ad->win) == EINA_FALSE){
-		_D("win is NULL or hide state, so long press pass\n");
-		return ECORE_CALLBACK_CANCEL;
-	}
+	retvm_if(ad == NULL, ECORE_CALLBACK_CANCEL, "Invalid argument: appdata is NULL\n");
+	retvm_if(ad->win == NULL, ECORE_CALLBACK_CANCEL, "window is NULL");
+	retvm_if(evas_object_visible_get(ad->win) == EINA_FALSE, ECORE_CALLBACK_CANCEL, "window is hide\n");
+
 	DEL_TIMER(ad->stimer)
 
 	_get_sound_level(ad->type, &val);
+	if(val == 0){
+		_D("already 0\n");
+		return ECORE_CALLBACK_CANCEL;
+	}
 	_set_sound_level(ad->type, val -1 <= 0 ? 0 : val - 1);
 	_D("down, type(%d), step(%d) val[%d]\n", ad->type, ad->step, val+1);
 	return ECORE_CALLBACK_RENEW;
@@ -135,10 +204,30 @@ Eina_Bool _ld_timer_cb(void *data)
 
 Eina_Bool _sd_timer_cb(void *data)
 {
+	int val = 0;
 	struct appdata *ad = (struct appdata *)data;
-	retvm_if(ad == NULL, 0, "Invalid argument: appdata is NULL\n");
-	_D("add long down timer\n");
-	ADD_TIMER(ad->ldtimer, 0.0, _ld_timer_cb, ad)
+	retvm_if(ad == NULL, ECORE_CALLBACK_CANCEL, "Invalid argument: appdata is NULL\n");
+	retvm_if(ad->win == NULL, ECORE_CALLBACK_CANCEL, "window is NULL");
+	retvm_if(evas_object_visible_get(ad->win) == EINA_FALSE, ECORE_CALLBACK_CANCEL, "window is hide\n");
+
+	ecore_timer_interval_set(ad->sdtimer, 0.1);
+	DEL_TIMER(ad->stimer)
+
+	_get_sound_level(ad->type, &val);
+	if(val == 0){
+		_D("already 0\n");
+		return ECORE_CALLBACK_CANCEL;
+	}
+	_set_sound_level(ad->type, val -1 <= 0 ? 0 : val - 1);
+	_D("down, type(%d), step(%d) val[%d]\n", ad->type, ad->step, val+1);
+	return ECORE_CALLBACK_RENEW;
+}
+
+static Eina_Bool _grab_top_position(void *data)
+{
+	struct appdata *ad = (struct appdata *)data;
+	retvm_if(ad == NULL, ECORE_CALLBACK_CANCEL, "Invalid argument: appdata is NULL\n");
+	_grab_key_new(ad, -1, TOP_POSITION_GRAB);
 	return ECORE_CALLBACK_CANCEL;
 }
 
@@ -150,23 +239,24 @@ Eina_Bool _volume_show(void *data)
 	int lock = IDLELOCK_ON;
 	struct appdata *ad = (struct appdata *)data;
 	retvm_if(ad == NULL, EINA_FALSE, "Invalid argument: appdata is NULL\n");
+	retvm_if(ad->flag_deleting ==  EINA_TRUE, EINA_FALSE, "volume is closing\n");
 
 	status = _check_status(&lock, &type);
 	if(status != LOCK_AND_NOT_MEDIA && ad->win)
 	{
 		_init_mm_sound(ad);
 		/* ungrab SHARED_GRAB */
-		_ungrab_key_new(ad);
+		//_ungrab_key_new(ad);
 
 		if(status == UNLOCK_STATUS)
 		{
-			_grab_key_new(ad, -1, TOP_POSITION_GRAB);
-
 			_rotate_func(ad);
 			elm_win_indicator_mode_set(ad->win, ELM_WIN_INDICATOR_HIDE);
 			evas_object_show(ad->win);
 			if(syspopup_has_popup(ad->volume_bundle))
 				syspopup_reset(ad->volume_bundle);
+			//_grab_key_new(ad, -1, TOP_POSITION_GRAB);
+			ecore_idler_add(_grab_top_position, ad);
 		}
 		else if(status == LOCK_AND_MEIDA)
 		{
@@ -187,9 +277,9 @@ Eina_Bool _volume_show(void *data)
 
 static Eina_Bool _key_press_cb(void *data, int type, void *event)
 {
-	_D("%s\n", __func__);
 	int val=0, snd=0, vib=0;
 	Ecore_Event_Key *ev = event;
+	_D("%s %s\n", __func__, ev->keyname);
 	int status = -1;
 	int mtype = MM_ERROR_SOUND_VOLUME_CAPTURE_ONLY;
 	int lock = IDLELOCK_ON;
@@ -203,9 +293,19 @@ static Eina_Bool _key_press_cb(void *data, int type, void *event)
 	retvm_if(ad == NULL, ECORE_CALLBACK_CANCEL, "Invalid argument: appdata is NULL\n");
 	retvm_if(ad->win == NULL, ECORE_CALLBACK_CANCEL, "Invalid argument: window is NULL\n");
 
-	ret = vconf_get_bool(VCONFKEY_SETAPPL_ACCESSIBILITY_TURN_OFF_ALL_SOUNDS, &is_turn_off_all_sounds);
-	if(ret == 0)
+	if(!strcmp(ev->keyname, KEY_CANCEL))
 	{
+		_D("CANCEL Key is pressed\n");
+		_close_volume(ad);
+		return ECORE_CALLBACK_CANCEL;
+	}
+
+	ret = vconf_get_bool(VCONFKEY_SETAPPL_ACCESSIBILITY_TURN_OFF_ALL_SOUNDS, &is_turn_off_all_sounds);
+	if(is_turn_off_all_sounds)
+	{
+		if(status == LOCK_AND_NOT_MEDIA)
+			return ECORE_CALLBACK_CANCEL;
+		notification_status_message_post(_("IDS_PN_POP_UNABLE_TO_ADJUST_VOLUME_WHILE_ALL_SOUND_IS_OFF_YOU_CAN_TURN_ON_SOUND_BY_GOING_TO_ACCESSIBILITY_SETTINGS"));
 		retvm_if(is_turn_off_all_sounds == EINA_TRUE, ECORE_CALLBACK_CANCEL,
 			"VCONFKEY_SETAPPL_ACCESSIBILITY_TURN_OFF_ALL_SOUNDS is set, all sound is mute\n");
 	}
@@ -244,10 +344,14 @@ static Eina_Bool _key_press_cb(void *data, int type, void *event)
 		_set_sound_level(ad->type, val + 1);
 		if(snd)_play_sound(ad->type, ad->sh);
 		DEL_TIMER(ad->sutimer)
+		DEL_TIMER(ad->sdtimer)
+		DEL_TIMER(ad->ldtimer)
 		ADD_TIMER(ad->sutimer, 0.5, _su_timer_cb, ad)
 
 		_D("set volume %d -> [%d]\n", val, val+1);
-
+		if(ad->sutimer == NULL){
+			_D("error\n");
+		}
 	} else if (!strcmp(ev->keyname, KEY_VOLUMEDOWN)) {
 		_get_sound_level(ad->type, &val);
 		if (val == 0) {
@@ -257,11 +361,16 @@ static Eina_Bool _key_press_cb(void *data, int type, void *event)
 		_set_sound_level(ad->type, val - 1);
 		if(snd)_play_sound(ad->type, ad->sh);
 		DEL_TIMER(ad->sdtimer)
+		DEL_TIMER(ad->sutimer)
+		DEL_TIMER(ad->lutimer)
 		ADD_TIMER(ad->sdtimer, 0.5, _sd_timer_cb, ad)
 
 		_D("type (%d) set volume %d -> [%d]\n", ad->type, val, val-1);
+	if(ad->sdtimer == NULL)
+		_D("error\n");
 
 	}
+	_D("key press fini\n");
 	return ECORE_CALLBACK_CANCEL;
 }
 
@@ -269,10 +378,18 @@ static Eina_Bool _key_release_cb(void *data, int type, void *event)
 {
 	Ecore_Event_Key *ev = event;
 	struct appdata *ad = (struct appdata *)data;
+	_D("%s %s\n", __func__, ev->keyname);
 
 	retvm_if(ev == NULL, ECORE_CALLBACK_CANCEL, "Invalid arguemnt: event is NULL\n");
 	retvm_if(ad == NULL, ECORE_CALLBACK_CANCEL, "Invalid argument:appdata is NULL\n");
 	retvm_if(ad->win == NULL, ECORE_CALLBACK_CANCEL, "Invalid argument: window is NULL\n");
+
+	if(!strcmp(ev->keyname, KEY_CANCEL))
+	{
+		_D("CANCEL Key is released\n");
+		_close_volume(ad);
+		return ECORE_CALLBACK_CANCEL;
+	}
 
 	if (ad->flag_touching == EINA_TRUE) {
 		return ECORE_CALLBACK_CANCEL;
@@ -282,12 +399,10 @@ static Eina_Bool _key_release_cb(void *data, int type, void *event)
 		_D("up key released and del timer\n");
 		DEL_TIMER(ad->sutimer)
 		DEL_TIMER(ad->lutimer)
-		DEL_TIMER(ad->luwarmtimer)
 	} else if (!strcmp(ev->keyname, KEY_VOLUMEDOWN)) {
 		_D("down key released and del timer\n");
 		DEL_TIMER(ad->sdtimer)
 		DEL_TIMER(ad->ldtimer)
-		DEL_TIMER(ad->ldwarmtimer)
 	}
 
 	ad->flag_pressing = EINA_FALSE;
@@ -573,8 +688,7 @@ int _volume_popup_resize(void *data, int angle)
 	else
 		rotation = angle;
 
-	system_info_get_value_int(SYSTEM_INFO_KEY_SCREEN_WIDTH, &w);
-	system_info_get_value_int(SYSTEM_INFO_KEY_SCREEN_HEIGHT, &h);
+	ecore_x_window_size_get(ecore_x_window_root_first_get(), &w, &h);
 
 	switch(rotation){
 		case 90 :
@@ -820,6 +934,8 @@ static void _button_cb(void *data, Evas_Object *obj, void *event_info)
 	struct appdata *ad = (struct appdata *)data;
 	retm_if(ad == NULL, "Invalid argument: appdata is NULL\n");
 	char buf[PATHBUF_SIZE] = {0, };
+	int ret = -1;
+
 	snprintf(buf, sizeof(buf), "%s/%s", IMAGEDIR, IMG_VOLUME_ICON_SETTINGS);
 	elm_image_file_set(obj, buf, NULL);
 	if(evas_object_visible_get(ad->win)){
@@ -832,32 +948,82 @@ static void _button_cb(void *data, Evas_Object *obj, void *event_info)
 				ecore_x_e_illume_zone_get(elm_win_xwindow_get(ad->win)), ECORE_X_ILLUME_QUICKPANEL_STATE_OFF);
 		}
 		service_h svc;
-		service_create(&svc);
-		service_set_package(svc, "setting-profile-efl");
-		service_send_launch_request(svc, NULL, NULL);
+		ret = service_create(&svc);
+		if(ret != SERVICE_ERROR_NONE)
+		{
+			switch(ret)
+			{
+				case SERVICE_ERROR_INVALID_PARAMETER :
+					_D("error : SERVICE_ERROR_INVALID_PARAMETER");
+					break;
+				case SERVICE_ERROR_OUT_OF_MEMORY :
+					_D("error : SERVICE_ERROR_OUT_OF_MEMORY");
+					break;
+				default :
+					_D("error : %d\n", ret);
+					break;
+			}
+		}
+		ret = service_set_package(svc, "setting-profile-efl");
+
+		if(ret != SERVICE_ERROR_NONE)
+		{
+			switch(ret)
+			{
+				case SERVICE_ERROR_INVALID_PARAMETER :
+					_D("error : SERVICE_ERROR_INVALID_PARAMETER");
+					break;
+				case SERVICE_ERROR_OUT_OF_MEMORY :
+					_D("error : SERVICE_ERROR_OUT_OF_MEMORY");
+					break;
+				default :
+					_D("error : %d\n", ret);
+					break;
+			}
+		}
+		ret = service_send_launch_request(svc, NULL, NULL);
+		if(ret != SERVICE_ERROR_NONE)
+		{
+			switch(ret)
+			{
+				case SERVICE_ERROR_INVALID_PARAMETER :
+					_D("error : SERVICE_ERROR_INVALID_PARAMETER");
+					break;
+				case SERVICE_ERROR_OUT_OF_MEMORY :
+					_D("error : SERVICE_ERROR_OUT_OF_MEMORY");
+					break;
+				case SERVICE_ERROR_APP_NOT_FOUND :
+					_D("error : SERVICE_ERROR_APP_NOT_FOUND");
+					break;
+				case SERVICE_ERROR_LAUNCH_REJECTED :
+					_D("error : SERVICE_ERROR_LAUNCH_REJECTED");
+					break;
+				default :
+					_D("error : %d\n", ret);
+					break;
+			}
+		}
 		_app_pause(ad);
 
 		service_destroy(svc);
 	}
 }
-
 static int _check_emul(void)
 {
-	int is_emul = 0;
-	char *info = NULL;
+        int is_emul = 0;
+        char *info = NULL;
 
-	if (system_info_get_value_string(SYSTEM_INFO_KEY_MODEL, &info) == 0) {
-		if (info == NULL) return 0;
-		if (!strncmp(EMUL_STR, info, strlen(info))) {
-			is_emul = 1;
-		}
-	}
+        if (system_info_get_value_string(SYSTEM_INFO_KEY_MODEL, &info) == 0) {
+                if (info == NULL) return 0;
+                if (!strncmp(EMUL_STR, info, strlen(info))) {
+                        is_emul = 1;
+                }
+        }
 
-	if (info != NULL) free(info);
+        if (info != NULL) free(info);
 
-	return is_emul;
+        return is_emul;
 }
-
 int _app_reset(bundle *b, void *data)
 {
 	_D("%s\n", __func__);
@@ -991,5 +1157,6 @@ int _app_pause(struct appdata *ad)
 {
 	_D("%s\n", __func__);
 	_close_volume(ad);
+	_cache_flush(ad);
 	return 0;
 }

@@ -204,10 +204,11 @@ void _mm_func(void *data)
 	mm_sound_volume_get_value(ad->type, (unsigned int*)(&val));
 
 	/* apply earphone safety concept */
-	if(ad->device != device){
-		if(device == SYSTEM_AUDIO_ROUTE_PLAYBACK_DEVICE_EARPHONE && val > 9)
+	if(ad->device != device) {
+		if(device == SYSTEM_AUDIO_ROUTE_PLAYBACK_DEVICE_EARPHONE && val > 9) {
 			val = 9;
 			_set_sound_level(ad->type, val);
+		}
 		ad->device = device;
 	}
 	_set_device_warning(ad, val, device);

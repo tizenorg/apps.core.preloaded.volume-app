@@ -1063,7 +1063,7 @@ int _app_reset(bundle *b, void *data)
 	elm_theme_extension_add(th, EDJ_APP);
 
 	ad->flag_emul = _check_emul();
-
+#if USE_SETTING_ICON
 	if(!ad->flag_emul)
 	{
 		block = _add_layout(win, EDJ_APP, GRP_VOLUME_BLOCKEVENTS);
@@ -1112,6 +1112,7 @@ int _app_reset(bundle *b, void *data)
 	}
 	else
 	{
+#endif
 		block = _add_layout(win, EDJ_APP, GRP_VOLUME_BLOCKEVENTS);
 		retvm_if(block == NULL, -1, "Failed to add block layout\n");
 
@@ -1143,7 +1144,9 @@ int _app_reset(bundle *b, void *data)
 		elm_object_part_content_set(ad->sl, "icon", ic);
 		ad->ic = ic;
 		_set_icon(ad, val);
+#if USE_SETTING_ICON
 	}
+#endif
 
 
 	ret = syspopup_create(b, &handler, ad->win, ad);

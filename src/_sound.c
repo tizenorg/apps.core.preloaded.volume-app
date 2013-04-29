@@ -97,13 +97,16 @@ int _set_icon(void *data, int val)
 
 	switch(ad->type){
 		case VOLUME_TYPE_RINGTONE:
-			img = IMG_VOLUME_ICON_CALL;
+			img = IMG_VOLUME_ICON;
 			break;
 		case VOLUME_TYPE_MEDIA:
 			if(device == SYSTEM_AUDIO_ROUTE_PLAYBACK_DEVICE_EARPHONE)
 				img = IMG_VOLUME_ICON_HEADPHONE;
 			else
 				img = IMG_VOLUME_ICON_MEDIA;
+			break;
+		case VOLUME_TYPE_CALL:
+			img = IMG_VOLUME_ICON_CALL;
 			break;
 		default:
 			img = IMG_VOLUME_ICON;

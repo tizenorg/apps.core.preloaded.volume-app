@@ -77,6 +77,8 @@
 		x = NULL;\
 	}
 
+#define USE_SETTING_ICON 0
+
 struct appdata
 {
 	Ecore_X_Window input_win;

@@ -48,3 +48,4 @@ rm -rf %{buildroot}
 %{PREFIX}/res/*
 /opt/share/icons/default/small/org.tizen.volume.png
 /usr/share/packages/org.tizen.volume.xml
+/etc/smack/accesses2.d/org.tizen.volume.rule

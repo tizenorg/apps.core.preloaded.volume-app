@@ -14,7 +14,7 @@ org.tizen.volume svi-data rx
 org.tizen.volume org.tizen.setting rwx
 org.tizen.volume org.tizen.music-player rw
 aul org.tizen.volume rx
-e17 org.tizen.volume w
+e17 org.tizen.volume rwx
 dbus org.tizen.volume rwx
 org.tizen.cluster-home org.tizen.volume rx
 org.tizen.voluem sys-assert::core rwxat

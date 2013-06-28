@@ -6,6 +6,7 @@ Release:	1
 Group:	TO_BE/FILLED_IN
 License:	Flora Software License
 Source0:	%{name}-%{version}.tar.gz
+Source1001: 	org.tizen.volume.manifest
 BuildRequires:  pkgconfig(appcore-efl)
 BuildRequires:  pkgconfig(elementary)
 BuildRequires:  pkgconfig(utilX)
@@ -28,6 +29,7 @@ volume.
 
 %prep
 %setup -q
+cp %{SOURCE1001} .
 
 %define PREFIX /usr/apps/org.tizen.volume
 
@@ -42,7 +44,7 @@ rm -rf %{buildroot}
 %make_install
 
 %files
-%manifest org.tizen.volume.manifest
+%manifest %{name}.manifest
 %defattr(-,root,root,-)
 %{PREFIX}/bin/*
 %{PREFIX}/res/*

@@ -1,0 +1,8 @@
+Change-Id: I90d4e33f2aeaa695af1a40b37d61bb991661de5e
+Code-Review+2: Ryan Ware <ware@linux.intel.com>
+Verified+1: Ryan Ware <ware@linux.intel.com>
+Submitted-by: Ryan Ware <ware@linux.intel.com>
+Submitted-at: Mon, 08 Jul 2013 10:07:19 -0700
+Reviewed-on: https://review.tizen.org/gerrit/4485
+Project: apps/core/preloaded/volume-app
+Branch: refs/heads/tizen

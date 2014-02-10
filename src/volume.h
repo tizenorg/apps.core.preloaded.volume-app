@@ -26,13 +26,13 @@
 #include <appcore-efl.h>
 #include <Ecore_X.h>
 #include <notification.h>
-
+#include <tzplatform_config.h>
 #if !defined(PACKAGE)
 #  define PACKAGE "volume"
 #endif
 
 #if !defined(RESDIR)
-#  define RESDIR "/usr/apps/org.tizen.volume/res"
+#  define RESDIR tzplatform_mkpath(TZ_SYS_RO_APP,"org.tizen.volume/res")
 #endif
 
 #if !defined(LOCALEDIR)

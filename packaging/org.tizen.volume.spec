@@ -18,12 +18,15 @@ BuildRequires:  pkgconfig(ui-gadget-1)
 BuildRequires:	pkgconfig(notification)
 BuildRequires:	pkgconfig(capi-system-info)
 BuildRequires:	pkgconfig(feedback)
+BuildRequires:  pkgconfig(libtzplatform-config)
 
 BuildRequires:  cmake
 BuildRequires:  edje-bin
 BuildRequires:  embryo-bin
 BuildRequires:  gettext-devel
 
+Requires: libtzplatform-config
+Requires: tizen-platform-config
 %description
 volume.
 
@@ -36,7 +39,7 @@ cp %{SOURCE1001} .
 %build
 RPM_OPT=`echo $CFLAGS|sed 's/-Wp,-D_FORTIFY_SOURCE=2//'`
 export CFLAGS=$RPM_OPT
-cmake  -DCMAKE_INSTALL_PREFIX="%{PREFIX}"
+cmake  -DCMAKE_INSTALL_PREFIX="%{PREFIX}" -DTZ_SYS_SHARE=%TZ_SYS_SHARE -DTZ_SYS_ETC=%TZ_SYS_ETC -DTZ_SYS_BIN=%TZ_SYS_BIN
 make %{?jobs:-j%jobs}
 
 %install
@@ -48,6 +51,6 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %{PREFIX}/bin/*
 %{PREFIX}/res/*
-/opt/share/icons/default/small/org.tizen.volume.png
+%{TZ_SYS_SHARE}/icons/default/small/org.tizen.volume.png
 /usr/share/packages/org.tizen.volume.xml
-/opt/etc/smack/accesses.d/org.tizen.volume.rule
+%{TZ_SYS_ETC}/smack/accesses.d/org.tizen.volume.rule

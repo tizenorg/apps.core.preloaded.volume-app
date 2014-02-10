@@ -7,8 +7,8 @@ POTFILES=POTFILES.in
 #ALL_LINGUAS= ar bg ca cs da de_DE el_GR en en_GB en_US es_ES fi fr_FR he hi hr hu id it_IT ja_JP ko_KR lt lv ms nl_NL no pl pt_PT ro ru_RU sk sl sr sv th tr_TR uk vi zh_CN zh_HK zh_TW
 ALL_LINGUAS="ar bg ca cs da de_DE el_GR en en_GB en_US es_ES fi fr_FR he hi hr hu id it_IT ja_JP ko_KR lt lv ms nl_NL no pl pt_PT ro ru_RU sk sl sr sv th tr_TR uk vi zh_CN zh_HK zh_TW"
 
-XGETTEXT=/usr/bin/xgettext
-MSGMERGE=/usr/bin/msgmerge
+XGETTEXT=${TZ_SYS_BIN}/xgettext
+MSGMERGE=${TZ_SYS_BIN}/msgmerge
 
 echo -n "Make ${PACKAGE}.pot  "
 if [ ! -e $POTFILES ] ; then

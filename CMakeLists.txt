@@ -14,9 +14,8 @@ SET(PKGNAME "org.${VENDOR}.${PACKAGE}")
 SET(PREFIX ${CMAKE_INSTALL_PREFIX})
 SET(BINDIR "${PREFIX}/bin")
 SET(RESDIR "${PREFIX}/res")
-SET(DATADIR "/opt/usr/apps/com.${VENDOR}.${PACKAGE}/data")
 SET(LOCALEDIR "${RESDIR}/locale")
-SET(ICONDIR "/opt/share/icons/default/small")
+SET(ICONDIR "${TZ_SYS_SHARE}/icons/default/small")
 SET(IMAGEDIR "${RESDIR}/images/${PACKAGE}")
 SET(EDJDIR "${RESDIR}/edje")
 
@@ -46,6 +45,7 @@ pkg_check_modules(pkgs REQUIRED
 	ui-gadget-1
 	notification
 	capi-system-info
+	libtzplatform-config
 )
 
 FOREACH(flag ${pkgs_CFLAGS})
@@ -68,7 +68,6 @@ ADD_DEFINITIONS("-DPACKAGE=\"${PACKAGE}\"")
 ADD_DEFINITIONS("-DPACKAGE_NAME=\"${PKGNAME}\"")
 ADD_DEFINITIONS("-DPREFIX=\"${PREFIX}\"")
 ADD_DEFINITIONS("-DRESDIR=\"${RESDIR}\"")
-ADD_DEFINITIONS("-DDATADIR=\"${DATADIR}\"")
 ADD_DEFINITIONS("-DLOCALEDIR=\"${LOCALEDIR}\"")
 ADD_DEFINITIONS("-DICONDIR=\"${ICONDIR}\"")
 ADD_DEFINITIONS("-DIMAGEDIR=\"${IMAGEDIR}\"")
@@ -82,7 +81,7 @@ TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${pkgs_LDFLAGS} -lm)
 
 INSTALL(TARGETS ${PROJECT_NAME} DESTINATION ${BINDIR})
 
-INSTALL(FILES ${CMAKE_SOURCE_DIR}/${PKGNAME}.rule DESTINATION /opt/etc/smack/accesses.d)
+INSTALL(FILES ${CMAKE_SOURCE_DIR}/${PKGNAME}.rule DESTINATION ${TZ_SYS_ETC}/smack/accesses.d)
 
 # install desktop file & icon
 #CONFIGURE_FILE(${PKGNAME}.desktop.in ${CMAKE_BINARY_DIR}/${PKGNAME}.desktop)

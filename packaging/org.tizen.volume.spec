@@ -51,4 +51,3 @@ rm -rf %{buildroot}
 %{PREFIX}/res/*
 %{TZ_SYS_SHARE}/icons/default/small/org.tizen.volume.png
 /usr/share/packages/org.tizen.volume.xml
-%{TZ_SYS_ETC}/smack/accesses.d/org.tizen.volume.rule

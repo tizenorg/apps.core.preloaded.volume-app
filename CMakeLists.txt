@@ -2,10 +2,14 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 PROJECT(volume C)
 
 SET(SRCS
-	src/volume.c
-	src/_util_efl.c
-	src/_logic.c
-	src/_sound.c
+	src/main.c
+	src/view.c
+	src/control.c
+	src/x_event.c
+	src/key_event.c
+	src/timer.c
+	src/sound.c
+	src/bt.c
 )
 
 SET(VENDOR "tizen")
@@ -14,8 +18,9 @@ SET(PKGNAME "org.${VENDOR}.${PACKAGE}")
 SET(PREFIX ${CMAKE_INSTALL_PREFIX})
 SET(BINDIR "${PREFIX}/bin")
 SET(RESDIR "${PREFIX}/res")
+SET(DATADIR "/opt/usr/apps/com.${VENDOR}.${PACKAGE}/data")
 SET(LOCALEDIR "${RESDIR}/locale")
-SET(ICONDIR "${TZ_SYS_SHARE}/icons/default/small")
+SET(ICONDIR "/usr/share/icons/default/small")
 SET(IMAGEDIR "${RESDIR}/images/${PACKAGE}")
 SET(EDJDIR "${RESDIR}/edje")
 
@@ -24,37 +29,43 @@ IF("${CMAKE_BUILD_TYPE}" STREQUAL "")
 ENDIF("${CMAKE_BUILD_TYPE}" STREQUAL "")
 MESSAGE("Build type: ${CMAKE_BUILD_TYPE}")
 
-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/src)
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/include)
 
 INCLUDE(FindPkgConfig)
 pkg_check_modules(pkgs REQUIRED
+	capi-appfw-application
+	capi-appfw-app-manager
 	appcore-efl
-	ecore-input
-	ecore-x
+#	ecore-x
 	ecore
 	evas
 	edje
-	mm-sound
+	capi-media-sound-manager
+	capi-network-bluetooth
 	vconf
-	utilX
+#	utilX
 	syspopup
+	syspopup-caller
 	bundle
-	svi
 	feedback
-	glib-2.0
-	ui-gadget-1
 	notification
-	capi-system-info
-	libtzplatform-config
+#	x11 xcomposite xext xi
 )
 
 FOREACH(flag ${pkgs_CFLAGS})
 	SET(EXTRA_CFLAGS "${EXTRA_CFLAGS} ${flag}")
 ENDFOREACH(flag)
 
-SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EXTRA_CFLAGS}")
-SET(CMAKE_C_FLAGS_DEBUG "-O0 -g")
-SET(CMAKE_C_FLAGS_RELEASE "-O2")
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EXTRA_CFLAGS} -fPIE")
+SET(CMAKE_C_FLAGS_PROFILING "-O0 -g -pg -fPIE")
+SET(CMAKE_CXX_FLAGS_PROFILING "-O0 -std=c++0x -g -pg -fPIE")
+SET(CMAKE_C_FLAGS_DEBUG "-O0 -g -fPIE")
+SET(CMAKE_CXX_FLAGS_DEBUG "-O0 -std=c++0x -g -fPIE")
+SET(CMAKE_C_FLAGS_RELEASE "-O2 -g -fPIE")
+SET(CMAKE_CXX_FLAGS_RELEASE "-O2 std=c++0x -g -fPIE")
+SET(CMAKE_C_FLAGS_CCOV "-O2 -g --coverage -fPIE")
+SET(CMAKE_CXX_FLAGS_CCOV "-O2 std=c++0x -g --coverage -fPIE")
+SET(CMAKE_EXE_LINKER_FLAGS "-Wl,--as-needed -pie")
 
 FIND_PROGRAM(UNAME NAMES uname)
 EXEC_PROGRAM("${UNAME}" ARGS "-m" OUTPUT_VARIABLE "ARCH")
@@ -68,24 +79,22 @@ ADD_DEFINITIONS("-DPACKAGE=\"${PACKAGE}\"")
 ADD_DEFINITIONS("-DPACKAGE_NAME=\"${PKGNAME}\"")
 ADD_DEFINITIONS("-DPREFIX=\"${PREFIX}\"")
 ADD_DEFINITIONS("-DRESDIR=\"${RESDIR}\"")
+ADD_DEFINITIONS("-DDATADIR=\"${DATADIR}\"")
 ADD_DEFINITIONS("-DLOCALEDIR=\"${LOCALEDIR}\"")
 ADD_DEFINITIONS("-DICONDIR=\"${ICONDIR}\"")
 ADD_DEFINITIONS("-DIMAGEDIR=\"${IMAGEDIR}\"")
 ADD_DEFINITIONS("-DEDJDIR=\"${EDJDIR}\"")
-
-#SET(CMAKE_EXE_LINKER_FLAGS "-Wl,--as-needed")
-SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--as-needed")
 
 ADD_EXECUTABLE(${PROJECT_NAME} ${SRCS})
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${pkgs_LDFLAGS} -lm)
 
 INSTALL(TARGETS ${PROJECT_NAME} DESTINATION ${BINDIR})
 
-
 # install desktop file & icon
 #CONFIGURE_FILE(${PKGNAME}.desktop.in ${CMAKE_BINARY_DIR}/${PKGNAME}.desktop)
 INSTALL(FILES ${CMAKE_BINARY_DIR}/${PKGNAME}.xml DESTINATION /usr/share/packages)
 INSTALL(FILES ${CMAKE_SOURCE_DIR}/${PKGNAME}.png DESTINATION ${ICONDIR})
+INSTALL(FILES ${CMAKE_SOURCE_DIR}/${PKGNAME}.efl DESTINATION /etc/smack/accesses.d)
 
 # data
 ADD_SUBDIRECTORY(data)

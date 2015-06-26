@@ -16,3 +16,42 @@ msgstr "Rabhadh"
 msgid "IDS_COM_OPT_HEADPHONES_ABB"
 msgstr "Cluasáin"
 
+msgid "IDS_PN_POP_UNABLE_TO_ADJUST_VOLUME_WHILE_ALL_SOUND_IS_OFF_YOU_CAN_TURN_ON_SOUND_BY_GOING_TO_ACCESSIBILITY_SETTINGS"
+msgstr "Ní féidir an airde a choigeartú agus gach fuaim casta as. Féadann tú fuaim a chasadh air trí ghabháil chuig socruithe inrochtaineachta."
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_PM"
+msgstr "Tá sé %d:%02d I.N."
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_AM"
+msgstr "Tá sé %d:%02d R.N."
+
+msgid "IDS_LCKSCN_BODY_YOU_HAVE_P1SD_MISSED_CALLS_AND_P2SD_UNREAD_MESSAGEST_TTS"
+msgstr "Tá %1$d glao caillte agus %2$d teachtaireacht neamhléite agat"
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_T_TTS"
+msgstr "%d glao caillte"
+
+msgid "IDS_LCKSCN_BODY_PD_NEW_MESSAGES_T_TTS"
+msgstr "%d teachtaireacht nua"
+
+msgid "IDS_TTS_BODY_1_MISSED_CALL_T_TTS"
+msgstr "1 ghlao caillte"
+
+msgid "IDS_TTS_BODY_1_NEW_MESSAGE_T_TTS"
+msgstr "1 teachtaireacht nua"
+
+msgid "IDS_LCKSCN_BODY_IT_IS_P1SD_CP2SD_T_TTS"
+msgstr "%1$d:%2$02d an t-am anois"
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "1 ghlao a cailleadh agus 1 teachtaireacht neamhléite"
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "%d glao a cailleadh agus 1 teachtaireacht neamhléite"
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_PD_UNREAD_MESSAGES_T_TTS"
+msgstr "1 ghlao a cailleadh agus %d teachtaireacht neamhléite"
+
+msgid "IDS_ST_BODY_PERSONAL_MODE_ENABLED"
+msgstr "Mód pearsanta cumasaithe"
+

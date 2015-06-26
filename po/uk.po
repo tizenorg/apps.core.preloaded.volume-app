@@ -1,5 +1,8 @@
 msgid "IDS_COM_BODY_HIGH_VOLUMES_MAY_HARM_YOUR_HEARING_IF_YOU_LISTEN_FOR_A_LONG_TIME"
-msgstr "Тривале прослуховування за високого рівня гучності може призвести до погіршення слуху"
+msgstr "Тривале прослуховування за високого рівня гучності може призвести до погіршення слуху."
+
+msgid "IDS_COM_BODY_MEDIA"
+msgstr "Медіадані"
 
 msgid "IDS_COM_BODY_ANDROID"
 msgstr "Android"
@@ -10,9 +13,48 @@ msgstr "Java"
 msgid "IDS_COM_BODY_WARNING"
 msgstr "Попередження"
 
-msgid "IDS_COM_BODY_MEDIA"
-msgstr "Медіадані"
-
 msgid "IDS_COM_OPT_HEADPHONES_ABB"
 msgstr "Навушники"
+
+msgid "IDS_PN_POP_UNABLE_TO_ADJUST_VOLUME_WHILE_ALL_SOUND_IS_OFF_YOU_CAN_TURN_ON_SOUND_BY_GOING_TO_ACCESSIBILITY_SETTINGS"
+msgstr "Неможливо відрегулювати гучність у разі вимкнення всіх звуків. Звуки можна ввімкнути, перейшовши до установок доступності."
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_PM"
+msgstr "Зараз %d:%d після полудня."
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_AM"
+msgstr "Зараз %d:%d до полудня."
+
+msgid "IDS_LCKSCN_BODY_YOU_HAVE_P1SD_MISSED_CALLS_AND_P2SD_UNREAD_MESSAGEST_TTS"
+msgstr "Пропущених викликів: %1$d, непрочитаних повідомлень: %2$d."
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_T_TTS"
+msgstr "Пропущені виклики: %d"
+
+msgid "IDS_LCKSCN_BODY_PD_NEW_MESSAGES_T_TTS"
+msgstr "Нові повідомлення: %d"
+
+msgid "IDS_TTS_BODY_1_MISSED_CALL_T_TTS"
+msgstr "1 пропущений виклик"
+
+msgid "IDS_TTS_BODY_1_NEW_MESSAGE_T_TTS"
+msgstr "1 нове повідомлення"
+
+msgid "IDS_LCKSCN_BODY_IT_IS_P1SD_CP2SD_T_TTS"
+msgstr "Зараз %1$d:%2$d."
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "1 пропущений виклик; 1 непрочитане повідомлення"
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "Пропущених викликів: %d; 1 непрочитане повідомлення"
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_PD_UNREAD_MESSAGES_T_TTS"
+msgstr "1 пропущений виклик; непрочитаних повідомлень: %d"
+
+msgid "IDS_ST_BODY_PERSONAL_MODE_ENABLED"
+msgstr "Особистий режим увімкнено."
+
+msgid "IDS_ST_TPOP_DISABLE_TURN_OFF_ALL_SOUNDS_IN_ACCESSIBILITY_SETTINGS"
+msgstr "Вимкніть опцію «Вимкнути всі звуки» в установках доступності."
 

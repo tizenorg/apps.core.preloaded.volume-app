@@ -16,3 +16,45 @@ msgstr "Oharra"
 msgid "IDS_COM_OPT_HEADPHONES_ABB"
 msgstr "Aurikularrak"
 
+msgid "IDS_PN_POP_UNABLE_TO_ADJUST_VOLUME_WHILE_ALL_SOUND_IS_OFF_YOU_CAN_TURN_ON_SOUND_BY_GOING_TO_ACCESSIBILITY_SETTINGS"
+msgstr "Ezin da bolumena egokitu soinu guztiak itzalita daudenean. Soinua piztu dezakezu irisgarritasun ezarpenetan."
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_PM"
+msgstr "Arratsaldeko %d:%d-a(k) d(ir)a"
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_AM"
+msgstr "Goizeko %d:%d-a(k) d(ir)a"
+
+msgid "IDS_LCKSCN_BODY_YOU_HAVE_P1SD_MISSED_CALLS_AND_P2SD_UNREAD_MESSAGEST_TTS"
+msgstr "%1$d dei galdu eta irakurri gabeko %2$d mezu dituzu"
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_T_TTS"
+msgstr "%d dei galdu"
+
+msgid "IDS_LCKSCN_BODY_PD_NEW_MESSAGES_T_TTS"
+msgstr "%d mezu berri"
+
+msgid "IDS_TTS_BODY_1_MISSED_CALL_T_TTS"
+msgstr "Dei galdu 1"
+
+msgid "IDS_TTS_BODY_1_NEW_MESSAGE_T_TTS"
+msgstr "Mezu berri 1"
+
+msgid "IDS_LCKSCN_BODY_IT_IS_P1SD_CP2SD_T_TTS"
+msgstr "%1$d:%2$d dira"
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "Dei galdu 1 eta irakurri gabeko mezu 1"
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "%d dei galdu eta irakurri gabeko mezu 1"
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_PD_UNREAD_MESSAGES_T_TTS"
+msgstr "Dei galdu 1 eta %d irakurri gabeko mezu"
+
+msgid "IDS_ST_BODY_PERSONAL_MODE_ENABLED"
+msgstr "Modu pertsonala gaituta"
+
+msgid "IDS_ST_TPOP_DISABLE_TURN_OFF_ALL_SOUNDS_IN_ACCESSIBILITY_SETTINGS"
+msgstr "Ezgaitu Itzali soinu guztiak Irisgarritasun ezarpenetan."
+

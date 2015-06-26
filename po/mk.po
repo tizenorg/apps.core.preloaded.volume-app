@@ -16,3 +16,42 @@ msgstr "Предупредување"
 msgid "IDS_COM_OPT_HEADPHONES_ABB"
 msgstr "Слушалки"
 
+msgid "IDS_PN_POP_UNABLE_TO_ADJUST_VOLUME_WHILE_ALL_SOUND_IS_OFF_YOU_CAN_TURN_ON_SOUND_BY_GOING_TO_ACCESSIBILITY_SETTINGS"
+msgstr "Не може да се прилагоди јачината додека сите звуци се исклучени. Може да го вклучите звукот одејќи во опциите за пристапност."
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_PM"
+msgstr "Сега е %d:%02d PM"
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_AM"
+msgstr "Сега е %d:%02d AM"
+
+msgid "IDS_LCKSCN_BODY_YOU_HAVE_P1SD_MISSED_CALLS_AND_P2SD_UNREAD_MESSAGEST_TTS"
+msgstr "Имате %1$d пропуштени повици и %2$d непрочитани пораки"
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_T_TTS"
+msgstr "%d пропуштени повици"
+
+msgid "IDS_LCKSCN_BODY_PD_NEW_MESSAGES_T_TTS"
+msgstr "%d нови пораки"
+
+msgid "IDS_TTS_BODY_1_MISSED_CALL_T_TTS"
+msgstr "1 пропуштен повик"
+
+msgid "IDS_TTS_BODY_1_NEW_MESSAGE_T_TTS"
+msgstr "1 нова порака"
+
+msgid "IDS_LCKSCN_BODY_IT_IS_P1SD_CP2SD_T_TTS"
+msgstr "Сега е %1$d:%2$02d"
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "1 пропуштен повик и 1 непрочитана порака"
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "%d пропуштени повици и 1 непрочитана порака"
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_PD_UNREAD_MESSAGES_T_TTS"
+msgstr "1 пропуштен повик и %d непрочитани пораки"
+
+msgid "IDS_ST_BODY_PERSONAL_MODE_ENABLED"
+msgstr "Личниот режим е вклучен"
+

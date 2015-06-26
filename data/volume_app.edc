@@ -1,19 +1,156 @@
 /*
- * org.tizen.volume
- * Copyright 2012  Samsung Electronics Co., Ltd
+ * Copyright (c) 2009-2014 Samsung Electronics Co., Ltd All Rights Reserved
  *
- * Licensed under the Flora License, Version 1.1 (the License);
+ * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://floralicense.org/license/
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an AS IS BASIS,
+ * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/*			 ___________________________________________________________________________________________________________________________________
+|			| 											|											|								       		|
+|			|											|											|									   		|
+|			|			|*-----------------*|     		|											|CONTENT    |*-----------------*| WIN		|
+|			|			|*				   *|	CONTENT	|											|	RIGHT	|*				   *| RIGTH		|
+|			|			|*				   *|	LEFT	|											| PADDING	|*				   *| PADDING	|
+| LEFT		|WIN		|*   IC_SIZE	   *|   PADDING	|											|			|*		IC		   *|			|
+| PADDING	|LEFT		|*				   *|			|					CONTENT					|			|* SETTING		   *|			|
+|			|PADDING	|*				   *|			|					SIZE					|			|*	(IC_SIZE)	   *|			|
+|			|			|*				   *|			|											|			|*				   *|			|
+|			|			|*				   *|			|											|			|*				   *|			|
+|			|			|*-----------------*|			|											|			|*-----------------*|			|
+|			|											|											|											|
+|			|___________________________________________|___________________________________________|___________________________________________|
+*/
+
+
+/*
+* Helper sizes
+*/
+#define SCREEN_HEIGHT 800
+#define SCREEN_WIDTH 480
+
+#define SCREEN_HEIGHT_L 480
+#define SCREEN_WIDTH_L 800
+
+
+/**
+ * Values above should be modified if something will be changed in GUI
+ */
+#define WIN_HEIGHT 102
+#define WIN_WIDTH 456
+
+#define LEFT_PADDING 12
+#define RIGHT_PADDING 12
+#define TOP_PADDING 113
+
+#define WIN_LEFT_PADDING 24
+#define WIN_RIGHT_PADDING 26
+#define SETTING_RIGHT_PADDING 21
+
+#define IC_ICON_SIZE 42
+
+#define CONTENT_TOP_PADDING 28
+#define CONTENT_BOTTOM_PADDING CONTENT_TOP_PADDING
+#define CONTENT_LEFT_PADDING 26
+#define CONTENT_RIGHT_PADDING 26
+
+#define CONTENT_SLIDER_WIDTH 291
+#define CONTENT_SLIDER_WIDTH_L 600
+#define CONTENT_HEIGHT 46
+
+#define WARNING_POPUP_HEIGHT 222
+#define WARRNING_TEXT_TOP_PADDING 38
+#define WARRNING_TEXT_HEIGHT 128
+
+/**
+ * This parameters describes window size and position.
+ */
+#define WIN_X_MIN LEFT_PADDING/SCREEN_WIDTH
+#define WIN_X_MAX 1.0-(RIGHT_PADDING/SCREEN_WIDTH)
+#define WIN_Y_MIN TOP_PADDING/SCREEN_HEIGHT
+#define WIN_Y_MAX (TOP_PADDING+WIN_HEIGHT)/SCREEN_HEIGHT
+
+#define WIN_X_MIN_L LEFT_PADDING/SCREEN_WIDTH_L
+#define WIN_X_MAX_L 1.0-(RIGHT_PADDING/SCREEN_WIDTH_L)
+#define WIN_Y_MIN_L TOP_PADDING/SCREEN_HEIGHT_L
+#define WIN_Y_MAX_L (TOP_PADDING+WIN_HEIGHT)/SCREEN_HEIGHT_L
+
+#define WARRING_Y_MAX (TOP_PADDING+WARNING_POPUP_HEIGHT)/SCREEN_HEIGHT
+#define WARRING_Y_MAX_L (TOP_PADDING+WARNING_POPUP_HEIGHT)/SCREEN_HEIGHT_L
+
+/*
+* IC sound (Positioned to clipper)
+*/
+#define IC_SOUND_X_MIN (LEFT_PADDING+WIN_LEFT_PADDING)/SCREEN_WIDTH
+#define IC_SOUND_X_MAX (LEFT_PADDING+WIN_LEFT_PADDING+IC_ICON_SIZE)/SCREEN_WIDTH
+#define IC_SOUND_Y_MIN (CONTENT_TOP_PADDING+TOP_PADDING)/SCREEN_HEIGHT
+#define IC_SOUND_Y_MAX (CONTENT_TOP_PADDING+IC_ICON_SIZE+TOP_PADDING)/SCREEN_HEIGHT
+
+#define IC_SOUND_X_MIN_L (LEFT_PADDING+WIN_LEFT_PADDING)/SCREEN_WIDTH_L
+#define IC_SOUND_X_MAX_L (LEFT_PADDING+WIN_LEFT_PADDING+IC_ICON_SIZE)/SCREEN_WIDTH_L
+#define IC_SOUND_Y_MIN_L (CONTENT_TOP_PADDING+TOP_PADDING)/SCREEN_HEIGHT_L
+#define IC_SOUND_Y_MAX_L (CONTENT_TOP_PADDING+IC_ICON_SIZE+TOP_PADDING)/SCREEN_HEIGHT_L
+
+/*
+* IC setting (Positioned to clipper)
+*/
+#define IC_SETTING_X_MIN 1.0-(SETTING_RIGHT_PADDING+IC_ICON_SIZE+RIGHT_PADDING)/SCREEN_WIDTH
+#define IC_SETTING_X_MAX 1.0-((SETTING_RIGHT_PADDING+RIGHT_PADDING)/SCREEN_WIDTH)
+#define IC_SETTING_Y_MIN (CONTENT_TOP_PADDING+TOP_PADDING)/SCREEN_HEIGHT
+#define IC_SETTING_Y_MAX (CONTENT_TOP_PADDING+IC_ICON_SIZE+TOP_PADDING)/SCREEN_HEIGHT
+
+#define IC_SETTING_X_MIN_L 1.0-(SETTING_RIGHT_PADDING+IC_ICON_SIZE+RIGHT_PADDING)/SCREEN_WIDTH_L
+#define IC_SETTING_X_MAX_L 1.0-((SETTING_RIGHT_PADDING+RIGHT_PADDING)/SCREEN_WIDTH_L)
+#define IC_SETTING_Y_MIN_L (CONTENT_TOP_PADDING+TOP_PADDING)/SCREEN_HEIGHT_L
+#define IC_SETTING_Y_MAX_L (CONTENT_TOP_PADDING+IC_ICON_SIZE+TOP_PADDING)/SCREEN_HEIGHT_L
+
+/*
+* Content swallow (Positioned to clipper)
+*/
+#define IC_CONTENT_X_MIN (WIN_LEFT_PADDING+IC_ICON_SIZE+4+LEFT_PADDING)/SCREEN_WIDTH
+#define IC_CONTENT_X_MAX (WIN_LEFT_PADDING+IC_ICON_SIZE+CONTENT_SLIDER_WIDTH+4+LEFT_PADDING)/SCREEN_WIDTH
+#define IC_CONTENT_Y_MIN (CONTENT_TOP_PADDING+TOP_PADDING)/SCREEN_HEIGHT
+#define IC_CONTENT_Y_MAX (CONTENT_HEIGHT+CONTENT_TOP_PADDING+TOP_PADDING)/SCREEN_HEIGHT
+
+#define IC_CONTENT_X_MIN_L (WIN_LEFT_PADDING+IC_ICON_SIZE+4+LEFT_PADDING)/SCREEN_WIDTH_L
+#define IC_CONTENT_X_MAX_L (WIN_LEFT_PADDING+IC_ICON_SIZE+CONTENT_SLIDER_WIDTH_L+4+LEFT_PADDING)/SCREEN_WIDTH_L
+#define IC_CONTENT_Y_MIN_L (CONTENT_TOP_PADDING+TOP_PADDING)/SCREEN_HEIGHT_L
+#define IC_CONTENT_Y_MAX_L (CONTENT_HEIGHT+CONTENT_TOP_PADDING+TOP_PADDING)/SCREEN_HEIGHT_L
+
+/**
+ * Divider line
+ */
+#define DIVIDER_X_MIN 386/SCREEN_WIDTH
+#define DIVIDER_X_MAX 388/SCREEN_WIDTH
+#define DIVIDER_Y_MIN (TOP_PADDING+CONTENT_TOP_PADDING)/SCREEN_HEIGHT
+#define DIVIDER_Y_MAX (TOP_PADDING+CONTENT_TOP_PADDING+CONTENT_HEIGHT)/SCREEN_HEIGHT
+
+#define DIVIDER_X_MIN_L IC_CONTENT_X_MAX_L+15/SCREEN_WIDTH_L
+#define DIVIDER_X_MAX_L IC_CONTENT_X_MAX_L+17/SCREEN_WIDTH_L
+#define DIVIDER_Y_MIN_L (TOP_PADDING+CONTENT_TOP_PADDING)/SCREEN_HEIGHT_L
+#define DIVIDER_Y_MAX_L (TOP_PADDING+CONTENT_TOP_PADDING+CONTENT_HEIGHT)/SCREEN_HEIGHT_L
+
+/**
+ * Warnign text
+ */
+#define WARRNING_TEXT_X_MIN (LEFT_PADDING+WIN_LEFT_PADDING)/SCREEN_WIDTH
+#define WARRNING_TEXT_X_MAX 1.0-(RIGHT_PADDING+WIN_RIGHT_PADDING)/SCREEN_HEIGHT
+#define WARRNING_TEXT_Y_MIN (TOP_PADDING+WARRNING_TEXT_TOP_PADDING+CONTENT_TOP_PADDING+CONTENT_HEIGHT)/SCREEN_HEIGHT
+#define WARRNING_TEXT_Y_MAX (TOP_PADDING+WARRNING_TEXT_TOP_PADDING+CONTENT_TOP_PADDING+WARRNING_TEXT_HEIGHT)/SCREEN_HEIGHT
+
+#define WARRNING_TEXT_X_MIN_L (LEFT_PADDING+WIN_LEFT_PADDING)/SCREEN_WIDTH_L
+#define WARRNING_TEXT_X_MAX_L 1.0-(RIGHT_PADDING+WIN_RIGHT_PADDING)/SCREEN_WIDTH_L
+#define WARRNING_TEXT_Y_MIN_L (TOP_PADDING+WARRNING_TEXT_TOP_PADDING+CONTENT_TOP_PADDING+CONTENT_HEIGHT)/SCREEN_HEIGHT_L
+#define WARRNING_TEXT_Y_MAX_L (TOP_PADDING+WARRNING_TEXT_TOP_PADDING+CONTENT_TOP_PADDING+WARRNING_TEXT_HEIGHT)/SCREEN_HEIGHT_L
+
 
 #define RESOURCE_IMAGE( FILE_NAME ) \
 	group { \
@@ -26,6 +163,41 @@
 					image.normal : FILE_NAME; \
 					aspect : 1 1; \
 					aspect_preference : BOTH; \
+					color_class: "W0661"; \
+				} \
+			} \
+		} \
+	}
+
+#define RESOURCE_IMAGE_DIM( FILE_NAME ) \
+	group { \
+		name : FILE_NAME; \
+		images.image: FILE_NAME COMP; \
+		parts { \
+			part { name: "image"; \
+				description { \
+					state : "default" 0.0; \
+					image.normal : FILE_NAME; \
+					aspect : 1 1; \
+					aspect_preference : BOTH; \
+					color_class: "W0661D"; \
+				} \
+			} \
+		} \
+	}
+
+#define RESOURCE_IMAGE_PRESS( FILE_NAME ) \
+	group { \
+		name : FILE_NAME; \
+		images.image: FILE_NAME COMP; \
+		parts { \
+			part { name: "image"; \
+				description { \
+					state : "default" 0.0; \
+					image.normal : FILE_NAME; \
+					aspect : 1 1; \
+					aspect_preference : BOTH; \
+					color_class: "B0563L1P"; \
 				} \
 			} \
 		} \
@@ -35,299 +207,347 @@
 collections {
 
 RESOURCE_IMAGE("00_volume_icon.png");
-RESOURCE_IMAGE("00_volume_icon_Call.png");
-RESOURCE_IMAGE("00_volume_icon_Mute.png");
-RESOURCE_IMAGE("00_volume_icon_Vibrat.png");
+RESOURCE_IMAGE("00_volume_icon_call.png");
+RESOURCE_IMAGE("00_volume_icon_mute.png");
+RESOURCE_IMAGE("00_volume_icon_vibrat.png");
 RESOURCE_IMAGE("00_volume_icon_headphone.png");
 RESOURCE_IMAGE("00_volume_icon_media.png");
+RESOURCE_IMAGE("00_volume_icon_notification.png");
+RESOURCE_IMAGE("00_volume_icon_notification_vibrate.png");
+RESOURCE_IMAGE("00_volume_icon_notification_mute.png");
+RESOURCE_IMAGE_DIM("00_volume_icon_settings_disabled.png");
+RESOURCE_IMAGE("00_volume_icon_settings.png");
+RESOURCE_IMAGE_PRESS("00_volume_icon_settings_pressed.png");
 
-
-group { name: "popup_volumebar";
-   images {
-      image: "00_divider_line.png" COMP;
-   }
-   parts {
-      part { name:"bg";
-         type: RECT;
-         scale : 1;
-         description { state: "default" 0.0;
-            min: 668 134;
-            align: 0.5 0.5;
-            fixed: 1 1;
-            visible: 0;
-            rel1 { relative: 0.5 0.5; offset: 0 -10; }
-            rel2 { relative: 0.5 0.5; offset: 0 -10; }
-         }
-      }
-      part { name: "pad_l";
-         type: RECT;
-         scale: 1;
-         description { state: "default" 0.0;
-            min : 0 20;
-            max : 0 20;
-            fixed: 1 1;
-            rel1.to: "bg";
-            rel2.to: "bg";
-            visible: 0;
-            align: 0.0 0.0;
-         }
-      }
-      part { name: "pad_r";
-         type: RECT;
-         scale: 1;
-         description { state: "default" 0.0;
-            min : 0 20;
-            max : 0 20;
-            fixed: 1 1;
-            rel1.to: "bg";
-            rel2.to: "bg";
-            visible: 0;
-            align: 1.0 1.0;
-         }
-      }
-      part { name: "elm.swallow.content";
-         type: SWALLOW;
-         scale: 1;
-         description { state: "default" 0.0;
-            min : 568 134;
-             fixed: 1 1;
-            rel1 {
-               relative: 1.0 0.5;
-               to_x: "pad_l";
-               to_y: "bg";
-            }
-            rel2 {
-               relative: 0.0 0.5;
-               to_x: "pad_after_content";
-               to_y: "bg";
-            }
-            align: 0.5 0.5;
-         }
-      }
-      part { name: "pad_after_content";
-         type: RECT;
-         scale: 1;
-         description { state: "default" 0.0;
-            min: 16 0;
-            fixed: 1 0;
-            rel1 {
-               relative: 0.0 0.5;
-               to_x: "divider";
-               to_y: "bg";
-            }
-            rel2 {
-               relative: 0.0 0.5;
-               to_x: "divider";
-               to_y: "bg";
-            }
-            align: 1.0 0.5;
-            visible: 0;
-         }
-      }
-      part { name: "divider";
-         scale: 1;
-         description { state: "default" 0.0;
-            min: 4 18;
-            max: 4 99999;
-            fixed: 1 1;
-            rel1 {
-               relative: 0.0 1.0;
-               to_x: "pad_after_divider";
-               to_y: "pad_l";
-            }
-            rel2 {
-               relative: 0.0 0.0;
-               to_x: "pad_after_divider";
-               to_y: "pad_r";
-            }
-            image.normal: "00_divider_line.png";
-            align: 1.0 0.5;
-         }
-      }
-      part { name: "pad_after_divider";
-         type: RECT;
-         scale: 1;
-         description { state: "default" 0.0;
-            min: 16 0;
-            max: 16 0;
-            fixed: 1 1;
-            visible: 0;
-            rel1 {
-               relative: 0.0 0.5;
-               to_x: "elm.swallow.icon";
-               to_y: "bg";
-            }
-            rel2 {
-               relative: 0.0 0.5;
-               to_x: "elm.swallow.icon";
-               to_y: "bg";
-            }
-            align: 1.0 0.5;
-         }
-      }
-      part { name: "elm.swallow.icon";
-         type: SWALLOW;
-         scale: 1;
-         description { state: "default" 0.0;
-            min: 64 64;
-            max: 64 64;
-            fixed: 1 1;
-            rel1 {
-               relative: 0.0 0.5;
-               to_x: "pad_r";
-               to_y: "bg";
-            }
-            rel2 {
-               relative: 0.0 0.5;
-               to_x: "pad_r";
-               to_y: "bg";
-            }
-            align: 1.0 0.5;
-         }
-      }
-   }
-}
-
-	group { name : "block_events";
-		parts{
-			part { name : "blockevent";
-				type : RECT;
-				description {
-					color : 0 0 0 0;
-				}
-			}
-		}
-		programs{
-			program{
-				name : "clicked";
-				source : "blockevent";
-				signal : "mouse,clicked,1";
-				action : SIGNAL_EMIT "clicked" "*";
-			}
-		}
-	}
-	/* END group "block_events" */
-
-	group { name : "volumeLayout";
+	group {
+		name : "volume_layout";
 		images {
-		image: "00_popup_bg.png" COMP;
+			image: "00_popup_bubble_bg.#.png" COMP;
 		}
-		parts{
-			part { name : "base";
-				type : IMAGE;
-				scale : 1;
-				description { state: "default" 0.0;
-					image {
-						normal: "00_popup_bg.png";
-						border: 18 18 32 52;
-						border_scale: 1;
-					}
-					min: 720 182;
-					max: 720 1120;
-					align: 0.5 0.5;
-				}
-			}
-			part { name: "elm.swallow.content";
-				type: SWALLOW;
-				scale : 1;
-				description { state: "default" 0.0;
-					min: 720 0;
-					fixed: 1 0;
-					rel1 {
-						relative: 0.5 0.0;
-						to: "base";
-					}
-					rel2 {
-						relative: 0.5 1.0;
-						to: "base";
-					}
-				}
+		styles {
+			style {
+				name: "textblock_style";
+				base: "font=Tizen font_size=24 align=left color=#000000 wrap=mixed";
 			}
 		}
-	}
-	/* END group "volumeLayout" */
-
-	group { name : "volumeLayoutContent";
 		parts{
-			part { name : "pad_t";
+			part {
+				name : "clipper";
 				type : RECT;
-				scale : 1;
+
+				description {
+					state : "default" 0.0;
+				}
+				description{
+					state : "transit" 0.0;
+					color: 0 0 0 0;
+				}
+			}
+
+			part {
+				name : "bg";
+				type : RECT;
+				clip_to: "clipper";
+				scale: 1;
+				description {
+					state : "default" 0.0;
+					color : 0 0 0 0;
+					rel1 {relative: WIN_X_MIN WIN_Y_MIN; to: "clipper";}
+					rel2 {relative: WIN_X_MAX WIN_Y_MAX; to: "clipper";}
+				}
+				description {
+					state: "portrait" 0.0;
+					inherit: "default" 0.0;
+				}
+				description {
+					state: "landscape" 0.0;
+					inherit: "default" 0.0;
+					rel1 {relative: WIN_X_MIN_L WIN_Y_MIN_L; to: "clipper";}
+					rel2 {relative: WIN_X_MAX_L WIN_Y_MAX_L; to: "clipper";}
+				}
+				description {
+					state: "warning_displayed" 0.0;
+					inherit: "default" 0.0;
+					color : 0 0 0 0;
+					rel2 {relative: WIN_X_MAX WARRING_Y_MAX; to: "clipper";}
+				}
+				description {
+					state: "warning_displayed_l" 0.0;
+					inherit: "default" 0.0;
+					color : 0 0 0 0;
+					rel1 {relative: WIN_X_MIN_L WIN_Y_MIN_L; to: "clipper";}
+					rel2 {relative: WIN_X_MAX_L WARRING_Y_MAX_L; to: "clipper";}
+				}
+			}
+
+			part {
+				name : "popup_bg";
+				type : IMAGE;
+				clip_to: "clipper";
 				mouse_events : 0;
-				description { state: "default" 0.0;
-					align: 0.5 0.0;
-					min: 0 49;
-					fixed: 0 1;
-					visible: 0;
-					rel1 {
-						relative: 1.0 0.0;
-						to_x: "pad_l";
-					}
-					rel2 {
-						relative: 0.0 0.0;
-						to_x: "pad_r";
-					}
-				}
-			} /* "pad_t" end */
-
-			part { name : "pad_l";
-				type: RECT;
-				scale: 1;
-				description { state: "default" 0.0;
-					min : 26 0;
-					fixed: 1 0;
-					rel2.relative: 0.0 1.0;
-					visible: 0;
-					align: 0.0 0.0;
-				}
-			} /* "pad_l" end */
-
-			part { name: "pad_r";
-				type: RECT;
-				scale: 1;
-				description { state: "default" 0.0;
-					min : 26 0;
-					fixed: 1 0;
-					rel1.relative: 1.0 0.0;
-					visible: 0;
-					align: 1.0 0.0;
-				}
-			} /* "pad_r" end */
-
-			part{ name:"elm.swallow.content";
-				type: SWALLOW;
 				scale : 1;
-				description { state: "default" 0.0;
-					min: 668 0;
-					fixed: 1 0;
-					rel1 {
-						relative: 0.5 1.0;
-						to: "pad_t";
-					}
-					rel2 {
-						relative: 0.5 0.0;
-						to: "pad_b";
+				description {
+					state : "default" 0.0;
+					image.normal: "00_popup_bubble_bg.#.png";
+					rel1.to : "bg";
+					rel2.to : "bg";
+				}
+				description {
+					state : "portrait" 0.0;
+					image.normal: "00_popup_bubble_bg.#.png";
+					rel1.to : "bg";
+					rel2.to : "bg";
+				}
+				description {
+					state : "landscape" 0.0;
+					visible : 1;
+					image.normal: "00_popup_bubble_bg.#.png";
+					rel1.to : "bg";
+					rel2.to : "bg";
+				}
+			}
+			part {
+				name : "ic_sound";
+				type : SWALLOW;
+				clip_to: "clipper";
+				mouse_events : 0;
+				scale : 1;
+				description {
+					state : "default" 0.0;
+					visible : 1;
+					fixed: 1 1;
+					rel1 { relative : IC_SOUND_X_MIN IC_SOUND_Y_MIN; to : "clipper";}
+					rel2 { relative : IC_SOUND_X_MAX IC_SOUND_Y_MAX; to : "clipper";}
+				}
+				description {
+					state: "portrait";
+					inherit: "default" 0.0;
+				}
+				description {
+					state: "landscape";
+					inherit: "default" 0.0;
+					rel1 { relative : IC_SOUND_X_MIN_L IC_SOUND_Y_MIN_L; to : "clipper";}
+					rel2 { relative : IC_SOUND_X_MAX_L IC_SOUND_Y_MAX_L; to : "clipper";}
+				}
+
+			}
+
+			part {
+				name : "ic_setting";
+				type : SWALLOW;
+				clip_to: "clipper";
+				mouse_events : 1;
+				scale : 1;
+				description {
+					state : "default" 0.0;
+					visible : 1;
+					fixed : 1 1;
+					rel1 { relative : IC_SETTING_X_MIN IC_SETTING_Y_MIN; to : "clipper";}
+					rel2 { relative : IC_SETTING_X_MAX IC_SETTING_Y_MAX; to : "clipper";}
+				}
+				description {
+					state: "portrait";
+					inherit: "default" 0.0;
+				}
+				description {
+					state: "landscape";
+					inherit: "default" 0.0;
+					rel1 { relative : IC_SETTING_X_MIN_L IC_SETTING_Y_MIN_L; to : "clipper";}
+					rel2 { relative : IC_SETTING_X_MAX_L IC_SETTING_Y_MAX_L; to : "clipper";}
+				}
+			}
+			part {
+				name : "divider";
+				type : RECT;
+				clip_to: "clipper";
+				mouse_events : 0;
+				scale : 1;
+				description {
+					state : "default" 0.0;
+					color: 200 200 200 100;
+					visible : 1;
+					rel1 { relative : DIVIDER_X_MIN DIVIDER_Y_MIN; to : "clipper";}
+					rel2 { relative : DIVIDER_X_MAX DIVIDER_Y_MAX; to : "clipper";}
+				}
+				description {
+					state: "portrait";
+					inherit: "default" 0.0;
+				}
+				description {
+					state: "landscape";
+					inherit: "default" 0.0;
+					rel1 { relative : DIVIDER_X_MIN_L DIVIDER_Y_MIN_L; to : "clipper";}
+					rel2 { relative : DIVIDER_X_MAX_L DIVIDER_Y_MAX_L; to : "clipper";}
+				}
+			}
+			part {
+				name : "sw.slider";
+				type : SWALLOW;
+				clip_to: "clipper";
+				scale : 1;
+				description {
+					state : "default" 0.0;
+					fixed: 1 1;
+					rel1 { relative : IC_CONTENT_X_MIN IC_CONTENT_Y_MIN; to : "clipper";}
+					rel2 { relative : IC_CONTENT_X_MAX IC_CONTENT_Y_MAX; to : "clipper";}
+					visible : 1;
+				}
+				description {
+					state: "portrait";
+					inherit: "default" 0.0;
+				}
+				description {
+					state: "landscape";
+					inherit: "default" 0.0;
+					rel1 { relative : IC_CONTENT_X_MIN_L IC_CONTENT_Y_MIN_L; to : "clipper";}
+					rel2 { relative : IC_CONTENT_X_MAX_L IC_CONTENT_Y_MAX_L; to : "clipper";}
+				}
+			}
+
+			part {
+				name: "warning_rect";
+				type: TEXTBLOCK;
+				clip_to: "clipper";
+				scale: 1;
+				description {
+					state: "default" 0.0;
+					visible: 0;
+					rel1 { relative: WARRNING_TEXT_X_MIN  WARRNING_TEXT_Y_MIN; to: "clipper";}
+					rel2 { relative: WARRNING_TEXT_X_MAX  WARRNING_TEXT_Y_MAX; to: "clipper";}
+					text {
+						style: "textblock_style";
 					}
 				}
-			} /* "elm.swallow.content" end */
-
-			part { name: "pad_b";
-				type: RECT;
-				scale : 1;
-				mouse_events: 0;
-				description { state: "default" 0.0;
-					align: 0.5 1.0;
-					min: 0 69;
-					fixed: 0 1;
+				description {
+					state: "landscape" 0.0;
+					inherit: "default" 0.0;
 					visible: 0;
-					rel1 {
-						relative: 0.0 1.0;
-						to_x: "pad_l";
-					}
-					rel2.to_x: "pad_r";
+				}
+				description {
+					state: "warning_displayed" 0.0;
+					inherit: "default" 0.0;
+					visible: 1;
+				}
+				description {
+					state: "warning_displayed_l" 0.0;
+					inherit: "default" 0.0;
+					visible: 1;
+					rel1 { relative: WARRNING_TEXT_X_MIN_L  WARRNING_TEXT_Y_MIN_L; to: "clipper";}
+					rel2 { relative: WARRNING_TEXT_X_MAX_L  WARRNING_TEXT_Y_MAX_L; to: "clipper";}
 				}
 			}
 		}
+		programs {
+			program {
+				name : "unset,emergency-mode";
+				signal : "unset,emergency-mode";
+				source : "bg";
+				action : STATE_SET "default" 0.0;
+				target : "ic_setting";
+				target : "divider";
+				target : "sw.slider";
+			}
+			program {
+				name : "set,emergency-mode";
+				signal : "set,emergency-mode";
+				source : "bg";
+				action : STATE_SET "hidden" 0.0;
+				target : "ic_setting";
+				target : "divider";
+				target : "sw.slider";
+			}
+			program {
+				name : "show,landscape";
+				signal : "show,landscape";
+				source : "bg";
+				action : STATE_SET "landscape" 0.0;
+				target : "popup_bg";
+				target : "bg";
+				target : "ic_sound";
+				target : "ic_setting";
+				target : "sw.slider";
+				target : "divider";
+			}
+			program {
+				name : "show,portrait";
+				signal : "show,portrait";
+				source : "bg";
+				action : STATE_SET "portrait" 0.0;
+				target : "popup_bg";
+				target : "bg";
+				target : "ic_sound";
+				target : "ic_setting";
+				target : "sw.slider";
+				target : "divider";
+			}
+			program{
+				name : "hide_effect";
+				signal : "hide_effect";
+				source : "clipper";
+				action : STATE_SET "transit" 0.0;
+				target : "clipper";
+				transition : ACCEL 0.3;
+				after: "hide,popup";
+			}
+			program{
+				name : "show_effect";
+				signal : "show_effect";
+				source : "clipper";
+				action : STATE_SET "portrait" 0.0;
+				target : "clipper";
+			}
+			program{
+				name: "hide,popup";
+				signal: "hide,popup";
+				source: "popup_bg";
+				action: SIGNAL_EMIT "hide,popup" "event";
+			}
+			program{
+				name: "show_warning";
+				signal: "show_warning";
+				source: "clipper";
+				action: STATE_SET "warning_displayed" 0.0;
+				target: "warning_rect";
+				target: "bg";
+			}
+			program{
+				name: "show_warning_l";
+				signal: "show_warning_l";
+				source: "clipper";
+				action: STATE_SET "warning_displayed_l" 0.0;
+				target: "warning_rect";
+				target: "bg";
+			}
+			program{
+				name: "hide_warning";
+				signal: "hide_warning";
+				source: "clipper";
+				action: STATE_SET "default" 0.0;
+				target: "warning_rect";
+				target: "bg";
+			}
+			program{
+				name: "hide_warning_l";
+				signal: "hide_warning_l";
+				source: "clipper";
+				action: STATE_SET "landscape" 0.0;
+				target: "warning_rect";
+				target: "bg";
+			}
+			program{
+				name: "slider_touching_on";
+				signal: "slider_touching_on";
+				source: "clipper";
+				action: STATE_SET "slider_touching" 0.0;
+				target: "bg";
+			}
+			program{
+				name: "slider_touching_off";
+				signal: "slider_touching_off";
+				source: "clipper";
+				action: STATE_SET "default" 0.0;
+				target: "bg";
+			}
+		}
 	}
-	/* END group "volumeLayoutContent" */
-
 }

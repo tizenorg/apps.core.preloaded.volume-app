@@ -1,5 +1,8 @@
 msgid "IDS_COM_BODY_HIGH_VOLUMES_MAY_HARM_YOUR_HEARING_IF_YOU_LISTEN_FOR_A_LONG_TIME"
-msgstr "Dlouhodobý poslech velmi hlasité reprodukce může poškodit sluch"
+msgstr "Dlouhodobý poslech velmi hlasité reprodukce může poškodit sluch."
+
+msgid "IDS_COM_BODY_MEDIA"
+msgstr "Média"
 
 msgid "IDS_COM_BODY_ANDROID"
 msgstr "Android"
@@ -10,9 +13,48 @@ msgstr "Java"
 msgid "IDS_COM_BODY_WARNING"
 msgstr "Upozornění"
 
-msgid "IDS_COM_BODY_MEDIA"
-msgstr "Média"
-
 msgid "IDS_COM_OPT_HEADPHONES_ABB"
 msgstr "Sluchátka"
+
+msgid "IDS_PN_POP_UNABLE_TO_ADJUST_VOLUME_WHILE_ALL_SOUND_IS_OFF_YOU_CAN_TURN_ON_SOUND_BY_GOING_TO_ACCESSIBILITY_SETTINGS"
+msgstr "Když jsou všechny zvuky vypnuté, není možné upravit hlasitost. Zvuk můžete zapnout v nastavení usnadnění."
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_PM"
+msgstr "Je %d:%d odp."
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_AM"
+msgstr "Je %d:%d dop."
+
+msgid "IDS_LCKSCN_BODY_YOU_HAVE_P1SD_MISSED_CALLS_AND_P2SD_UNREAD_MESSAGEST_TTS"
+msgstr "Máte %1$d nepřijatých hovorů a %2$d nepřečtených zpráv."
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_T_TTS"
+msgstr "%d nepřijatých hovorů"
+
+msgid "IDS_LCKSCN_BODY_PD_NEW_MESSAGES_T_TTS"
+msgstr "%d nových zpráv"
+
+msgid "IDS_TTS_BODY_1_MISSED_CALL_T_TTS"
+msgstr "1 nepřijatý hovor"
+
+msgid "IDS_TTS_BODY_1_NEW_MESSAGE_T_TTS"
+msgstr "1 nová zpráva"
+
+msgid "IDS_LCKSCN_BODY_IT_IS_P1SD_CP2SD_T_TTS"
+msgstr "Je %1$d:%2$d."
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "1 nepřijatý hovor a 1 nepřečtená zpráva"
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "%d nepřijatých hovorů a 1 nepřečtená zpráva"
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_PD_UNREAD_MESSAGES_T_TTS"
+msgstr "1 nepřijatý hovor a %d nepřečtených zpráv"
+
+msgid "IDS_ST_BODY_PERSONAL_MODE_ENABLED"
+msgstr "Osobní režim je zapnutý."
+
+msgid "IDS_ST_TPOP_DISABLE_TURN_OFF_ALL_SOUNDS_IN_ACCESSIBILITY_SETTINGS"
+msgstr "Vypněte možnost Vypnout všechny zvuky v nastavení Usnadnění."
 

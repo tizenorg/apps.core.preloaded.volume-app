@@ -1,0 +1,60 @@
+msgid "IDS_COM_BODY_HIGH_VOLUMES_MAY_HARM_YOUR_HEARING_IF_YOU_LISTEN_FOR_A_LONG_TIME"
+msgstr "Das Hören lauter Musik über einen längeren Zeitraum kann sich schädlich auf Ihr Gehör auswirken."
+
+msgid "IDS_COM_BODY_MEDIA"
+msgstr "Medien"
+
+msgid "IDS_COM_BODY_ANDROID"
+msgstr "Android"
+
+msgid "IDS_COM_BODY_JAVA"
+msgstr "Java"
+
+msgid "IDS_COM_BODY_WARNING"
+msgstr "Warnung"
+
+msgid "IDS_COM_OPT_HEADPHONES_ABB"
+msgstr "Kopfhörer"
+
+msgid "IDS_PN_POP_UNABLE_TO_ADJUST_VOLUME_WHILE_ALL_SOUND_IS_OFF_YOU_CAN_TURN_ON_SOUND_BY_GOING_TO_ACCESSIBILITY_SETTINGS"
+msgstr "Lautstärke kann nicht angepasst werden, solange alle Töne ausgeschaltet sind. Sie können die Töne unter den Eingabehilfeeinstellungen einschalten."
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_PM"
+msgstr "Es ist %d:%d PM"
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_AM"
+msgstr "Es ist %d:%d AM"
+
+msgid "IDS_LCKSCN_BODY_YOU_HAVE_P1SD_MISSED_CALLS_AND_P2SD_UNREAD_MESSAGEST_TTS"
+msgstr "Sie haben %1$d verpasste Anrufe und %2$d ungelesene Nachrichten."
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_T_TTS"
+msgstr "%d verpasste Anrufe"
+
+msgid "IDS_LCKSCN_BODY_PD_NEW_MESSAGES_T_TTS"
+msgstr "%d neue Nachrichten"
+
+msgid "IDS_TTS_BODY_1_MISSED_CALL_T_TTS"
+msgstr "1 Anruf in Abwesenheit"
+
+msgid "IDS_TTS_BODY_1_NEW_MESSAGE_T_TTS"
+msgstr "1 neue Nachricht"
+
+msgid "IDS_LCKSCN_BODY_IT_IS_P1SD_CP2SD_T_TTS"
+msgstr "Es ist %1$d:%2$d."
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "1 verpasster Anruf und 1 ungelesene Nachricht"
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "%d verpasste Anrufe und 1 ungelesene Nachricht"
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_PD_UNREAD_MESSAGES_T_TTS"
+msgstr "1 verpasster Anruf und %d ungelesene Nachrichten"
+
+msgid "IDS_ST_BODY_PERSONAL_MODE_ENABLED"
+msgstr "Persönlicher Modus aktiviert."
+
+msgid "IDS_ST_TPOP_DISABLE_TURN_OFF_ALL_SOUNDS_IN_ACCESSIBILITY_SETTINGS"
+msgstr "„Alle Töne abschalten“ in den Eingabehilfeeinstellungen deaktivieren."
+

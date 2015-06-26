@@ -1,5 +1,5 @@
 msgid "IDS_COM_BODY_HIGH_VOLUMES_MAY_HARM_YOUR_HEARING_IF_YOU_LISTEN_FOR_A_LONG_TIME"
-msgstr "Ұзақ уақыт тыңдайтын болсаңыз, қатты дауыс деңгейі есту мүшеңізді зақымдауы мүмкін"
+msgstr "Ұзақ уақыт тыңдайтын болсаңыз, қатты дауыс деңгейі есту мүшеңізді зақымдауы мүмкін."
 
 msgid "IDS_COM_BODY_MEDIA"
 msgstr "Ақпарат"
@@ -15,4 +15,46 @@ msgstr "Ескерту"
 
 msgid "IDS_COM_OPT_HEADPHONES_ABB"
 msgstr "Құлаққаптар"
+
+msgid "IDS_PN_POP_UNABLE_TO_ADJUST_VOLUME_WHILE_ALL_SOUND_IS_OFF_YOU_CAN_TURN_ON_SOUND_BY_GOING_TO_ACCESSIBILITY_SETTINGS"
+msgstr "Барлық дыбыс өшірулі кезде дыбыс деңгейін реттеу мүмкін емес. Арнайы мүмкіндіктер параметрлеріне өту арқылы дыбысты қосуға болады."
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_PM"
+msgstr "Сағат %d:%d PM."
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_AM"
+msgstr "Сағат %d:%d AM."
+
+msgid "IDS_LCKSCN_BODY_YOU_HAVE_P1SD_MISSED_CALLS_AND_P2SD_UNREAD_MESSAGEST_TTS"
+msgstr "Сізде қабылданбаған %1$d қоңырау және оқылмаған %2$d хабар бар."
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_T_TTS"
+msgstr "%d қабылданбаған қоңырау"
+
+msgid "IDS_LCKSCN_BODY_PD_NEW_MESSAGES_T_TTS"
+msgstr "%d жаңа хабар"
+
+msgid "IDS_TTS_BODY_1_MISSED_CALL_T_TTS"
+msgstr "1 қабылданбаған нөмір"
+
+msgid "IDS_TTS_BODY_1_NEW_MESSAGE_T_TTS"
+msgstr "1 жаңа хабар"
+
+msgid "IDS_LCKSCN_BODY_IT_IS_P1SD_CP2SD_T_TTS"
+msgstr "Ол — %1$d:%2$d."
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "1 қабылданбаған қоңырау және 1 оқылмаған хабар"
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "%d қабылданбаған қоңырау және 1 оқылмаған хабар"
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_PD_UNREAD_MESSAGES_T_TTS"
+msgstr "1 қабылданбаған қоңырау және %d оқылмаған хабар"
+
+msgid "IDS_ST_BODY_PERSONAL_MODE_ENABLED"
+msgstr "Жеке режим іске қосылды."
+
+msgid "IDS_ST_TPOP_DISABLE_TURN_OFF_ALL_SOUNDS_IN_ACCESSIBILITY_SETTINGS"
+msgstr "Қол жетімділік параметрлерінен Барлық дыбыстарды өшіру опциясын өшіріңіз."
 

@@ -1,5 +1,8 @@
 msgid "IDS_COM_BODY_HIGH_VOLUMES_MAY_HARM_YOUR_HEARING_IF_YOU_LISTEN_FOR_A_LONG_TIME"
-msgstr "오랫동안 큰 소리로 음악을 들으면 청각이 손상될 수 있습니다"
+msgstr "오랫동안 큰 소리로 음악을 들으면 청각이 손상될 수 있습니다."
+
+msgid "IDS_COM_BODY_MEDIA"
+msgstr "미디어"
 
 msgid "IDS_COM_BODY_ANDROID"
 msgstr "안드로이드"
@@ -10,9 +13,48 @@ msgstr "Java"
 msgid "IDS_COM_BODY_WARNING"
 msgstr "경고"
 
-msgid "IDS_COM_BODY_MEDIA"
-msgstr "미디어"
-
 msgid "IDS_COM_OPT_HEADPHONES_ABB"
 msgstr "헤드폰"
+
+msgid "IDS_PN_POP_UNABLE_TO_ADJUST_VOLUME_WHILE_ALL_SOUND_IS_OFF_YOU_CAN_TURN_ON_SOUND_BY_GOING_TO_ACCESSIBILITY_SETTINGS"
+msgstr "모든 소리가 꺼진 상태에서는 음량을 조절할 수 없습니다. 접근성 설정으로 이동하여 소리를 켤 수 있습니다."
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_PM"
+msgstr "오후 %d시%d분입니다."
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_AM"
+msgstr "오전 %d시%d분입니다."
+
+msgid "IDS_LCKSCN_BODY_YOU_HAVE_P1SD_MISSED_CALLS_AND_P2SD_UNREAD_MESSAGEST_TTS"
+msgstr "%1$d개의 부재중 전화 및 %2$d개의 읽지 않은 메시지가 있습니다."
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_T_TTS"
+msgstr "%d개의 부재중 전화가 있습니다"
+
+msgid "IDS_LCKSCN_BODY_PD_NEW_MESSAGES_T_TTS"
+msgstr "%d개의 새 메시지가 있습니다"
+
+msgid "IDS_TTS_BODY_1_MISSED_CALL_T_TTS"
+msgstr "부재중 전화가 1통 있습니다"
+
+msgid "IDS_TTS_BODY_1_NEW_MESSAGE_T_TTS"
+msgstr "새 메시지가 1개 있습니다"
+
+msgid "IDS_LCKSCN_BODY_IT_IS_P1SD_CP2SD_T_TTS"
+msgstr "%1$d시 %2$d분입니다."
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "1통의 부재중 전화와 1개의 읽지 않은 메시지가 있습니다"
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "%d개의 부재중 전화와 1개의 읽지 않은 메시지가 있습니다"
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_PD_UNREAD_MESSAGES_T_TTS"
+msgstr "1통의 부재중 전화와 %d개의 읽지 않은 메시지가 있습니다"
+
+msgid "IDS_ST_BODY_PERSONAL_MODE_ENABLED"
+msgstr "개인 모드가 실행되었습니다."
+
+msgid "IDS_ST_TPOP_DISABLE_TURN_OFF_ALL_SOUNDS_IN_ACCESSIBILITY_SETTINGS"
+msgstr "접근성 설정에서 [모든 소리 끄기]를 해제하세요."
 

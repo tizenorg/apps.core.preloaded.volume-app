@@ -1,5 +1,5 @@
 msgid "IDS_COM_BODY_HIGH_VOLUMES_MAY_HARM_YOUR_HEARING_IF_YOU_LISTEN_FOR_A_LONG_TIME"
-msgstr "Uzun müddət ucadan qulaq assanız, bu sizin eşitmənizə mənfi təsir edə bilər"
+msgstr "Uzun müddət ucadan qulaq assanız, bu sizin eşitmənizə mənfi təsir edə bilər."
 
 msgid "IDS_COM_BODY_MEDIA"
 msgstr "Mediya"
@@ -15,4 +15,46 @@ msgstr "Xəbərdarlıq"
 
 msgid "IDS_COM_OPT_HEADPHONES_ABB"
 msgstr "Qulaqlıqlar"
+
+msgid "IDS_PN_POP_UNABLE_TO_ADJUST_VOLUME_WHILE_ALL_SOUND_IS_OFF_YOU_CAN_TURN_ON_SOUND_BY_GOING_TO_ACCESSIBILITY_SETTINGS"
+msgstr "Bütün səslər sönülü olduqda səsi tənzimləmək mümkün deyil. Siz xüsusi imkanlar parametrlərinə keçərək səsi yandıra bilərsiniz."
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_PM"
+msgstr "Saat %d:%d PM."
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_AM"
+msgstr "Saat %d:%d AM."
+
+msgid "IDS_LCKSCN_BODY_YOU_HAVE_P1SD_MISSED_CALLS_AND_P2SD_UNREAD_MESSAGEST_TTS"
+msgstr "Sizin %1$d cavabsız zənginiz və %2$d oxunmamış mesajınız var."
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_T_TTS"
+msgstr "%d cavabsız zəng"
+
+msgid "IDS_LCKSCN_BODY_PD_NEW_MESSAGES_T_TTS"
+msgstr "%d yeni mesaj"
+
+msgid "IDS_TTS_BODY_1_MISSED_CALL_T_TTS"
+msgstr "1 cavabsız zəng"
+
+msgid "IDS_TTS_BODY_1_NEW_MESSAGE_T_TTS"
+msgstr "1 yeni mesaj"
+
+msgid "IDS_LCKSCN_BODY_IT_IS_P1SD_CP2SD_T_TTS"
+msgstr "Belədir: %1$d:%2$d."
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "1 cavabsız zəng və 1 oxunmamış mesaj"
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "%d cavabsız zəng və 1 oxunmamış mesaj"
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_PD_UNREAD_MESSAGES_T_TTS"
+msgstr "1 cavabsız zəng və %d oxunmamış mesaj"
+
+msgid "IDS_ST_BODY_PERSONAL_MODE_ENABLED"
+msgstr "Şəxsi rejim aktivləşdirilmişdir."
+
+msgid "IDS_ST_TPOP_DISABLE_TURN_OFF_ALL_SOUNDS_IN_ACCESSIBILITY_SETTINGS"
+msgstr "Xüsusi imkanlar parametrlərində bütün səsləri Söndürməni qeyri-aktiv edin."
 

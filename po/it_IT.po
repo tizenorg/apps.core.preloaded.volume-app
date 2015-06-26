@@ -1,5 +1,8 @@
 msgid "IDS_COM_BODY_HIGH_VOLUMES_MAY_HARM_YOUR_HEARING_IF_YOU_LISTEN_FOR_A_LONG_TIME"
-msgstr "Volumi troppo alti possono danneggiare l'udito in caso di ascolto prolungato"
+msgstr "Volumi troppo alti possono danneggiare l'udito in caso di ascolto prolungato."
+
+msgid "IDS_COM_BODY_MEDIA"
+msgstr "Multimedia"
 
 msgid "IDS_COM_BODY_ANDROID"
 msgstr "Android"
@@ -10,9 +13,48 @@ msgstr "Java"
 msgid "IDS_COM_BODY_WARNING"
 msgstr "Avviso"
 
-msgid "IDS_COM_BODY_MEDIA"
-msgstr "Multimedia"
-
 msgid "IDS_COM_OPT_HEADPHONES_ABB"
 msgstr "Cuffie"
+
+msgid "IDS_PN_POP_UNABLE_TO_ADJUST_VOLUME_WHILE_ALL_SOUND_IS_OFF_YOU_CAN_TURN_ON_SOUND_BY_GOING_TO_ACCESSIBILITY_SETTINGS"
+msgstr "Impossibile regolare il volume se tutti i suoni sono disattivati. Potete attivare i suoni accedendo alle impostazioni di accessibilità."
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_PM"
+msgstr "Sono le %d:%d PM."
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_AM"
+msgstr "Sono le %d:%d AM."
+
+msgid "IDS_LCKSCN_BODY_YOU_HAVE_P1SD_MISSED_CALLS_AND_P2SD_UNREAD_MESSAGEST_TTS"
+msgstr "%1$d chiamate perse e %2$d messaggi non letti."
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_T_TTS"
+msgstr "%d chiamate perse"
+
+msgid "IDS_LCKSCN_BODY_PD_NEW_MESSAGES_T_TTS"
+msgstr "%d nuovi messaggi"
+
+msgid "IDS_TTS_BODY_1_MISSED_CALL_T_TTS"
+msgstr "1 chiamata persa"
+
+msgid "IDS_TTS_BODY_1_NEW_MESSAGE_T_TTS"
+msgstr "1 nuovo messaggio"
+
+msgid "IDS_LCKSCN_BODY_IT_IS_P1SD_CP2SD_T_TTS"
+msgstr "Sono le %1$d:%2$d."
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "1 chiamata persa e 1 messaggio non letto"
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "%d chiamate perse e 1 messaggio non letto"
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_PD_UNREAD_MESSAGES_T_TTS"
+msgstr "1 chiamata persa e %d messaggi non letti"
+
+msgid "IDS_ST_BODY_PERSONAL_MODE_ENABLED"
+msgstr "Modalità Personale attivata."
+
+msgid "IDS_ST_TPOP_DISABLE_TURN_OFF_ALL_SOUNDS_IN_ACCESSIBILITY_SETTINGS"
+msgstr "Disabilitate l'opzione Disattiva tutti i suoni nelle impostazioni di accessibilità."
 

@@ -1,5 +1,5 @@
 msgid "IDS_COM_BODY_HIGH_VOLUMES_MAY_HARM_YOUR_HEARING_IF_YOU_LISTEN_FOR_A_LONG_TIME"
-msgstr "Musiqani baland ovozda uzoq vaqt davomida tinglash eshitish a’zolaringizga zarar yetkazishi mumkin"
+msgstr "Musiqani baland ovozda uzoq vaqt davomida tinglash eshitish a’zolaringizga zarar yetkazishi mumkin."
 
 msgid "IDS_COM_BODY_MEDIA"
 msgstr "Media"
@@ -15,4 +15,46 @@ msgstr "Ogohlantirish"
 
 msgid "IDS_COM_OPT_HEADPHONES_ABB"
 msgstr "Quloqliklar"
+
+msgid "IDS_PN_POP_UNABLE_TO_ADJUST_VOLUME_WHILE_ALL_SOUND_IS_OFF_YOU_CAN_TURN_ON_SOUND_BY_GOING_TO_ACCESSIBILITY_SETTINGS"
+msgstr "Barcha tovushlar o‘chirilganda, ovoz balandligini moslab bo‘lmaydi. Maxsus imkoniyatlar parametrlariga o‘tish orqali ovozni yoqishingiz mumkin."
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_PM"
+msgstr "Bu %d:%d Tushdan so‘ng."
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_AM"
+msgstr "Bu %d:%d Tushdan avvalgi."
+
+msgid "IDS_LCKSCN_BODY_YOU_HAVE_P1SD_MISSED_CALLS_AND_P2SD_UNREAD_MESSAGEST_TTS"
+msgstr "Sizda %1$d o‘tkazib yuborilgan qo‘ng‘iroq va %2$d o‘qilmagan xabar mavjud."
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_T_TTS"
+msgstr "%dta o‘tkazib yuborilgan qo‘ng‘iroq"
+
+msgid "IDS_LCKSCN_BODY_PD_NEW_MESSAGES_T_TTS"
+msgstr "%dta yangi xabar"
+
+msgid "IDS_TTS_BODY_1_MISSED_CALL_T_TTS"
+msgstr "1ta o‘tkazib yuborilgan qo‘ng‘iroq"
+
+msgid "IDS_TTS_BODY_1_NEW_MESSAGE_T_TTS"
+msgstr "1ta yangi xabar"
+
+msgid "IDS_LCKSCN_BODY_IT_IS_P1SD_CP2SD_T_TTS"
+msgstr "U %1$d:%2$d"
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "1ta o‘tkazib yuborilgan qo‘ng‘iroq va 1ta o‘qilmagan xabar"
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "%dta o‘tkazib yuborilgan qo‘ng‘iroq va 1ta o‘qilmagan xabar"
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_PD_UNREAD_MESSAGES_T_TTS"
+msgstr "1ta o‘tkazib yuborilgan qo‘ng‘iroq va %dta o‘qilmagan xabar"
+
+msgid "IDS_ST_BODY_PERSONAL_MODE_ENABLED"
+msgstr "Shaxsiy rejim yoqildi."
+
+msgid "IDS_ST_TPOP_DISABLE_TURN_OFF_ALL_SOUNDS_IN_ACCESSIBILITY_SETTINGS"
+msgstr "Maxsus imkoniyatlar parametrlarida Barcha ovozlarni o‘chirishni o‘chiring."
 

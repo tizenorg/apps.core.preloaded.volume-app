@@ -1,5 +1,5 @@
 msgid "IDS_COM_BODY_HIGH_VOLUMES_MAY_HARM_YOUR_HEARING_IF_YOU_LISTEN_FOR_A_LONG_TIME"
-msgstr "O volume alto do som  pode prejudicar a sua audição se a expor durante muito tempo"
+msgstr "O volume alto do som pode prejudicar a sua audição se a expor durante muito tempo."
 
 msgid "IDS_COM_BODY_MEDIA"
 msgstr "Mídia"
@@ -15,4 +15,46 @@ msgstr "Aviso"
 
 msgid "IDS_COM_OPT_HEADPHONES_ABB"
 msgstr "Fones de ouvido"
+
+msgid "IDS_PN_POP_UNABLE_TO_ADJUST_VOLUME_WHILE_ALL_SOUND_IS_OFF_YOU_CAN_TURN_ON_SOUND_BY_GOING_TO_ACCESSIBILITY_SETTINGS"
+msgstr "Não é possível ajustar o volume enquanto todos os sons estiverem desligados. Você pode ligar os sons indo para as configurações de acessibilidade."
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_PM"
+msgstr "São %d:%d PM."
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_AM"
+msgstr "São %d:%d AM."
+
+msgid "IDS_LCKSCN_BODY_YOU_HAVE_P1SD_MISSED_CALLS_AND_P2SD_UNREAD_MESSAGEST_TTS"
+msgstr "Você tem %1$d chamadas perdidas e %2$d mensagens não lidas."
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_T_TTS"
+msgstr "%d chamadas perdidas"
+
+msgid "IDS_LCKSCN_BODY_PD_NEW_MESSAGES_T_TTS"
+msgstr "%d novas mensagens"
+
+msgid "IDS_TTS_BODY_1_MISSED_CALL_T_TTS"
+msgstr "1 chamada perdida"
+
+msgid "IDS_TTS_BODY_1_NEW_MESSAGE_T_TTS"
+msgstr "1 nova mensagem"
+
+msgid "IDS_LCKSCN_BODY_IT_IS_P1SD_CP2SD_T_TTS"
+msgstr "São %1$d:%2$d."
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "1 chamada perdida e 1 mensagem não lida"
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "%d chamadas perdidas e 1 mensagem não lida"
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_PD_UNREAD_MESSAGES_T_TTS"
+msgstr "1 chamada perdida e %d mensagens não lidas"
+
+msgid "IDS_ST_BODY_PERSONAL_MODE_ENABLED"
+msgstr "Modo Pessoal ativado."
+
+msgid "IDS_ST_TPOP_DISABLE_TURN_OFF_ALL_SOUNDS_IN_ACCESSIBILITY_SETTINGS"
+msgstr "Desativar desligar todos os sons nas configurações de Acessibilidade."
 

@@ -1,5 +1,8 @@
 msgid "IDS_COM_BODY_HIGH_VOLUMES_MAY_HARM_YOUR_HEARING_IF_YOU_LISTEN_FOR_A_LONG_TIME"
-msgstr "Jei klausysitės garsiai ilgą laiką, gali būti pažeista klausa"
+msgstr "Jei klausysitės garsiai ilgą laiką, gali būti pažeista klausa."
+
+msgid "IDS_COM_BODY_MEDIA"
+msgstr "Daugialypė terpė"
 
 msgid "IDS_COM_BODY_ANDROID"
 msgstr "„Android“"
@@ -10,9 +13,48 @@ msgstr "Java"
 msgid "IDS_COM_BODY_WARNING"
 msgstr "Perspėjimas"
 
-msgid "IDS_COM_BODY_MEDIA"
-msgstr "Daugialypė terpė"
-
 msgid "IDS_COM_OPT_HEADPHONES_ABB"
 msgstr "Ausinės"
+
+msgid "IDS_PN_POP_UNABLE_TO_ADJUST_VOLUME_WHILE_ALL_SOUND_IS_OFF_YOU_CAN_TURN_ON_SOUND_BY_GOING_TO_ACCESSIBILITY_SETTINGS"
+msgstr "Neįmanoma sureguliuoti garso, kai išjungti visi garsai. Garsą galite įjungti pritaikymo neįgaliesiems nustatymuose."
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_PM"
+msgstr "Dabar %d:%d (popiet)."
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_AM"
+msgstr "Dabar %d:%d (priešpiet)."
+
+msgid "IDS_LCKSCN_BODY_YOU_HAVE_P1SD_MISSED_CALLS_AND_P2SD_UNREAD_MESSAGEST_TTS"
+msgstr "Yra %1$d praleisti (-ų) skambučiai (-ių) ir %2$d neskaitytos (-ų) žinutės (-ių)."
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_T_TTS"
+msgstr "Praleista skambučių: %d"
+
+msgid "IDS_LCKSCN_BODY_PD_NEW_MESSAGES_T_TTS"
+msgstr "Naujų žinučių: %d"
+
+msgid "IDS_TTS_BODY_1_MISSED_CALL_T_TTS"
+msgstr "1 praleistas skambutis"
+
+msgid "IDS_TTS_BODY_1_NEW_MESSAGE_T_TTS"
+msgstr "1 nauja žinutė"
+
+msgid "IDS_LCKSCN_BODY_IT_IS_P1SD_CP2SD_T_TTS"
+msgstr "Tai %1$d:%2$d."
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "1 praleistas skambutis ir 1 neperskaityta žinutė"
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "%d praleisti (-ų) skambučiai (-ių) ir 1 neperskaityta žinutė"
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_PD_UNREAD_MESSAGES_T_TTS"
+msgstr "1 praleistas skambutis ir %d neperskaitytos (-ų) žinutės (-ių)"
+
+msgid "IDS_ST_BODY_PERSONAL_MODE_ENABLED"
+msgstr "Asmeninis režimas įjungtas."
+
+msgid "IDS_ST_TPOP_DISABLE_TURN_OFF_ALL_SOUNDS_IN_ACCESSIBILITY_SETTINGS"
+msgstr "Pritaikymo neįgaliesiems nustatymuose išjunkite „Išjungti visus garsus“."
 

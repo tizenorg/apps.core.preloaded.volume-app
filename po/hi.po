@@ -1,18 +1,57 @@
 msgid "IDS_COM_BODY_HIGH_VOLUMES_MAY_HARM_YOUR_HEARING_IF_YOU_LISTEN_FOR_A_LONG_TIME"
 msgstr "उच्च वॉल्यूम से आपके सुनने में नुकसान हो सकता है यदि आप लंबे समय तक उसे सुनते हैं"
 
+msgid "IDS_COM_BODY_MEDIA"
+msgstr "मीडिया"
+
 msgid "IDS_COM_BODY_ANDROID"
 msgstr "एंड्रोइड"
 
 msgid "IDS_COM_BODY_JAVA"
-msgstr "Java"
+msgstr "जावा"
 
 msgid "IDS_COM_BODY_WARNING"
 msgstr "चेतावनी"
 
-msgid "IDS_COM_BODY_MEDIA"
-msgstr "मीडिया"
-
 msgid "IDS_COM_OPT_HEADPHONES_ABB"
 msgstr "हेडफ़ोन्‍स"
+
+msgid "IDS_PN_POP_UNABLE_TO_ADJUST_VOLUME_WHILE_ALL_SOUND_IS_OFF_YOU_CAN_TURN_ON_SOUND_BY_GOING_TO_ACCESSIBILITY_SETTINGS"
+msgstr "सभी ध्वनि बंद करने के दौरान वोल्यूम समायोजित करने में अक्षम। एक्‍सेसीबीलीटी सेटिंग्स पर जाते हुए आप ध्वनि चालू कर सकते हैं।"
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_PM"
+msgstr "समय है %d:%02d PM"
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_AM"
+msgstr "समय है %d:%02d AM"
+
+msgid "IDS_LCKSCN_BODY_YOU_HAVE_P1SD_MISSED_CALLS_AND_P2SD_UNREAD_MESSAGEST_TTS"
+msgstr "आपके पास %1$d छूटी कॉलें और %2$d अपठित सन्देश हैं"
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_T_TTS"
+msgstr "%d छूटी कॉल्स"
+
+msgid "IDS_LCKSCN_BODY_PD_NEW_MESSAGES_T_TTS"
+msgstr "%d नए संदेश"
+
+msgid "IDS_TTS_BODY_1_MISSED_CALL_T_TTS"
+msgstr "1 छूटी कॉल"
+
+msgid "IDS_TTS_BODY_1_NEW_MESSAGE_T_TTS"
+msgstr "1 नया संदेश"
+
+msgid "IDS_LCKSCN_BODY_IT_IS_P1SD_CP2SD_T_TTS"
+msgstr "यह %1$d:%2$02d है"
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "1 छूटी कॉल और 1 अपठित संदेश"
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "%d छूटी कॉल और 1 अपठित संदेश"
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_PD_UNREAD_MESSAGES_T_TTS"
+msgstr "1 छूटी कॉल और %d अपठित संदेश"
+
+msgid "IDS_ST_BODY_PERSONAL_MODE_ENABLED"
+msgstr "व्यक्तिगत मोड सक्षम किया गया है"
 

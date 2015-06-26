@@ -1,5 +1,8 @@
 msgid "IDS_COM_BODY_HIGH_VOLUMES_MAY_HARM_YOUR_HEARING_IF_YOU_LISTEN_FOR_A_LONG_TIME"
-msgstr "Velika glasnoća može oštetiti sluh pri dugom slušanju"
+msgstr "Velika glasnoća može oštetiti sluh pri dugom slušanju."
+
+msgid "IDS_COM_BODY_MEDIA"
+msgstr "Mediji"
 
 msgid "IDS_COM_BODY_ANDROID"
 msgstr "Android"
@@ -10,9 +13,48 @@ msgstr "Java"
 msgid "IDS_COM_BODY_WARNING"
 msgstr "Upozorenje"
 
-msgid "IDS_COM_BODY_MEDIA"
-msgstr "Mediji"
-
 msgid "IDS_COM_OPT_HEADPHONES_ABB"
 msgstr "Slušalice"
+
+msgid "IDS_PN_POP_UNABLE_TO_ADJUST_VOLUME_WHILE_ALL_SOUND_IS_OFF_YOU_CAN_TURN_ON_SOUND_BY_GOING_TO_ACCESSIBILITY_SETTINGS"
+msgstr "Greška prilagođavanja glasnoće kada je zvuk isključen. Možete uključiti zvuk tako da odete na postavke pristupačnosti."
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_PM"
+msgstr "Sada je %d:%d poslijepodne."
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_AM"
+msgstr "Sada je %d:%d ujutro."
+
+msgid "IDS_LCKSCN_BODY_YOU_HAVE_P1SD_MISSED_CALLS_AND_P2SD_UNREAD_MESSAGEST_TTS"
+msgstr "Imate %1$d propuštenih poziva i %2$d nepročitanih poruka."
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_T_TTS"
+msgstr "%d propuštenih poziva"
+
+msgid "IDS_LCKSCN_BODY_PD_NEW_MESSAGES_T_TTS"
+msgstr "%d novih poruka"
+
+msgid "IDS_TTS_BODY_1_MISSED_CALL_T_TTS"
+msgstr "1 propušten poziv"
+
+msgid "IDS_TTS_BODY_1_NEW_MESSAGE_T_TTS"
+msgstr "1 nova poruka"
+
+msgid "IDS_LCKSCN_BODY_IT_IS_P1SD_CP2SD_T_TTS"
+msgstr "Sada je %1$d:%2$d."
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "1 propušten poziv i 1 nepročitana poruka"
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "%d propuštenih poziva i 1 nepročitana poruka"
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_PD_UNREAD_MESSAGES_T_TTS"
+msgstr "1 propušten poziv i %d nepročitanih poruka"
+
+msgid "IDS_ST_BODY_PERSONAL_MODE_ENABLED"
+msgstr "Uključen Osobni način rada."
+
+msgid "IDS_ST_TPOP_DISABLE_TURN_OFF_ALL_SOUNDS_IN_ACCESSIBILITY_SETTINGS"
+msgstr "Isključi funkciju Isključi sve zvukove u Postavkama pristupačnosti."
 

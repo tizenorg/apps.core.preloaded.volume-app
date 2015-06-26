@@ -1,6 +1,9 @@
 msgid "IDS_COM_BODY_HIGH_VOLUMES_MAY_HARM_YOUR_HEARING_IF_YOU_LISTEN_FOR_A_LONG_TIME"
 msgstr "如果长时间用高音量收听，可能会损坏听力"
 
+msgid "IDS_COM_BODY_MEDIA"
+msgstr "媒体"
+
 msgid "IDS_COM_BODY_ANDROID"
 msgstr "Android"
 
@@ -10,9 +13,45 @@ msgstr "Java程序"
 msgid "IDS_COM_BODY_WARNING"
 msgstr "警告"
 
-msgid "IDS_COM_BODY_MEDIA"
-msgstr "媒体"
-
 msgid "IDS_COM_OPT_HEADPHONES_ABB"
 msgstr "耳机"
+
+msgid "IDS_PN_POP_UNABLE_TO_ADJUST_VOLUME_WHILE_ALL_SOUND_IS_OFF_YOU_CAN_TURN_ON_SOUND_BY_GOING_TO_ACCESSIBILITY_SETTINGS"
+msgstr "所有声音关闭时无法调节音量。您可在辅助功能中打开声音。"
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_PM"
+msgstr "下午 %d点 %d分"
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_AM"
+msgstr "上午 %d点 %d分"
+
+msgid "IDS_LCKSCN_BODY_YOU_HAVE_P1SD_MISSED_CALLS_AND_P2SD_UNREAD_MESSAGEST_TTS"
+msgstr "您有 %1$d 个未接来电和 %2$d 条未读消息"
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_T_TTS"
+msgstr "%d 个未接来电"
+
+msgid "IDS_LCKSCN_BODY_PD_NEW_MESSAGES_T_TTS"
+msgstr "%d 条新信息"
+
+msgid "IDS_TTS_BODY_1_MISSED_CALL_T_TTS"
+msgstr "1 个未接来电"
+
+msgid "IDS_TTS_BODY_1_NEW_MESSAGE_T_TTS"
+msgstr "1 条新信息"
+
+msgid "IDS_LCKSCN_BODY_IT_IS_P1SD_CP2SD_T_TTS"
+msgstr "现在时间 %1$d:%2$02d"
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "1 个未接来电和 1 条未读信息"
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "%d 个未接来电和 1 条未读信息"
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_PD_UNREAD_MESSAGES_T_TTS"
+msgstr "1 个未接来电和 %d 条未读信息"
+
+msgid "IDS_ST_BODY_PERSONAL_MODE_ENABLED"
+msgstr "个人模式已启用"
 

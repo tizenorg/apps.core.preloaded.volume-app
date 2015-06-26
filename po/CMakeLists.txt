@@ -1,8 +1,8 @@
 # for i18n
 
-SET(POFILES hy.po az.po eu.po bg.po ca.po zh_CN.po zh_HK.po zh_TW.po hr.po cs.po da.po nl_NL.po en.po en_US.po et.po fi.po fr_FR.po gl.po ka.po de_DE.po el_GR.po hu.po is.po ga.po it_IT.po ja_JP.po kk.po ko_KR.po lv.po lt.po mk.po nb.po pl.po pt_PT.po pt_BR.po ro.po ru_RU.po sr.po sk.po sl.po es_ES.po es_US.po sv.po  tr_TR.po uk.po uz.po ar.po zh_SG.po hi.po en_PH.po fr_CA.po)
+SET(POFILES ar.po az.po bg.po ca.po cs.po da.po de.po de_DE.po el_GR.po en.po en_PH.po en_US.po es_MX.po es_ES.po et.po eu.po fi.po fr.po fr_CA.po fr_FR.po ga.po gl.po hi.po hr.po hu.po hy.po is.po it_IT.po ja_JP.po ka.po kk.po ko_KR.po lt.po lv.po mn_MN.po mk.po nb.po nl.po nl_NL.po pl.po pt_BR.po pt_PT.po ro.po ru_RU.po sk.po sl.po sr.po sv.po tr_TR.po uk.po uz.po zh_CN.po zh_HK.po zh_SG.po zh_TW.po)
 
-SET(MSGFMT "${TZ_SYS_BIN}/msgfmt")
+SET(MSGFMT "/usr/bin/msgfmt")
 
 FOREACH(pofile ${POFILES})
 	SET(pofile ${CMAKE_CURRENT_SOURCE_DIR}/${pofile})

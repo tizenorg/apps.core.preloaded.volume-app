@@ -1,8 +1,8 @@
 msgid "IDS_COM_BODY_HIGH_VOLUMES_MAY_HARM_YOUR_HEARING_IF_YOU_LISTEN_FOR_A_LONG_TIME"
-msgstr "Hátt spiluð tónlist getur skaðað heyrn þína ef hlustað er í langan tíma í einu"
+msgstr "Hátt spiluð tónlist getur skaðað heyrn þína ef hlustað er í langan tíma í einu."
 
 msgid "IDS_COM_BODY_MEDIA"
-msgstr "Miðill"
+msgstr "Margmiðlunarefni"
 
 msgid "IDS_COM_BODY_ANDROID"
 msgstr "Android"
@@ -15,4 +15,46 @@ msgstr "Viðvörun"
 
 msgid "IDS_COM_OPT_HEADPHONES_ABB"
 msgstr "Höfuðtól"
+
+msgid "IDS_PN_POP_UNABLE_TO_ADJUST_VOLUME_WHILE_ALL_SOUND_IS_OFF_YOU_CAN_TURN_ON_SOUND_BY_GOING_TO_ACCESSIBILITY_SETTINGS"
+msgstr "Ekki er hægt að stilla hljóðstyrk þegar slökkt er á hljóði. Þú getur kveikt á hljóði í aðgengisstillingum."
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_PM"
+msgstr "Hún er %d:%d eftir hádegi."
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_AM"
+msgstr "Hún er %d:%d fyrir hádegi."
+
+msgid "IDS_LCKSCN_BODY_YOU_HAVE_P1SD_MISSED_CALLS_AND_P2SD_UNREAD_MESSAGEST_TTS"
+msgstr "Þú átt %1$d ósvaraðar hringingar og %2$d ólesin skilaboð."
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_T_TTS"
+msgstr "%d ósvöruð símtöl"
+
+msgid "IDS_LCKSCN_BODY_PD_NEW_MESSAGES_T_TTS"
+msgstr "%d ný skilaboð"
+
+msgid "IDS_TTS_BODY_1_MISSED_CALL_T_TTS"
+msgstr "Eitt ósvarað símtal"
+
+msgid "IDS_TTS_BODY_1_NEW_MESSAGE_T_TTS"
+msgstr "Ein ný skilaboð"
+
+msgid "IDS_LCKSCN_BODY_IT_IS_P1SD_CP2SD_T_TTS"
+msgstr "Klukkan er %1$d:%2$d."
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "Eitt ósvarað símtal og ein ólesin skilaboð"
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "%d ósvöruð símtöl og ein ólesin skilaboð"
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_PD_UNREAD_MESSAGES_T_TTS"
+msgstr "Eitt ósvarað símtal og %d ólesin skilaboð"
+
+msgid "IDS_ST_BODY_PERSONAL_MODE_ENABLED"
+msgstr "Kveikt á einkastillingu."
+
+msgid "IDS_ST_TPOP_DISABLE_TURN_OFF_ALL_SOUNDS_IN_ACCESSIBILITY_SETTINGS"
+msgstr "Gerðu „Slökkva á öllum hljóðum“ óvirkt í aðgengisstillingum."
 

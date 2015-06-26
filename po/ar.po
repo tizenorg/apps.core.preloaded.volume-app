@@ -1,6 +1,9 @@
 msgid "IDS_COM_BODY_HIGH_VOLUMES_MAY_HARM_YOUR_HEARING_IF_YOU_LISTEN_FOR_A_LONG_TIME"
 msgstr "قد تضر مستويات الصوت العالية بسمعك إذا استمعت إليها لفترة طويلة"
 
+msgid "IDS_COM_BODY_MEDIA"
+msgstr "وسائط"
+
 msgid "IDS_COM_BODY_ANDROID"
 msgstr "Android"
 
@@ -10,9 +13,45 @@ msgstr "جافا"
 msgid "IDS_COM_BODY_WARNING"
 msgstr "تحذير"
 
-msgid "IDS_COM_BODY_MEDIA"
-msgstr "وسائط"
-
 msgid "IDS_COM_OPT_HEADPHONES_ABB"
 msgstr "سماعات رأس"
+
+msgid "IDS_PN_POP_UNABLE_TO_ADJUST_VOLUME_WHILE_ALL_SOUND_IS_OFF_YOU_CAN_TURN_ON_SOUND_BY_GOING_TO_ACCESSIBILITY_SETTINGS"
+msgstr "يتعذر ضبط مستوى الصوت عند إيقاف تشغيل الصوت تماما. يمكنك تشغيل الصوت بالانتقال إلى إعدادات إمكانية الوصول."
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_PM"
+msgstr "إنها %d:%02d مساء"
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_AM"
+msgstr "إنها %d:%02d صباحا"
+
+msgid "IDS_LCKSCN_BODY_YOU_HAVE_P1SD_MISSED_CALLS_AND_P2SD_UNREAD_MESSAGEST_TTS"
+msgstr "لديك %1$d مكالمات فائتة و%2$d رسائل غير مقروءة"
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_T_TTS"
+msgstr "%d م. فائتة"
+
+msgid "IDS_LCKSCN_BODY_PD_NEW_MESSAGES_T_TTS"
+msgstr "%d رسالة جديدة"
+
+msgid "IDS_TTS_BODY_1_MISSED_CALL_T_TTS"
+msgstr "مكالمة لم يرد عليها"
+
+msgid "IDS_TTS_BODY_1_NEW_MESSAGE_T_TTS"
+msgstr "رسالة واحدة جديدة"
+
+msgid "IDS_LCKSCN_BODY_IT_IS_P1SD_CP2SD_T_TTS"
+msgstr "إنها %1$d:%2$02d"
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "لديك مكالمة واحدة فائتة ورسالة واحدة غير مقروءة"
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "لديك %d مكالمات فائتة ورسالة واحدة غير مقروءة"
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_PD_UNREAD_MESSAGES_T_TTS"
+msgstr "لديك مكالمة واحدة فائتة و%d رسائل غير مقروءة"
+
+msgid "IDS_ST_BODY_PERSONAL_MODE_ENABLED"
+msgstr "تم تفعيل الوضع الشخصي"
 

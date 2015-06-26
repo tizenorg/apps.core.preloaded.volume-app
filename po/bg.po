@@ -1,5 +1,8 @@
 msgid "IDS_COM_BODY_HIGH_VOLUMES_MAY_HARM_YOUR_HEARING_IF_YOU_LISTEN_FOR_A_LONG_TIME"
-msgstr "Голямата сила на звука може да увреди слуха ви, ако слушате дълго"
+msgstr "Голямата сила на звука може да увреди слуха ви, ако слушате дълго."
+
+msgid "IDS_COM_BODY_MEDIA"
+msgstr "Медии"
 
 msgid "IDS_COM_BODY_ANDROID"
 msgstr "Android"
@@ -10,9 +13,48 @@ msgstr "Java"
 msgid "IDS_COM_BODY_WARNING"
 msgstr "Предупреждение"
 
-msgid "IDS_COM_BODY_MEDIA"
-msgstr "Медии"
-
 msgid "IDS_COM_OPT_HEADPHONES_ABB"
 msgstr "Слушалки"
+
+msgid "IDS_PN_POP_UNABLE_TO_ADJUST_VOLUME_WHILE_ALL_SOUND_IS_OFF_YOU_CAN_TURN_ON_SOUND_BY_GOING_TO_ACCESSIBILITY_SETTINGS"
+msgstr "Силата на звука не може да се регулира, когато всички звуци са изключени. Можете да включите звука, като отидете в настройките за достъпност."
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_PM"
+msgstr "Сега е %d:%d часа сл.об."
+
+msgid "IDS_TTS_BODY_IT_IS_PD_CPD_AM"
+msgstr "Сега е %d:%d часа пр.об."
+
+msgid "IDS_LCKSCN_BODY_YOU_HAVE_P1SD_MISSED_CALLS_AND_P2SD_UNREAD_MESSAGEST_TTS"
+msgstr "Имате %1$d пропуснати повиквания и %2$d непрочетени съобщения."
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_T_TTS"
+msgstr "%d пропуснати повиквания"
+
+msgid "IDS_LCKSCN_BODY_PD_NEW_MESSAGES_T_TTS"
+msgstr "%d нови съобщения"
+
+msgid "IDS_TTS_BODY_1_MISSED_CALL_T_TTS"
+msgstr "1 пропуснато повикване"
+
+msgid "IDS_TTS_BODY_1_NEW_MESSAGE_T_TTS"
+msgstr "1 ново съобщение"
+
+msgid "IDS_LCKSCN_BODY_IT_IS_P1SD_CP2SD_T_TTS"
+msgstr "Сега е %1$d:%2$d."
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "1 пропуснато повикване и 1 непрочетено съобщение"
+
+msgid "IDS_LCKSCN_BODY_PD_MISSED_CALLS_AND_1_UNREAD_MESSAGE_T_TTS"
+msgstr "%d пропуснати повиквания и 1 непрочетено съобщение"
+
+msgid "IDS_LCKSCN_BODY_1_MISSED_CALL_AND_PD_UNREAD_MESSAGES_T_TTS"
+msgstr "1 пропуснато повикване и %d непрочетени съобщения"
+
+msgid "IDS_ST_BODY_PERSONAL_MODE_ENABLED"
+msgstr "Личен режим е активиран."
+
+msgid "IDS_ST_TPOP_DISABLE_TURN_OFF_ALL_SOUNDS_IN_ACCESSIBILITY_SETTINGS"
+msgstr "Деактивирайте Изключване на всички звуци в Настройки за достъпност."
 

@@ -87,7 +87,6 @@ cp LICENSE %{buildroot}/usr/share/license/%{_package_name}
 %{PREFIX}/*
 #%{PREFIX}/bin/*
 #%{PREFIX}/res/*
-/etc/smack/accesses.d/%{_package_name}.efl
 /usr/share/packages/%{_package_name}.xml
 /usr/share/icons/default/small/%{_package_name}.png
 /usr/share/license/%{_package_name}

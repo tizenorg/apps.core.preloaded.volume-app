@@ -1,11 +1,5 @@
 <manifest>
-    <define>
-        <domain name="org.tizen.volume"/>
-    </define>
-    <assign>
-	<filesystem path="/usr/share/icons/default/small/org.tizen.volume.png" label="_" />
-    </assign>
     <request>
-        <domain name="org.tizen.volume"/>
+        <domain name="_"/>
     </request>
 </manifest>

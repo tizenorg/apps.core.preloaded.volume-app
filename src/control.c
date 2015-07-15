@@ -459,37 +459,18 @@ volume_error_e volume_control_hide_view(void)
 
 	_D("Start closing volume view");
 
+	int ret = 0;
+	int ret1 = 0;
 	int i = 0;
 	int count_grabed = volume_key_event_count_grabed_get();
 
-	//Ecore_X_Window input_win = volume_key_event_input_window_get();
-	//retv_if(!input_win, VOLUME_ERROR_FAIL);
-
 	control_info.is_deleting = EINA_TRUE;
 
-	/* unregister outer event handler */
-	/*if(VOLUME_ERROR_OK != volume_x_input_event_unregister())
-	{
-		_E("Failed to unregister x input event handler");
-//		control_info.is_deleting = EINA_FALSE;
-//		return VOLUME_ERROR_FAIL;
-	}*/
-
-	/*for (i = 0; i < count_grabed; i++) {
-		if (VOLUME_ERROR_OK != volume_key_event_key_ungrab()) {
-			_E("Failed to ungrab key");
-			continue;
-		}
-		_D("ungrab key : %d/%d", i+1, count_grabed);
-	}*/
-	//elm_win_keygrab_unset(volume_view_win_get(), KEY_VOLUMEUP, 0, 0);
-	//elm_win_keygrab_unset(volume_view_win_get(), KEY_VOLUMEDOWN, 0, 0);
+	elm_win_keygrab_unset(volume_view_win_get(), KEY_VOLUMEUP, 0, 0);
+	elm_win_keygrab_unset(volume_view_win_get(), KEY_VOLUMEDOWN, 0, 0);
 	volume_key_event_count_grabed_set(0);
-	/*if (VOLUME_ERROR_OK != volume_key_event_key_grab(input_win, SHARED_GRAB)) {
-		_E("Failed to grab key : SHARED_GRAB");
-	}*/
-	//elm_win_keygrab_set(volume_view_win_get(), KEY_VOLUMEUP, 0, 0, 0, ELM_WIN_KEYGRAB_SHARED);
-	//elm_win_keygrab_set(volume_view_win_get(), KEY_VOLUMEDOWN, 0, 0, 0, ELM_WIN_KEYGRAB_SHARED);
+	ret = elm_win_keygrab_set(volume_view_win_get(), KEY_VOLUMEUP, 0, 0, 0, ELM_WIN_KEYGRAB_SHARED);
+	ret1 = elm_win_keygrab_set(volume_view_win_get(), KEY_VOLUMEDOWN, 0, 0, 0, ELM_WIN_KEYGRAB_SHARED);
 
 	volume_timer_del(TYPE_TIMER_SU);
 	volume_timer_del(TYPE_TIMER_SD);
@@ -637,12 +618,6 @@ volume_error_e volume_control_initialize(void)
 	Evas_Object *win = volume_view_window_create();
 	retv_if(!win, VOLUME_ERROR_FAIL);
 
-	/* Create input_window */
-	/*if(VOLUME_ERROR_OK != volume_key_event_input_window_create()) {
-		_E("Failed to create input window");
-		return VOLUME_ERROR_FAIL;
-	}*/
-
 	/* Create volume layout */
 	if(VOLUME_ERROR_OK != volume_view_layout_create(win)) {
 		_E("Failed to create volume layout");
@@ -725,7 +700,7 @@ static void _rotate_changed_cb(void *data, Evas_Object *obj, void *event_info)
 			break;
 		}
 
-		//volume_x_input_event_shape(obj, control_info.is_warning_visible);
+		//volume_x_input_eddddent_shape(obj, control_info.is_warning_visible);
 	}
 }
 
@@ -748,9 +723,14 @@ static void _control_set_window_rotation(Evas_Object *win)
 
 static Eina_Bool _idler_top_position_grab(void *data)
 {
-	//volume_key_event_key_grab(-1, TOP_POSITION_GRAB);
-	elm_win_keygrab_set(volume_view_win_get(), KEY_VOLUMEUP, 0, 0, 0, ELM_WIN_KEYGRAB_TOPMOST);
-	elm_win_keygrab_set(volume_view_win_get(), KEY_VOLUMEDOWN, 0, 0, 0, ELM_WIN_KEYGRAB_TOPMOST);
+	Evas_Object *win = NULL;
+	_D("Unset shared keygrab");
+
+	win = volume_view_win_get();
+	elm_win_keygrab_unset(win, KEY_VOLUMEUP, 0, 0);
+	elm_win_keygrab_unset(win, KEY_VOLUMEDOWN, 0, 0);
+	elm_win_keygrab_set(win, KEY_VOLUMEUP, 0, 0, 0, ELM_WIN_KEYGRAB_TOPMOST);
+	elm_win_keygrab_set(win, KEY_VOLUMEDOWN, 0, 0, 0, ELM_WIN_KEYGRAB_TOPMOST);
 
 	return ECORE_CALLBACK_CANCEL;
 }
@@ -807,13 +787,13 @@ static void _idle_lock_state_vconf_changed_cb(keynode_t *key, void *data)
 	}
 	_D("idle lock state : %d", lock);
 
-	/*if(lock == VCONFKEY_IDLE_LAUNCHING_LOCK)
+	if(lock == VCONFKEY_IDLE_LAUNCHING_LOCK)
 	{
 		if(VOLUME_ERROR_OK != volume_view_window_hide())
 		{
 			_E("Failed to hide window");
 		}
-	}*/
+	}
 }
 
 static void _notify_pm_lcdoff_cb(keynode_t * node, void *data)

@@ -38,7 +38,6 @@ static void _changed_language(app_event_info_h event_info, void *user_data);
 
 int main(int argc, char *argv[])
 {
-	_D(">>>>>>>>>>>>>>>>>>>>>>>>>> main >>>>>>>>>>>>>>>>");
 	int ret = 0;
 
 	ui_app_lifecycle_callback_s lifecycle_callback = {0,};
@@ -65,7 +64,6 @@ int main(int argc, char *argv[])
 
 static bool _create_app(void *user_data)
 {
-	_D(">>>>>>>>>>>>>>>>>>>>>>>>> create app >>>>>>>>>>>>>>>>>>>>");
 	elm_app_base_scale_set(1.8);
 	/* Initialize feedback */
 	//feedback_initialize();

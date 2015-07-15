@@ -292,8 +292,9 @@ Evas_Object *add_slider(Evas_Object *parent, int min, int max, int val)
 
 volume_error_e volume_view_window_show(void)
 {
+	_D("Volume view window SHOW");
 	evas_object_show(view_info.win);
-	elm_object_signal_emit(view_info.ly_outer, "show_effect", "clipper");
+	elm_win_iconified_set(view_info.win, EINA_FALSE);
 	volume_view_setting_icon_callback_add();
 
 	return VOLUME_ERROR_OK;
@@ -301,7 +302,8 @@ volume_error_e volume_view_window_show(void)
 
 volume_error_e volume_view_window_hide(void)
 {
-	elm_object_signal_emit(view_info.ly_outer, "hide_effect", "clipper");
+	_D("Volume view window HIDE");
+	elm_win_iconified_set(view_info.win, EINA_TRUE);
 	volume_view_setting_icon_callback_del();
 
 	return VOLUME_ERROR_OK;
@@ -365,7 +367,6 @@ volume_error_e volume_view_layout_create(Evas_Object *win)
 
 Evas_Object *add_volume_window(const char *name)
 {
-	_D(">>>>>>>>>>>>>>>>>>>>>>>>>> add volume window >>>>>>>>>>>>>>>>>>");
 	Evas_Object *eo = NULL;
 	Evas *evas = NULL;
 	int x, y, w, h = 0;
@@ -390,13 +391,16 @@ Evas_Object *add_volume_window(const char *name)
 
 Evas_Object *volume_view_window_create(void)
 {
-	_D(">>>>>>>>>>>>>>>>>>>>>>>>>>> view win create >>>>>>>>>>>>>>>>>>>");
+	int ret = 0;
+	int ret1 = 0;
 	Evas_Object *win = add_volume_window(PACKAGE);
 	retv_if(!win, NULL);
 
 	view_info.win = win;
-	elm_win_keygrab_set(win, KEY_VOLUMEUP, 0, 0, 0, ELM_WIN_KEYGRAB_SHARED);
-	elm_win_keygrab_set(win, KEY_VOLUMEDOWN, 0, 0, 0, ELM_WIN_KEYGRAB_SHARED);
+	ret = elm_win_keygrab_set(win, KEY_VOLUMEUP, 0, 0, 0, ELM_WIN_KEYGRAB_SHARED);
+	ret1 = elm_win_keygrab_set(win, KEY_VOLUMEDOWN, 0, 0, 0, ELM_WIN_KEYGRAB_SHARED);
+	_D("keygrab ret: %d, ret1: %d", ret, ret1);
+	elm_win_iconified_set(win, EINA_TRUE);
 
 	return win;
 }

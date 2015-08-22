@@ -20,7 +20,7 @@
 #include <bluetooth.h>
 #include <bluetooth_internal.h>
 #include <app.h>
-//#include <bluetooth_extention.h>
+#include <bluetooth_extention.h>
 
 #include "main.h"
 #include "_util_efl.h"
@@ -29,7 +29,6 @@
 #include "control.h"
 #include "sound.h"
 #include "timer.h"
-#include "x_event.h"
 #include "key_event.h"
 #include "bt.h"
 
@@ -37,8 +36,6 @@
 
 struct _control_s_info{
 	bundle *volume_bundle;
-	Ecore_Event_Handler *handler_qp_state;
-	Ecore_Timer *shape_timer;
 
 	Eina_Bool is_deleting;
 	Eina_Bool is_launching;
@@ -55,8 +52,6 @@ struct _control_s_info{
 };
 static struct _control_s_info control_info = {
 	.volume_bundle = NULL,
-	.handler_qp_state = NULL,
-	.shape_timer = NULL,
 
 	.is_deleting = EINA_FALSE,
 	.is_launching = EINA_FALSE,
@@ -72,13 +67,9 @@ static struct _control_s_info control_info = {
 	.sound_type_at_show = SOUND_TYPE_RINGTONE,
 };
 
-static int _myterm(bundle *b, void *data);
-static int _mytimeout(bundle *b, void *data);
 static void _notify_pm_lcdoff_cb(keynode_t * node, void *data);
 static void _idle_lock_state_vconf_changed_cb(keynode_t *key, void *data);
 static void _starter_user_volume_key_vconf_changed_cb(keynode_t *key, void *data);
-static Eina_Bool _shape_cb(void *data);
-static Eina_Bool _idler_top_position_grab(void *data);
 static void _control_set_window_rotation(Evas_Object *win);
 static void _rotate_changed_cb(void *data, Evas_Object *obj, void *event_info);
 
@@ -251,13 +242,6 @@ int volume_control_check_status(int *lock, sound_type_e *sound_type)
 	return UNLOCK_STATUS;
 }
 
-void volume_control_shape_event_area(Eina_Bool is_warning_visible)
-{
-	_D("shape event area");
-	Evas_Object *win = volume_view_win_get();
-	//volume_x_input_event_shape(win, is_warning_visible);
-}
-
 void volume_control_show_hide_worning()
 {
 	Evas_Object *ly_outer = volume_view_outer_layout_get();
@@ -279,8 +263,6 @@ void volume_control_show_hide_worning()
 			{
 				elm_object_signal_emit(ly_outer, "show_warning", "clipper"); //landscape
 			}
-
-            volume_control_shape_event_area(EINA_TRUE);
 		}
 	}
 	else if(control_info.is_warning_visible)
@@ -295,38 +277,6 @@ void volume_control_show_hide_worning()
 		{
 			elm_object_signal_emit(ly_outer, "hide_warning", "clipper"); //landscape
 		}
-
-		volume_control_shape_event_area(EINA_FALSE);
-	}
-}
-
-int volume_register_shape_timer()
-{
-	if (control_info.shape_timer) {
-		ecore_timer_del(control_info.shape_timer);
-		control_info.shape_timer = NULL;
-	}
-
-	control_info.shape_timer = ecore_timer_add(0.1, _shape_cb, NULL);
-
-	if (control_info.shape_timer)
-		return VOLUME_ERROR_OK;
-	else
-		return VOLUME_ERROR_FAIL;
-}
-
-void volume_control_check_syspopup()
-{
-	if(syspopup_has_popup(control_info.volume_bundle)) {
-		syspopup_reset(control_info.volume_bundle);
-	}
-}
-
-void volume_control_check_once(void)
-{
-	if(control_info.show_once) {
-		ecore_idler_add(_idler_top_position_grab, NULL);
-		control_info.show_once = EINA_FALSE;
 	}
 }
 
@@ -368,14 +318,6 @@ Eina_Bool volume_control_show_view(int status, sound_type_e sound_type, int soun
 			if(VOLUME_ERROR_OK != volume_view_window_show()) {
 				_E("Failed to show volume window");
 			}
-
-			/*if(VOLUME_ERROR_OK != volume_x_input_event_register()) {
-				_E("Failed to add x input event handler");
-			}*/
-
-			volume_control_check_syspopup();
-
-			volume_control_check_once();
 		}
 
 		control_info.is_launching = EINA_TRUE;
@@ -413,11 +355,6 @@ Eina_Bool volume_control_show_view(int status, sound_type_e sound_type, int soun
 		//@TODO: need to check
 		volume_view_volume_icon_set(sound_type, sound, vibration, bt_opened);
 
-		if(VOLUME_ERROR_OK != volume_register_shape_timer())
-		{
-			_E("Failed to register shape_timer");
-		}
-
 		return EINA_TRUE;
 	}
 }
@@ -428,16 +365,7 @@ volume_error_e volume_control_close_bt_display(void)
 
 	_D("Start closing bt display");
 
-	Ecore_X_Window input_win = volume_key_event_input_window_get();
-	retv_if(!input_win, VOLUME_ERROR_FAIL);
-
 	control_info.is_deleting = EINA_TRUE;
-
-	/* unregister outer event handler */
-	/*if(VOLUME_ERROR_OK != volume_x_input_event_unregister())
-	{
-		_E("Failed to unregister x input event handler");
-	}*/
 
 	/* hide window */
 	if(VOLUME_ERROR_OK != volume_view_window_hide())
@@ -459,18 +387,7 @@ volume_error_e volume_control_hide_view(void)
 
 	_D("Start closing volume view");
 
-	int ret = 0;
-	int ret1 = 0;
-	int i = 0;
-	int count_grabed = volume_key_event_count_grabed_get();
-
 	control_info.is_deleting = EINA_TRUE;
-
-	elm_win_keygrab_unset(volume_view_win_get(), KEY_VOLUMEUP, 0, 0);
-	elm_win_keygrab_unset(volume_view_win_get(), KEY_VOLUMEDOWN, 0, 0);
-	volume_key_event_count_grabed_set(0);
-	ret = elm_win_keygrab_set(volume_view_win_get(), KEY_VOLUMEUP, 0, 0, 0, ELM_WIN_KEYGRAB_SHARED);
-	ret1 = elm_win_keygrab_set(volume_view_win_get(), KEY_VOLUMEDOWN, 0, 0, 0, ELM_WIN_KEYGRAB_SHARED);
 
 	volume_timer_del(TYPE_TIMER_SU);
 	volume_timer_del(TYPE_TIMER_SD);
@@ -555,7 +472,6 @@ volume_error_e volume_control_reset(bundle *b)
 	Evas_Object *win = volume_view_win_get();
 	retv_if(!win, VOLUME_ERROR_FAIL);
 
-	int ret = -1;
 	int lock = IDLELOCK_ON;
 	int status = 0;
 	int volume = 0;
@@ -564,18 +480,6 @@ volume_error_e volume_control_reset(bundle *b)
 	bool bt_opened = false;
 	sound_type_e sound_type = 0;
 	const char *show_volume = NULL;
-/*
-	if(control_info.reset_once) {
-		static syspopup_handler handler = {
-			.def_term_fn = _myterm,
-			.def_timeout_fn = _mytimeout
-		};
-
-		ret = syspopup_create(b, &handler, win, NULL);
-		retvm_if(ret < 0, VOLUME_ERROR_FAIL, "Failed to create syspopup");
-		control_info.volume_bundle = bundle_dup(b);
-		control_info.reset_once = EINA_FALSE;
-	}*/
 
 	status = volume_control_check_status(&lock, &sound_type);
 	_D("status: %d, lock: %d, sound type : %d", status, lock, sound_type);
@@ -699,8 +603,6 @@ static void _rotate_changed_cb(void *data, Evas_Object *obj, void *event_info)
 			}
 			break;
 		}
-
-		//volume_x_input_eddddent_shape(obj, control_info.is_warning_visible);
 	}
 }
 
@@ -719,28 +621,6 @@ static void _control_set_window_rotation(Evas_Object *win)
 
 	/* initialize degree */
 	_rotate_changed_cb(NULL, win, NULL);
-}
-
-static Eina_Bool _idler_top_position_grab(void *data)
-{
-	Evas_Object *win = NULL;
-	_D("Unset shared keygrab");
-
-	win = volume_view_win_get();
-	elm_win_keygrab_unset(win, KEY_VOLUMEUP, 0, 0);
-	elm_win_keygrab_unset(win, KEY_VOLUMEDOWN, 0, 0);
-	elm_win_keygrab_set(win, KEY_VOLUMEUP, 0, 0, 0, ELM_WIN_KEYGRAB_TOPMOST);
-	elm_win_keygrab_set(win, KEY_VOLUMEDOWN, 0, 0, 0, ELM_WIN_KEYGRAB_TOPMOST);
-
-	return ECORE_CALLBACK_CANCEL;
-}
-
-static Eina_Bool _shape_cb(void *data)
-{
-	LOGD("shape callback");
-	volume_control_shape_event_area(control_info.is_warning_visible);
-	control_info.shape_timer = NULL;
-	return ECORE_CALLBACK_CANCEL;
 }
 
 static void _starter_user_volume_key_vconf_changed_cb(keynode_t *key, void *data)
@@ -808,23 +688,3 @@ static void _notify_pm_lcdoff_cb(keynode_t * node, void *data)
 		_E("Failed to flush cache");
 	}
 }
-
-static int _mytimeout(bundle *b, void *data)
-{
-	return 0;
-}
-
-static int _myterm(bundle *b, void *data)
-{
-	if (VOLUME_ERROR_OK != volume_control_hide_view())
-	{
-		_E("Failed to close volume");
-	}
-	if (VOLUME_ERROR_OK != volume_control_cache_flush())
-	{
-		_E("Failed to flush cache");
-	}
-
-	return 0;
-}
-

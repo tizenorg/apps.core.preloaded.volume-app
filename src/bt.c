@@ -21,14 +21,13 @@
 #include <feedback.h>
 #include <bluetooth.h>
 #include <bluetooth_internal.h>
-//#include <bluetooth_extention.h>
+#include <bluetooth_extention.h>
 
 #include "main.h"
 #include "_util_log.h"
 #include "view.h"
 #include "control.h"
 #include "sound.h"
-#include "x_event.h"
 #include "timer.h"
 
 static void _bt_display_bt_volume_view(sound_type_e sound_type, int sound, int vibration, bool bt_opened);
@@ -77,17 +76,7 @@ static void _bt_display_bt_volume_view(sound_type_e sound_type, int sound, int v
 	if (VOLUME_ERROR_OK != volume_view_window_show())
 		_E("Failed to show volume window");
 
-	/*if (VOLUME_ERROR_OK != volume_x_input_event_register())
-		_E("Failed to add x input event handler");*/
-
-	volume_control_check_syspopup();
-
-	volume_control_check_once();
-
 	volume_view_volume_icon_set(sound_type, sound, vibration, bt_opened);
-
-	if (VOLUME_ERROR_OK != volume_register_shape_timer())
-		_E("Failed to register shape timer");
 }
 
 static void _bt_volume_changed_cb(int volume, void *user_data)
@@ -124,25 +113,7 @@ static void _bt_volume_changed_cb(int volume, void *user_data)
 
 static void _bt_state_changed_cb(int result, bool opened, void *user_data)
 {
-	int status = 0;
-	int sound = 0;
-	sound_type_e sound_type = 0;
-	int lock = 0;
-
 	_D("SCO opened [%s]", opened ? "YES" : "NO");
-
-	status = volume_control_check_status(&lock, &sound_type);
-	_D("status: %d, lock: %d, sound type : %d", status, lock, sound_type);
-
-	sound = volume_sound_vconf_status_get(TYPE_VCONF_SOUND_STATUS);
-	_D("sound status : %d", sound);
-
-	if (sound_type == SOUND_TYPE_CALL)
-	{
-		volume_control_show_view(status, sound_type, sound, opened);
-		volume_timer_add(3.0, TYPE_TIMER_BT);
-	}
-
 }
 
 static int _bt_register_changed_cb(void)

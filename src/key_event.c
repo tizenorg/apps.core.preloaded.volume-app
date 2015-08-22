@@ -15,13 +15,12 @@
  */
 
 #include <Ecore.h>
-//#include <Ecore_X.h>
 #include <vconf.h>
 #include <vconf-keys.h>
 #include <feedback.h>
 #include <bluetooth.h>
 #include <bluetooth_internal.h>
-//#include <bluetooth_extention.h>
+#include <bluetooth_extention.h>
 #include <app.h>
 
 #include "main.h"
@@ -74,26 +73,6 @@ static volume_error_e _volume_down_key_press(sound_type_e sound_type, int sound,
 static volume_error_e _volume_up_key_press(sound_type_e sound_type, int sound, bool bt_opened);
 static volume_error_e _mute_key_press();
 
-/*
-Ecore_X_Window _add_input_window(void)
-{
-	Ecore_X_Window win = 0;
-	win = ecore_x_window_input_new(0, -10000, -10000, 1, 1);
-	retv_if(!win, 0);
-
-	ecore_x_icccm_title_set(win, VOLUME_INPUT_WIN_NAME);
-	ecore_x_netwm_name_set(win, VOLUME_INPUT_WIN_NAME);
-	ecore_x_netwm_pid_set(win, getpid());
-	ecore_x_flush();
-
-	return win;
-}*/
-
-Ecore_X_Window volume_key_event_input_window_get(void)
-{
-	return key_event_info.input_win;
-}
-
 Ecore_Event_Handler* volume_key_event_handler_volume_up_get(void)
 {
 	return key_event_info.handler_volume_up;
@@ -102,11 +81,6 @@ Ecore_Event_Handler* volume_key_event_handler_volume_up_get(void)
 Ecore_Event_Handler* volume_key_event_handler_volume_down_get(void)
 {
 	return key_event_info.handler_volume_down;
-}
-
-Ecore_Event_Handler* volume_key_event_handler_qp_state_check(void)
-{
-	return key_event_info.handler_qp_state_check;
 }
 
 Eina_Bool volume_key_event_is_pressing_get(void)
@@ -118,76 +92,6 @@ int volume_key_event_count_grabed_get(void)
 {
 	return key_event_info.count_grabed;
 }
-
-void volume_key_event_count_grabed_set(int val)
-{
-	key_event_info.count_grabed = val;
-}
-
-/*
-volume_error_e volume_key_event_key_grab(Ecore_X_Window _xwin, int grab_mode)
-{
-	Evas_Object *win = volume_view_win_get();
-	retv_if(win == NULL, VOLUME_ERROR_FAIL);
-
-	Ecore_X_Display *disp = NULL;
-	Ecore_X_Window xwin = 0;
-	int ret = -1;
-
-	key_event_info.count_grabed++;
-	_D("count_grabed : %d", key_event_info.count_grabed);
-
-	disp = ecore_x_display_get();
-	retvm_if(disp == NULL, VOLUME_ERROR_FAIL, "Failed to get display");
-
-	if (_xwin == -1) {
-		_D("Top position grab");
-		xwin = elm_win_xwindow_get(win);
-		retvm_if(xwin == 0, VOLUME_ERROR_FAIL, "Failed to get xwindow");
-	} else
-		xwin = _xwin;
-
-	ret = utilx_grab_key(disp, xwin, KEY_VOLUMEDOWN, grab_mode);
-	retvm_if(ret < 0, VOLUME_ERROR_FAIL, "Failed to grab key down");
-	retvm_if(ret == 1, VOLUME_ERROR_FAIL, "Already grab");
-
-	ret = utilx_grab_key(disp, xwin, KEY_VOLUMEUP, grab_mode);
-	retvm_if(ret < 0, VOLUME_ERROR_FAIL, "Failed to grab key up");
-	retvm_if(ret == 1, VOLUME_ERROR_FAIL, "Already grab");
-
-	ret = utilx_grab_key(disp, xwin, KEY_MUTE, grab_mode);
-	retvm_if(ret < 0, VOLUME_ERROR_FAIL, "Failed to grab key mute");
-	retvm_if(ret == 1, VOLUME_ERROR_FAIL, "Already grab");
-
-	return VOLUME_ERROR_OK;
-}
-
-volume_error_e volume_key_event_key_ungrab(void)
-{
-	Ecore_X_Window xwin = 0;
-	Ecore_X_Display *disp = NULL;
-
-	Evas_Object *win = volume_view_win_get();
-	retv_if(win == NULL, VOLUME_ERROR_FAIL);
-
-	Ecore_X_Window input_win = volume_key_event_input_window_get();
-	retv_if(input_win == 0, VOLUME_ERROR_FAIL);
-
-	xwin = elm_win_xwindow_get(win);
-	retv_if(xwin == 0, VOLUME_ERROR_FAIL);
-
-	disp = ecore_x_display_get();
-	retv_if(disp == NULL, VOLUME_ERROR_FAIL);
-
-	//@TODO : need to check
-	utilx_ungrab_key(disp, input_win, KEY_VOLUMEUP);
-	utilx_ungrab_key(disp, input_win, KEY_VOLUMEDOWN);
-	utilx_ungrab_key(disp, input_win, KEY_MUTE);
-
-	_D("key ungrabed");
-
-	return VOLUME_ERROR_OK;
-}*/
 
 void volume_key_event_handler_add(void)
 {
@@ -208,16 +112,6 @@ void volume_key_event_handler_del(void)
 	ecore_event_handler_del(key_event_info.handler_volume_down);
 	key_event_info.handler_volume_down = NULL;
 }
-/*
-volume_error_e volume_key_event_input_window_create(void)
-{
-	Ecore_X_Window input_win = _add_input_window();
-	retv_if(!input_win, VOLUME_ERROR_FAIL);
-
-	key_event_info.input_win = input_win;
-
-	return volume_key_event_key_grab(input_win, SHARED_GRAB);
-}*/
 
 static volume_error_e _mute_key_press()
 {
@@ -359,7 +253,7 @@ static volume_error_e _volume_up_key_press(sound_type_e sound_type, int sound, b
 		}
 	}
 	else {
-		if (sound_level != sound_step) {
+		if (sound_level != sound_step ) {
 			volume_sound_level_set(sound_type, sound_level+1);
 			volume_view_slider_value_set(sound_level+1);
 			_D("new sound value: %d", sound_level+1);

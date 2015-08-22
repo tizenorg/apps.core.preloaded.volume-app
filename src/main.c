@@ -66,7 +66,7 @@ static bool _create_app(void *user_data)
 {
 	elm_app_base_scale_set(1.8);
 	/* Initialize feedback */
-	//feedback_initialize();
+	feedback_initialize();
 
 	/* Initialize volume */
 	if (VOLUME_ERROR_OK != volume_control_initialize()) {

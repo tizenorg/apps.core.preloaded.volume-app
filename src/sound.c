@@ -83,8 +83,9 @@ void volume_sound_vib_play(void)
 
 	_D("Play Feedback : vibration");
 
-	//if (FEEDBACK_ERROR_NONE != feedback_play_type(FEEDBACK_TYPE_VIBRATION, FEEDBACK_PATTERN_VIBRATION_ON))
-	//	_E("Failed to play feedback");
+	if (FEEDBACK_ERROR_NONE != feedback_play_type(FEEDBACK_TYPE_VIBRATION, FEEDBACK_PATTERN_VIBRATION_ON)) {
+		_E("Failed to play feedback");
+	}
 
 	sound_info.is_vibration = EINA_TRUE;
 }

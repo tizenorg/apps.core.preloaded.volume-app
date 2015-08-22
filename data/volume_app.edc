@@ -151,6 +151,9 @@
 #define WARRNING_TEXT_Y_MIN_L (TOP_PADDING+WARRNING_TEXT_TOP_PADDING+CONTENT_TOP_PADDING+CONTENT_HEIGHT)/SCREEN_HEIGHT_L
 #define WARRNING_TEXT_Y_MAX_L (TOP_PADDING+WARRNING_TEXT_TOP_PADDING+CONTENT_TOP_PADDING+WARRNING_TEXT_HEIGHT)/SCREEN_HEIGHT_L
 
+/*color_class: "W0661"; \
+color_class: "W0661D"; \
+color_class: "B0563L1P"; \*/
 
 #define RESOURCE_IMAGE( FILE_NAME ) \
 	group { \
@@ -163,7 +166,7 @@
 					image.normal : FILE_NAME; \
 					aspect : 1 1; \
 					aspect_preference : BOTH; \
-					color_class: "W0661"; \
+					color: 100 0 0 200; \
 				} \
 			} \
 		} \
@@ -180,7 +183,7 @@
 					image.normal : FILE_NAME; \
 					aspect : 1 1; \
 					aspect_preference : BOTH; \
-					color_class: "W0661D"; \
+					color: 0 100 0 200; \
 				} \
 			} \
 		} \
@@ -197,7 +200,7 @@
 					image.normal : FILE_NAME; \
 					aspect : 1 1; \
 					aspect_preference : BOTH; \
-					color_class: "B0563L1P"; \
+					color: 153 56 0 200; \
 				} \
 			} \
 		} \

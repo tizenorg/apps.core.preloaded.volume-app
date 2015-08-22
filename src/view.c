@@ -15,7 +15,6 @@
  */
 
 #include <Ecore.h>
-//#include <Ecore_X.h>
 #include <feedback.h>
 #include <vconf.h>
 #include <vconf-keys.h>
@@ -27,7 +26,6 @@
 #include "view.h"
 #include "control.h"
 #include "timer.h"
-#include "x_event.h"
 #include "key_event.h"
 #include "sound.h"
 
@@ -185,6 +183,7 @@ volume_error_e volume_view_slider_value_set(int val)
 
 void volume_view_volume_icon_set(sound_type_e sound_type, int sound, int vibration, bool bt_opened)
 {
+	_D("Volume icon set");
 	char *img = NULL;
 
 	if (sound == -1 || vibration == -1) {
@@ -237,12 +236,15 @@ void volume_view_volume_icon_set(sound_type_e sound_type, int sound, int vibrati
 
 void volume_view_setting_icon_set(const char *file)
 {
+	_D("Setting icon image set");
 	ret_if(!file);
 
 	Evas_Object *icon_setting = view_info.icon_setting;
 	ret_if(!icon_setting);
 
-	elm_image_file_set(icon_setting, EDJ_APP, file);
+	if (EINA_TRUE != elm_image_file_set(icon_setting, EDJ_APP, file)) {
+		_E("Failed to set image file : %s, Group", EDJ_APP, file);
+	};
 }
 
 void volume_view_setting_icon_callback_add(void)
@@ -292,9 +294,8 @@ Evas_Object *add_slider(Evas_Object *parent, int min, int max, int val)
 
 volume_error_e volume_view_window_show(void)
 {
-	_D("Volume view window SHOW");
-	evas_object_show(view_info.win);
-	elm_win_iconified_set(view_info.win, EINA_FALSE);
+	_D("Volume view window SHOW is [%p]", view_info.win);
+	elm_win_raise(view_info.win);
 	volume_view_setting_icon_callback_add();
 
 	return VOLUME_ERROR_OK;
@@ -303,7 +304,7 @@ volume_error_e volume_view_window_show(void)
 volume_error_e volume_view_window_hide(void)
 {
 	_D("Volume view window HIDE");
-	elm_win_iconified_set(view_info.win, EINA_TRUE);
+	elm_win_lower(view_info.win);
 	volume_view_setting_icon_callback_del();
 
 	return VOLUME_ERROR_OK;
@@ -389,18 +390,32 @@ Evas_Object *add_volume_window(const char *name)
 	return eo;
 }
 
-Evas_Object *volume_view_window_create(void)
+static Eina_Bool _key_grab_cb(void *data)
 {
 	int ret = 0;
-	int ret1 = 0;
+	Evas_Object *win = data;
+
+	_D("keygrab window is [%p]", win);
+	ret = elm_win_keygrab_set(win, KEY_VOLUMEUP, 0, 0, 0, ELM_WIN_KEYGRAB_SHARED);
+	_D("Result of volume up keygrab set : %d", ret);
+	ret = elm_win_keygrab_set(win, KEY_VOLUMEDOWN, 0, 0, 0, ELM_WIN_KEYGRAB_SHARED);
+	_D("Result of volume down keygrab set : %d", ret);
+	elm_win_lower(win);
+
+	return EINA_FALSE;
+}
+
+Evas_Object *volume_view_window_create(void)
+{
 	Evas_Object *win = add_volume_window(PACKAGE);
 	retv_if(!win, NULL);
+	_D("window is [%p]", win);
 
 	view_info.win = win;
-	ret = elm_win_keygrab_set(win, KEY_VOLUMEUP, 0, 0, 0, ELM_WIN_KEYGRAB_SHARED);
-	ret1 = elm_win_keygrab_set(win, KEY_VOLUMEDOWN, 0, 0, 0, ELM_WIN_KEYGRAB_SHARED);
-	_D("keygrab ret: %d, ret1: %d", ret, ret1);
-	elm_win_iconified_set(win, EINA_TRUE);
+	_D("view_info.win is [%p]", view_info.win);
+
+	ecore_timer_add(1.0f, _key_grab_cb, win);
+	evas_object_show(win);
 
 	return win;
 }
@@ -435,11 +450,11 @@ void _lock_sound_check(void)
 		}
 		_D("lock type : %d", lock_type);
 
-		/*if (lock_type == SETTING_SCREEN_LOCK_TYPE_SWIPE)
+		if (lock_type == SETTING_SCREEN_LOCK_TYPE_SWIPE)
 			feedback_play_type(FEEDBACK_TYPE_SOUND, FEEDBACK_PATTERN_LOCK_SWIPE);
 
 		else
-			feedback_play_type(FEEDBACK_TYPE_SOUND, FEEDBACK_PATTERN_LOCK);*/
+			feedback_play_type(FEEDBACK_TYPE_SOUND, FEEDBACK_PATTERN_LOCK);
 	}
 }
 
@@ -625,6 +640,7 @@ static void _button_cb(void *data, Evas_Object *obj, void *event_info)
 
 static Evas_Object* _setting_icon_make()
 {
+	_D("Setting ICON make");
 	Evas_Object *icon_setting = elm_icon_add(view_info.ly_outer);
 	retv_if(!icon_setting, NULL);
 
@@ -657,8 +673,7 @@ static Evas_Object* _slider_make()
 	sound_type_e sound_type = volume_control_get_sound_type_at_show();
 	_D("sound type at show : %d", sound_type);
 
-	//int sound_step = volume_sound_sound_manager_step_get(sound_type);
-	int sound_step = 7;
+	int sound_step = volume_sound_sound_manager_step_get(sound_type);
 	_D("sound step : %d", sound_step);
 
 	int sound_val = volume_sound_level_get(sound_type);

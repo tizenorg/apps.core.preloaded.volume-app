@@ -5,7 +5,6 @@ SET(SRCS
 	src/main.c
 	src/view.c
 	src/control.c
-	src/x_event.c
 	src/key_event.c
 	src/timer.c
 	src/sound.c
@@ -36,20 +35,17 @@ pkg_check_modules(pkgs REQUIRED
 	capi-appfw-application
 	capi-appfw-app-manager
 	appcore-efl
-#	ecore-x
 	ecore
 	evas
 	edje
 	capi-media-sound-manager
 	capi-network-bluetooth
 	vconf
-#	utilX
 	syspopup
 	syspopup-caller
 	bundle
 	feedback
 	notification
-#	x11 xcomposite xext xi
 )
 
 FOREACH(flag ${pkgs_CFLAGS})

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2014 Samsung Electronics Co., Ltd All Rights Reserved
+ * Copyright (c) 2009-2015 Samsung Electronics Co., Ltd All Rights Reserved
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,6 @@
 #include <feedback.h>
 #include <vconf.h>
 #include <app_control_internal.h>
-#include <app_preference.h>
-#include <Elementary.h>
-#include <appcore-efl.h>
-#include <app.h>
 
 #include "main.h"
 #include "_util_log.h"
@@ -32,7 +28,6 @@ static bool _create_app(void *user_data);
 static void _terminate_app(void *user_data);
 static void _pause_app(void *user_data);
 static void _resume_app(void *user_data);
-static void _control_app(app_control_h service, void *user_data);
 static void _control_app(app_control_h service, void *user_data);
 static void _changed_language(app_event_info_h event_info, void *user_data);
 

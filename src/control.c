@@ -19,8 +19,7 @@
 #include <app_manager.h>
 #include <bluetooth.h>
 #include <bluetooth_internal.h>
-#include <app.h>
-#include <bluetooth_extention.h>
+#include <bluetooth_extension.h>
 
 #include "main.h"
 #include "_util_efl.h"
@@ -31,11 +30,14 @@
 #include "timer.h"
 #include "key_event.h"
 #include "bt.h"
+#include "tzsh_volume_service.h"
 
 #define VCONF_KEY_FMRADIO_RECORDING "memory/private/Sound/FMRadioRecording"
 
 struct _control_s_info{
 	bundle *volume_bundle;
+	Ecore_Event_Handler *handler_qp_state;
+	Ecore_Timer *shape_timer;
 
 	Eina_Bool is_deleting;
 	Eina_Bool is_launching;
@@ -52,6 +54,8 @@ struct _control_s_info{
 };
 static struct _control_s_info control_info = {
 	.volume_bundle = NULL,
+	.handler_qp_state = NULL,
+	.shape_timer = NULL,
 
 	.is_deleting = EINA_FALSE,
 	.is_launching = EINA_FALSE,
@@ -571,6 +575,69 @@ void volume_control_deinitialize(void)
 	bt_deinit_sco();
 }
 
+void volume_service_region_set(Evas_Object *win, Eina_Bool is_warning_visible)
+{
+	_D("X input event shape");
+	Evas_Object *ly = NULL;
+	tzsh_h tzsh = NULL;
+	tzsh_volume_service_h volume_service = NULL;
+	tzsh_region_h rect = NULL;
+	int ret = 0;
+
+	int x, y, w ,h;
+	int tmp_x;
+	int tmp_y;
+	int tmp_w;
+	int tmp_h;
+
+	tzsh = volume_view_tzsh_get();
+	ret_if(!tzsh);
+	volume_service = volume_view_service_get();
+	ret_if(!volume_service);
+
+	int current_angle = volume_control_get_current_angle();
+	_D("Current angle : %d", current_angle);
+
+	ly = volume_view_outer_layout_get();
+	if (!ly) {
+		_E("Failed to load edje");
+		return;
+	}
+
+	edje_object_part_geometry_get(_EDJ(ly), "bg", &x, &y, &w, &h);
+	_D("The position of bg x: %d, y: %d, w: %d, h: %d", x, y, w, h);
+
+	if (current_angle == 90) {
+		tmp_x = x;
+		tmp_y = y;
+		tmp_w = w;
+		tmp_h = h;
+
+		x = tmp_y;
+		y = tmp_x;
+		w = tmp_h;
+		h = tmp_w;
+	}
+	else if (current_angle == 270) {
+		tmp_x = x;
+		tmp_y = y;
+		tmp_w = w;
+		tmp_h = h;
+
+		x = volume_control_get_viewport_width()-tmp_y-tmp_h;
+		y = tmp_x;
+		w = tmp_h;
+		h = tmp_w;
+	}
+
+	rect = tzsh_region_create(tzsh);
+	tzsh_region_add(rect, x, y, h, w);
+	_D("shape x: %d, y: %d, w: %d, h: %d", x, y, w, h);
+	ret = tzsh_volume_service_content_region_set(volume_service, current_angle, rect);
+	_D("The result of volume region set is : %d", ret);
+	tzsh_region_destroy(rect);
+}
+
 static void _rotate_changed_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	static int current_angle = -1;
@@ -603,6 +670,8 @@ static void _rotate_changed_cb(void *data, Evas_Object *obj, void *event_info)
 			}
 			break;
 		}
+
+		volume_service_region_set(obj, control_info.is_warning_visible);
 	}
 }
 

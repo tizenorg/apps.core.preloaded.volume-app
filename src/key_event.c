@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2014 Samsung Electronics Co., Ltd All Rights Reserved
+ * Copyright (c) 2009-2015 Samsung Electronics Co., Ltd All Rights Reserved
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,7 @@
 #include <feedback.h>
 #include <bluetooth.h>
 #include <bluetooth_internal.h>
-#include <bluetooth_extention.h>
-#include <app.h>
+#include <bluetooth_extension.h>
 
 #include "main.h"
 #include "_util_log.h"
@@ -86,11 +85,6 @@ Ecore_Event_Handler* volume_key_event_handler_volume_down_get(void)
 Eina_Bool volume_key_event_is_pressing_get(void)
 {
 	return key_event_info.is_pressing;
-}
-
-int volume_key_event_count_grabed_get(void)
-{
-	return key_event_info.count_grabed;
 }
 
 void volume_key_event_handler_add(void)
@@ -253,7 +247,7 @@ static volume_error_e _volume_up_key_press(sound_type_e sound_type, int sound, b
 		}
 	}
 	else {
-		if (sound_level != sound_step ) {
+		if (sound_level != sound_step) {
 			volume_sound_level_set(sound_type, sound_level+1);
 			volume_view_slider_value_set(sound_level+1);
 			_D("new sound value: %d", sound_level+1);

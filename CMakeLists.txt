@@ -46,6 +46,7 @@ pkg_check_modules(pkgs REQUIRED
 	bundle
 	feedback
 	notification
+	tzsh-volume-service
 )
 
 FOREACH(flag ${pkgs_CFLAGS})

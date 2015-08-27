@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2014 Samsung Electronics Co., Ltd All Rights Reserved
+ * Copyright (c) 2009-2015 Samsung Electronics Co., Ltd All Rights Reserved
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +20,12 @@
 
 #include <Elementary.h>
 
-Ecore_X_Window _add_input_window(void);
-Evas_Object *add_volume_window(const char *name);
-Evas_Object *add_slider(Evas_Object *parent, int min, int max, int val);
-Evas_Object *add_layout(Evas_Object *parent, const char *file, const char *group);
-Evas_Object *add_button(Evas_Object *parent, const char *style, const char *text);
-Evas_Object *add_popup(Evas_Object *parent, const char *style);
-Evas_Object *add_label(Evas_Object *parent, const char *text);
+extern Ecore_X_Window _add_input_window(void);
+extern Evas_Object *add_volume_window(const char *name);
+extern Evas_Object *add_slider(Evas_Object *parent, int min, int max, int val);
+extern Evas_Object *add_layout(Evas_Object *parent, const char *file, const char *group);
+extern Evas_Object *add_button(Evas_Object *parent, const char *style, const char *text);
+extern Evas_Object *add_popup(Evas_Object *parent, const char *style);
+extern Evas_Object *add_label(Evas_Object *parent, const char *text);
 #endif
 /* __VOLUME_UTIL_EFL_H__ */

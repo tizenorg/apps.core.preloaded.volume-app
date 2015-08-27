@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2014 Samsung Electronics Co., Ltd All Rights Reserved
+ * Copyright (c) 2009-2015 Samsung Electronics Co., Ltd All Rights Reserved
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,21 +24,21 @@
 #define KEY_BACK "XF86Back"
 #define KEY_CANCEL "Cancel"
 
-Ecore_X_Window volume_key_event_input_window_get(void);
-Ecore_Event_Handler *volume_key_event_handler_volume_up_get(void);
-Ecore_Event_Handler *volume_key_event_handler_volume_down_get(void);
-Ecore_Event_Handler *volume_key_event_handler_qp_state_check(void);
-Eina_Bool volume_key_event_is_pressing_get(void);
-int volume_key_event_count_grabed_get(void);
-void volume_key_event_count_grabed_set(int val);
+extern Ecore_X_Window volume_key_event_input_window_get(void);
+extern Ecore_Event_Handler *volume_key_event_handler_volume_up_get(void);
+extern Ecore_Event_Handler *volume_key_event_handler_volume_down_get(void);
+extern Ecore_Event_Handler *volume_key_event_handler_qp_state_check(void);
+extern Eina_Bool volume_key_event_is_pressing_get(void);
+extern int volume_key_event_count_grabed_get(void);
+extern void volume_key_event_count_grabed_set(int val);
 
-sound_type_e volume_key_event_sound_type_at_key_pressed_get(void);
+extern sound_type_e volume_key_event_sound_type_at_key_pressed_get(void);
 
-int volume_key_event_key_grab(Ecore_X_Window _xwin, int grab_mode);
-volume_error_e volume_key_event_key_ungrab(void);
+extern int volume_key_event_key_grab(Ecore_X_Window _xwin, int grab_mode);
+extern volume_error_e volume_key_event_key_ungrab(void);
 
-void volume_key_event_handler_add(void);
-void volume_key_event_handler_del(void);
-volume_error_e volume_key_event_input_window_create(void);
+extern void volume_key_event_handler_add(void);
+extern void volume_key_event_handler_del(void);
+extern volume_error_e volume_key_event_input_window_create(void);
 
 #endif /* __VOLUME_KEY_EVENT_H__ */

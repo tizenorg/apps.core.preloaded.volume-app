@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2014 Samsung Electronics Co., Ltd All Rights Reserved
+ * Copyright (c) 2009-2015 Samsung Electronics Co., Ltd All Rights Reserved
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@
 #include <sound_manager.h>
 //#include <syspopup.h>
 #include <appcore-efl.h>
-//#include <Ecore_X.h>
 #include <notification.h>
 #include <syspopup_caller.h>
 

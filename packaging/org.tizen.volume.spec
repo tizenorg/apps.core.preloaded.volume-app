@@ -13,24 +13,20 @@ Summary:	Volume application (EFL)
 Version:	0.1.148
 Release:	1
 Group:	TO_BE/FILLED_IN
-License:	Apache
+License:	Apache-2.0
 Source0:	%{name}-%{version}.tar.gz
 BuildRequires:  pkgconfig(capi-appfw-application)
 BuildRequires:  pkgconfig(capi-appfw-app-manager)
 BuildRequires:  pkgconfig(appcore-efl)
 BuildRequires:  pkgconfig(elementary)
-#BuildRequires:  pkgconfig(utilX)
 BuildRequires:  pkgconfig(capi-media-sound-manager)
 BuildRequires:  pkgconfig(syspopup)
 BuildRequires:  pkgconfig(dlog)
 BuildRequires:  pkgconfig(notification)
 BuildRequires:  pkgconfig(feedback)
 BuildRequires:  pkgconfig(syspopup-caller)
-#BuildRequires:  pkgconfig(x11)
-#BuildRequires:  pkgconfig(xcomposite)
-#BuildRequires:  pkgconfig(xext)
-#BuildRequires:  pkgconfig(xi)
 BuildRequires:  pkgconfig(capi-network-bluetooth)
+BuildRequires:  pkgconfig(tzsh-volume-service)
 
 BuildRequires:  cmake
 BuildRequires:  edje-bin

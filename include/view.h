@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2014 Samsung Electronics Co., Ltd All Rights Reserved
+ * Copyright (c) 2009-2015 Samsung Electronics Co., Ltd All Rights Reserved
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
+#include "tzsh_volume_service.h"
 
 #ifndef __VOLUME_VIEW_H__
 #define __VOLUME_VIEW_H__
 
 Evas_Object *volume_view_win_get(void);
+extern tzsh_h volume_view_tzsh_get(void);
+extern tzsh_volume_service_h volume_view_service_get(void);
 Evas_Object *volume_view_evas_get(void);
 Evas_Object *volume_view_outer_layout_get(void);
 Evas_Object *volume_view_icon_volume_get(void);

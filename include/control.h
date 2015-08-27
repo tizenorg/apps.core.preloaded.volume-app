@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2014 Samsung Electronics Co., Ltd All Rights Reserved
+ * Copyright (c) 2009-2015 Samsung Electronics Co., Ltd All Rights Reserved
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,9 +31,6 @@ enum{
 	LOCK_AND_MEDIA,
 };
 
-extern void volume_control_check_syspopup();
-extern int volume_register_shape_timer();
-extern void volume_control_check_once(void);
 extern int volume_control_get_viewport_height();
 extern int volume_control_get_viewport_width();
 extern void volume_control_show_hide_worning();
@@ -48,7 +45,6 @@ extern sound_type_e volume_control_get_sound_type_at_show(void);
 extern volume_error_e volume_control_cache_flush(void);
 
 extern volume_error_e volume_control_app_launch_with_bundle(const char *op_type, const char *operation, const char *pkgname);
-extern volume_error_e volume_control_mode_syspopup_launch(void);
 extern int volume_control_get_vconf_idlelock(void);
 
 extern int volume_control_check_status(int *lock, sound_type_e *sound_type);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2014 Samsung Electronics Co., Ltd All Rights Reserved
+ * Copyright (c) 2009-2015 Samsung Electronics Co., Ltd All Rights Reserved
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
 #include <feedback.h>
 #include <vconf.h>
 #include <vconf-keys.h>
-#include <app.h>
 
 #include "main.h"
 #include "_util_efl.h"
@@ -28,9 +27,12 @@
 #include "timer.h"
 #include "key_event.h"
 #include "sound.h"
+#include "tzsh_volume_service.h"
 
 struct _view_s_info {
 	Evas_Object *win;
+	tzsh_h tzsh;
+	tzsh_volume_service_h volume_service;
 	Evas_Object *evas;
 	Evas_Object *ly_outer;
 	Evas_Object *icon_volume;
@@ -47,6 +49,8 @@ struct _view_s_info {
 };
 static struct _view_s_info view_info = {
 	.win = NULL,
+	.tzsh = NULL,
+	.volume_service = NULL,
 	.evas = NULL,
 	.ly_outer = NULL,
 	.icon_volume = NULL,
@@ -76,6 +80,16 @@ static Evas_Object* _setting_icon_make();
 Evas_Object* volume_view_win_get(void)
 {
 	return view_info.win;
+}
+
+tzsh_h volume_view_tzsh_get(void)
+{
+	return view_info.tzsh;
+}
+
+tzsh_volume_service_h volume_view_service_get(void)
+{
+	return view_info.volume_service;
 }
 
 Evas_Object* volume_view_evas_get(void)
@@ -333,6 +347,28 @@ Evas_Object *add_layout(Evas_Object *parent, const char *file, const char *group
 	return eo;
 }
 
+void _connect_to_wm(Evas_Object *win)
+{
+	_D("Mack connection with window manager");
+
+	tzsh_window tz_win;
+
+	view_info.tzsh = tzsh_create(TZSH_TOOLKIT_TYPE_EFL);
+	if (!view_info.tzsh) {
+		_E("Failed to get connection to Tizen window manager");
+	}
+
+	tz_win = elm_win_window_id_get(win);
+	if (!tz_win) {
+		_E("Failed to get Tizen window manager");
+	}
+
+	view_info.volume_service = tzsh_volume_service_create(view_info.tzsh, tz_win);
+	if (!view_info.volume_service) {
+		_E("Failed to get volume service");
+	}
+}
+
 volume_error_e volume_view_layout_create(Evas_Object *win)
 {
 	LOGD("Layout create");
@@ -382,6 +418,7 @@ Evas_Object *add_volume_window(const char *name)
 	elm_win_title_set(eo, name);
 	elm_win_borderless_set(eo, EINA_TRUE);
 	ecore_evas_name_class_set(ecore_evas_ecore_evas_get(evas), "SYSTEM_POPUP", "SYSTEM_POPUP");
+	elm_win_prop_focus_skip_set(eo, EINA_TRUE);
 	elm_win_role_set(eo, "no-dim");
 
 	elm_win_screen_size_get(eo, &x, &y, &w, &h);
@@ -416,6 +453,8 @@ Evas_Object *volume_view_window_create(void)
 
 	ecore_timer_add(1.0f, _key_grab_cb, win);
 	evas_object_show(win);
+
+	_connect_to_wm(win);
 
 	return win;
 }

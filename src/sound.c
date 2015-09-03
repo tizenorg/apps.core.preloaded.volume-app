@@ -114,7 +114,7 @@ void volume_sound_setting_sound_play(void)
 	_D("snd_enabled(%d)", snd_enabled);
 
 	if(snd_enabled == 1)
-		volume_sound_feedback_play(FEEDBACK_TYPE_SOUND, FEEDBACK_PATTERN_TOUCH_TAP);
+		volume_sound_feedback_play(FEEDBACK_TYPE_SOUND, FEEDBACK_PATTERN_TAP);
 }
 
 int volume_sound_sound_manager_step_get(sound_type_e type)

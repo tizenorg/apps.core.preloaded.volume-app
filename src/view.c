@@ -489,11 +489,7 @@ void _lock_sound_check(void)
 		}
 		_D("lock type : %d", lock_type);
 
-		if (lock_type == SETTING_SCREEN_LOCK_TYPE_SWIPE)
-			feedback_play_type(FEEDBACK_TYPE_SOUND, FEEDBACK_PATTERN_LOCK_SWIPE);
-
-		else
-			feedback_play_type(FEEDBACK_TYPE_SOUND, FEEDBACK_PATTERN_LOCK);
+		feedback_play_type(FEEDBACK_TYPE_SOUND, FEEDBACK_PATTERN_LOCK);
 	}
 }
 

@@ -10,7 +10,7 @@ ExcludeArch: %{arm} %ix86 x86_64
 
 Name:		org.tizen.volume
 Summary:	Volume application (EFL)
-Version:	0.1.148
+Version:	0.1.149
 Release:	1
 Group:		Applications/Core Applications
 License:	Apache-2.0

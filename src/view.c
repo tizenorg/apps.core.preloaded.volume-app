@@ -437,7 +437,6 @@ static Eina_Bool _key_grab_cb(void *data)
 	_D("Result of volume up keygrab set : %d", ret);
 	ret = elm_win_keygrab_set(win, KEY_VOLUMEDOWN, 0, 0, 0, ELM_WIN_KEYGRAB_SHARED);
 	_D("Result of volume down keygrab set : %d", ret);
-	elm_win_iconified_set(win, EINA_TRUE);
 
 	return EINA_FALSE;
 }
@@ -450,6 +449,8 @@ Evas_Object *volume_view_window_create(void)
 
 	view_info.win = win;
 	_D("view_info.win is [%p]", view_info.win);
+
+	elm_win_iconified_set(win, EINA_TRUE);
 
 	ecore_timer_add(1.0f, _key_grab_cb, win);
 	evas_object_show(win);

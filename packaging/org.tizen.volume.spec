@@ -1,10 +1,10 @@
 %define _project_name volume
 %define _package_name org.tizen.%{_project_name}
-%if "%{?tizen_profile_name}" == "wearable"
+%if "%{profile}" == "wearable"
 ExcludeArch: %{arm} %ix86 x86_64
 %endif
 
-%if "%{?tizen_profile_name}" == "tv"
+%if "%{profile}" == "tv"
 ExcludeArch: %{arm} %ix86 x86_64
 %endif
 

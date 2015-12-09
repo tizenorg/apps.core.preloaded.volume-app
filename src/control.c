@@ -570,10 +570,10 @@ void volume_control_deinitialize(void)
 	/* Unregister bt changed callback */
 	bt_deinit_sco();
 }
-
+/*
 void volume_service_region_set(Evas_Object *win, Eina_Bool is_warning_visible)
 {
-	_D("X input event shape");
+	_D("tzsh input region set");
 	Evas_Object *ly = NULL;
 	tzsh_h tzsh = NULL;
 	tzsh_volume_service_h volume_service = NULL;
@@ -634,6 +634,7 @@ void volume_service_region_set(Evas_Object *win, Eina_Bool is_warning_visible)
 	_D("The result of volume region set is : %d", ret);
 	tzsh_region_destroy(rect);
 }
+*/
 
 static void _rotate_changed_cb(void *data, Evas_Object *obj, void *event_info)
 {
@@ -668,7 +669,7 @@ static void _rotate_changed_cb(void *data, Evas_Object *obj, void *event_info)
 			break;
 		}
 
-		volume_service_region_set(obj, control_info.is_warning_visible);
+		//volume_service_region_set(obj, control_info.is_warning_visible);
 	}
 }
 

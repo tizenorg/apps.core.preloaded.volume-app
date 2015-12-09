@@ -369,6 +369,63 @@ void _connect_to_wm(Evas_Object *win)
 	}
 }
 
+static void _layout_resize_cb(void *data, Evas *e, Evas_Object *obj, void *event_info)
+{
+	_D("Layout resize cb");
+	tzsh_h tzsh = NULL;
+	tzsh_volume_service_h volume_service = NULL;
+	tzsh_region_h rect = NULL;
+	int x, y, w, h = 0;
+	int tmp_x;
+	int tmp_y;
+	int tmp_w;
+	int tmp_h;
+	int ret = 0;
+	int current_angle = 0;
+
+	tzsh = volume_view_tzsh_get();
+	ret_if(!tzsh);
+	volume_service = volume_view_service_get();
+	ret_if(!volume_service);
+
+	current_angle = volume_control_get_current_angle();
+	_D("Current angle : %d", current_angle);
+
+	edje_object_part_geometry_get(_EDJ(obj), "bg", &x, &y, &w, &h);
+	_D("BG  part size -- x: %d, y: %d, w: %d, h: %d", x, y, w, h);
+
+	if (current_angle == 90) {
+		tmp_x = x;
+		tmp_y = y;
+		tmp_w = w;
+		tmp_h = h;
+
+		x = tmp_y;
+		y = tmp_x;
+		w = tmp_h;
+		h = tmp_w;
+	}
+	else if (current_angle == 270) {
+		tmp_x = x;
+		tmp_y = y;
+		tmp_w = w;
+		tmp_h = h;
+
+		x = volume_control_get_viewport_width()-tmp_y-tmp_h;
+		y = tmp_x;
+		w = tmp_h;
+		h = tmp_w;
+	}
+
+	rect = tzsh_region_create(tzsh);
+	ret_if(!rect);
+	tzsh_region_add(rect, x, y, h, w);
+	_D("shape x: %d, y: %d, w: %d, h: %d", x, y, w, h);
+	ret = tzsh_volume_service_content_region_set(volume_service, current_angle, rect);
+	_D("The result of volume region set is : %d", ret);
+	tzsh_region_destroy(rect);
+}
+
 volume_error_e volume_view_layout_create(Evas_Object *win)
 {
 	LOGD("Layout create");
@@ -380,6 +437,7 @@ volume_error_e volume_view_layout_create(Evas_Object *win)
 	elm_win_resize_object_add(win, ly_outer);
 	elm_object_signal_callback_add(ly_outer, "hide,popup", "event", _hide_launcher, NULL);
 	view_info.ly_outer = ly_outer;
+	evas_object_event_callback_add(ly_outer, EVAS_CALLBACK_RESIZE, _layout_resize_cb, NULL);
 
 	/* make setting icon */
 	Evas_Object *icon_setting = _setting_icon_make();

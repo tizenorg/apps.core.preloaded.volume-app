@@ -6,6 +6,7 @@
 	<ui-application appid="org.tizen.volume" exec="/usr/apps/org.tizen.volume/bin/volume" nodisplay="true" multiple="false" type="capp" taskmanage="false">
 		<icon>org.tizen.volume.png</icon>
 		<label>Volume</label>
+		<background-category value="system"/>
 	</ui-application>
 	<privileges>
 		<privilege>http://tizen.org/privilege/haptic</privilege>

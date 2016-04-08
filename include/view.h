@@ -19,6 +19,9 @@
 #ifndef __VOLUME_VIEW_H__
 #define __VOLUME_VIEW_H__
 
+extern sound_type_e volume_view_pre_sound_type_get(void);
+extern volume_error_e volume_change_slider_max_value(sound_type_e type);
+
 extern Evas_Object *volume_view_win_get(void);
 extern tzsh_h volume_view_tzsh_get(void);
 extern tzsh_volume_service_h volume_view_service_get(void);
@@ -37,7 +40,7 @@ extern void volume_view_volume_icon_set(sound_type_e sound_type, int sound, int 
 extern void volume_view_setting_icon_set(const char *file);
 extern void volume_view_setting_icon_callback_del(void);
 
-extern volume_error_e volume_view_window_show(void);
+extern volume_error_e volume_view_window_show(sound_type_e type);
 extern volume_error_e volume_view_window_hide(void);
 
 extern volume_error_e volume_view_layout_create(Evas_Object *win);
@@ -45,5 +48,6 @@ extern Evas_Object *volume_view_window_create(void);
 
 extern Evas_Object* show_lockscreen_splash(const char *bg_path);
 extern volume_error_e hide_lockscreen_splash(void);
+
 
 #endif /* __VOLUME_VIEW_H__ */

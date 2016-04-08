@@ -73,7 +73,7 @@ void bt_deinit_sco(void)
 
 static void _bt_display_bt_volume_view(sound_type_e sound_type, int sound, int vibration, bool bt_opened)
 {
-	if (VOLUME_ERROR_OK != volume_view_window_show())
+	if (VOLUME_ERROR_OK != volume_view_window_show(sound_type))
 		_E("Failed to show volume window");
 
 	volume_view_volume_icon_set(sound_type, sound, vibration, bt_opened);

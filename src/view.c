@@ -46,6 +46,7 @@ struct _view_s_info {
 	Eina_Bool is_registered_callback;
 	Eina_Bool is_slider_touching;
 	Eina_Bool is_warning_displayed;
+	sound_type_e pre_sound_type;
 };
 static struct _view_s_info view_info = {
 	.win = NULL,
@@ -63,7 +64,8 @@ static struct _view_s_info view_info = {
 
 	.is_registered_callback = EINA_FALSE,
 	.is_slider_touching = EINA_FALSE,
-	.is_warning_displayed = EINA_FALSE
+	.is_warning_displayed = EINA_FALSE,
+	.pre_sound_type = SOUND_TYPE_RINGTONE
 };
 
 static void _button_cb(void *data, Evas_Object *obj, void *event_info);
@@ -127,6 +129,11 @@ Eina_Bool volume_view_is_slider_touching_get(void)
 	return view_info.is_slider_touching;
 }
 
+sound_type_e volume_view_pre_sound_type_get(void)
+{
+	return view_info.pre_sound_type;
+}
+
 volume_error_e volume_view_set_default_slider(){
 	Evas_Object *slider = volume_view_slider_get();
 	elm_object_style_set(slider, "default");
@@ -182,6 +189,26 @@ int volume_mute_toggle_set()
 
 		return 1;
 	}
+}
+
+volume_error_e volume_change_slider_max_value(sound_type_e type)
+{
+	_D("Slider max change for state: %d", type);
+	int ret = 0;
+	int step = 0;
+
+	ret = sound_manager_get_max_volume(type, &step);
+	if (ret < 0) {
+		_E("Failed to get max volume for sound_type: %d", type);
+		return VOLUME_ERROR_FAIL;
+	}
+	_D("Sound type: %d, max: %d", type, step);
+
+	elm_slider_min_max_set(view_info.slider, 0, step);
+
+	view_info.pre_sound_type = type;
+
+	return VOLUME_ERROR_OK;
 }
 
 volume_error_e volume_view_slider_value_set(int val)
@@ -306,11 +333,15 @@ Evas_Object *add_slider(Evas_Object *parent, int min, int max, int val)
 	return slider;
 }
 
-volume_error_e volume_view_window_show(void)
+volume_error_e volume_view_window_show(sound_type_e type)
 {
 	_D("Volume view window SHOW is [%p]", view_info.win);
 	elm_win_iconified_set(view_info.win, EINA_FALSE);
-	volume_view_setting_icon_callback_add();
+	if (type == SOUND_TYPE_CALL) {
+		_D("Sound type is Call");
+	} else {
+		volume_view_setting_icon_callback_add();
+	}
 
 	return VOLUME_ERROR_OK;
 }

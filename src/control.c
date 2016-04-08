@@ -286,6 +286,7 @@ Eina_Bool volume_control_show_view(int status, sound_type_e sound_type, int soun
 	Evas_Object *win = NULL;
 	int volume = 0;
 	int vibration = 0;
+	sound_type_e pre_sound_type;
 
 	retv_if(control_info.is_deleting, EINA_FALSE);
 
@@ -293,6 +294,8 @@ Eina_Bool volume_control_show_view(int status, sound_type_e sound_type, int soun
 
 	win = volume_view_win_get();
 	retv_if(!win, EINA_FALSE);
+
+	pre_sound_type = volume_view_pre_sound_type_get();
 
 	if(status == LOCK_AND_NOT_MEDIA)
 	{
@@ -314,8 +317,14 @@ Eina_Bool volume_control_show_view(int status, sound_type_e sound_type, int soun
 		_D("UNLOCK or LOCK_AND_MEDIA");
 		control_info.sound_type_at_show = sound_type;
 
+		if (sound_type != pre_sound_type) {
+			if (VOLUME_ERROR_OK != volume_change_slider_max_value(sound_type)) {
+				_E("Failed to changed max volume");
+			}
+		}
+
 		if(status == UNLOCK_STATUS)	{
-			if(VOLUME_ERROR_OK != volume_view_window_show()) {
+			if(VOLUME_ERROR_OK != volume_view_window_show(sound_type)) {
 				_E("Failed to show volume window");
 			}
 		}

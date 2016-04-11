@@ -14,6 +14,7 @@
 		<privilege>http://tizen.org/privilege/telephony.admin</privilege>
 		<privilege>http://tizen.org/privilege/internal/default/public</privilege>
 		<privilege>http://tizen.org/privilege/systemsettings.admin</privilege>
+		<privilege>http://tizen.org/privilege/appmanager.launch</privilege>
 	</privileges>
 
 </manifest>

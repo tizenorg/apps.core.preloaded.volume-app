@@ -246,6 +246,15 @@ RESOURCE_IMAGE_PRESS("00_volume_icon_settings_pressed.png");
 					color: 0 0 0 0;
 				}
 			}
+			part {
+				name : "bg_for_event";
+				type : RECT;
+
+				description {
+					state : "default" 0.0;
+					color: 0 0 0 0;
+				}
+			}
 
 			part {
 				name : "bg";
@@ -550,6 +559,12 @@ RESOURCE_IMAGE_PRESS("00_volume_icon_settings_pressed.png");
 				source: "clipper";
 				action: STATE_SET "default" 0.0;
 				target: "bg";
+			}
+			program{
+				name: "volume_down_for_hide";
+				signal: "mouse,down,1";
+				source: "bg_for_event";
+				action: SIGNAL_EMIT "hide,volume" "hide";
 			}
 		}
 	}

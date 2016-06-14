@@ -400,6 +400,13 @@ void _connect_to_wm(Evas_Object *win)
 	}
 }
 
+static void _down_for_hide(void *data, Evas_Object *obj, const char* emission, const char* source)
+{
+	LOGD("Down for HIDE");
+
+	volume_control_hide_view();
+}
+
 volume_error_e volume_view_layout_create(Evas_Object *win)
 {
 	LOGD("Layout create");
@@ -429,6 +436,9 @@ volume_error_e volume_view_layout_create(Evas_Object *win)
 	retv_if(!slider, VOLUME_ERROR_FAIL);
 	view_info.slider = slider;
 	elm_object_part_content_set(ly_outer, "sw.slider", slider);
+
+	/* add callback for hide */
+	elm_object_signal_callback_add(ly_outer, "hide,volume", "hide", _down_for_hide, NULL);
 
 	return VOLUME_ERROR_OK;
 }

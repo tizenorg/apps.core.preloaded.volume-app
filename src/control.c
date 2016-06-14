@@ -364,6 +364,8 @@ Eina_Bool volume_control_show_view(int status, sound_type_e sound_type, int soun
 		//@TODO: need to check
 		volume_view_volume_icon_set(sound_type, sound, vibration, bt_opened);
 
+		volume_service_region_set(win, false);
+
 		return EINA_TRUE;
 	}
 }

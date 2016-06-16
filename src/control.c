@@ -639,7 +639,7 @@ void volume_service_region_set(Evas_Object *win, Eina_Bool is_warning_visible)
 
 	rect = tzsh_region_create(tzsh);
 	ret_if(!rect);
-	tzsh_region_add(rect, x, y, h, w);
+	tzsh_region_add(rect, x, y, w, h);
 	_D("shape x: %d, y: %d, w: %d, h: %d", x, y, w, h);
 	ret = tzsh_volume_service_content_region_set(volume_service, current_angle, rect);
 	_D("The result of volume region set is : %d", ret);

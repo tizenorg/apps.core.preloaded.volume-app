@@ -15,6 +15,7 @@
 		<privilege>http://tizen.org/privilege/internal/default/public</privilege>
 		<privilege>http://tizen.org/privilege/systemsettings.admin</privilege>
 		<privilege>http://tizen.org/privilege/appmanager.launch</privilege>
+		<privilege>http://tizen.org/privilege/keygrab</privilege>
 	</privileges>
 
 </manifest>

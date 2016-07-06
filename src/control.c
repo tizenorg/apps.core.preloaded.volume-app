@@ -20,6 +20,7 @@
 #include <bluetooth.h>
 #include <bluetooth_internal.h>
 #include <bluetooth_extension.h>
+#include <bundle_internal.h>
 
 #include "main.h"
 #include "_util_efl.h"
@@ -280,6 +281,15 @@ void volume_control_show_hide_worning()
 	}
 }
 
+static Eina_Bool _volume_region_set_timer_cb(void *data)
+{
+	Evas_Object *win = data;
+
+	volume_service_region_set(win, EINA_FALSE);
+
+	return EINA_FALSE;
+}
+
 Eina_Bool volume_control_show_view(int status, sound_type_e sound_type, int sound, bool bt_opened)
 {
 	_D("Volume control show");
@@ -327,6 +337,7 @@ Eina_Bool volume_control_show_view(int status, sound_type_e sound_type, int soun
 			if(VOLUME_ERROR_OK != volume_view_window_show(sound_type)) {
 				_E("Failed to show volume window");
 			}
+			ecore_timer_add(1.0f, _volume_region_set_timer_cb, win);
 		}
 
 		control_info.is_launching = EINA_TRUE;
@@ -363,8 +374,6 @@ Eina_Bool volume_control_show_view(int status, sound_type_e sound_type, int soun
 
 		//@TODO: need to check
 		volume_view_volume_icon_set(sound_type, sound, vibration, bt_opened);
-
-		volume_service_region_set(win, false);
 
 		return EINA_TRUE;
 	}
@@ -540,7 +549,6 @@ volume_error_e volume_control_initialize(void)
 	}
 
 	elm_win_screen_size_get(win, NULL, NULL, &(control_info.viewport_width), &(control_info.viewport_height));
-
 
 	/* Set available rotations */
 	_control_set_window_rotation(win);

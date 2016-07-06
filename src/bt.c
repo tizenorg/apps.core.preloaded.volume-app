@@ -104,6 +104,7 @@ static void _bt_volume_changed_cb(int volume, void *user_data)
 	if (bt_opened == true && sound_type == SOUND_TYPE_CALL)
 	{
 		_bt_display_bt_volume_view(sound_type, sound, vibration, bt_opened);
+		_D("BT SCO volume level is : %d", volume);
 		if (VOLUME_ERROR_OK != volume_view_slider_value_set(volume))
 			_E("Failed to set slider value");
 

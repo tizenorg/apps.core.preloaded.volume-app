@@ -336,7 +336,9 @@ Evas_Object *add_slider(Evas_Object *parent, int min, int max, int val)
 volume_error_e volume_view_window_show(sound_type_e type)
 {
 	_D("Volume view window SHOW is [%p]", view_info.win);
+
 	elm_win_iconified_set(view_info.win, EINA_FALSE);
+
 	if (type == SOUND_TYPE_CALL) {
 		_D("Sound type is Call");
 	} else {
@@ -470,14 +472,15 @@ Evas_Object *add_volume_window(const char *name)
 
 static Eina_Bool _key_grab_cb(void *data)
 {
-	int ret = 0;
+	int ret_up = 0;
+	int ret_down = 0;
 	Evas_Object *win = data;
 
 	_D("keygrab window is [%p]", win);
-	ret = elm_win_keygrab_set(win, KEY_VOLUMEUP, 0, 0, 0, ELM_WIN_KEYGRAB_SHARED);
-	_D("Result of volume up keygrab set : %d", ret);
-	ret = elm_win_keygrab_set(win, KEY_VOLUMEDOWN, 0, 0, 0, ELM_WIN_KEYGRAB_SHARED);
-	_D("Result of volume down keygrab set : %d", ret);
+	ret_up = elm_win_keygrab_set(win, KEY_VOLUMEUP, 0, 0, 0, ELM_WIN_KEYGRAB_SHARED);
+	_D("Result of volume up keygrab set : %d", ret_up);
+	ret_down = elm_win_keygrab_set(win, KEY_VOLUMEDOWN, 0, 0, 0, ELM_WIN_KEYGRAB_SHARED);
+	_D("Result of volume down keygrab set : %d", ret_down);
 
 	return EINA_FALSE;
 }
@@ -491,12 +494,13 @@ Evas_Object *volume_view_window_create(void)
 	view_info.win = win;
 	_D("view_info.win is [%p]", view_info.win);
 
-	elm_win_iconified_set(win, EINA_TRUE);
-
-	ecore_timer_add(1.0f, _key_grab_cb, win);
 	evas_object_show(win);
 
+	ecore_timer_add(1.0f, _key_grab_cb, win);
+
 	_connect_to_wm(win);
+
+	elm_win_iconified_set(win, EINA_TRUE);
 
 	return win;
 }

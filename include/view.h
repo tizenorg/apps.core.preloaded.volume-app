@@ -48,6 +48,7 @@ extern Evas_Object *volume_view_window_create(void);
 
 extern Evas_Object* show_lockscreen_splash(const char *bg_path);
 extern volume_error_e hide_lockscreen_splash(void);
+extern void volume_service_region_set(Evas_Object *win, Eina_Bool is_warning_visible);
 
 
 #endif /* __VOLUME_VIEW_H__ */

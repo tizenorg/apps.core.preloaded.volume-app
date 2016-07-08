@@ -337,7 +337,7 @@ Eina_Bool volume_control_show_view(int status, sound_type_e sound_type, int soun
 			if(VOLUME_ERROR_OK != volume_view_window_show(sound_type)) {
 				_E("Failed to show volume window");
 			}
-			ecore_timer_add(1.0f, _volume_region_set_timer_cb, win);
+			ecore_timer_add(0.1f, _volume_region_set_timer_cb, win);
 		}
 
 		control_info.is_launching = EINA_TRUE;

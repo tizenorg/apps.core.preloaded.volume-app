@@ -445,6 +445,11 @@ volume_error_e volume_view_layout_create(Evas_Object *win)
 	return VOLUME_ERROR_OK;
 }
 
+static void _iconified_cb(void *data, Evas_Object *obj, void *event_info)
+{
+	_D("ICONIFIED IS CALLED");
+}
+
 Evas_Object *add_volume_window(const char *name)
 {
 	Evas_Object *eo = NULL;
@@ -466,6 +471,8 @@ Evas_Object *add_volume_window(const char *name)
 
 	elm_win_screen_size_get(eo, &x, &y, &w, &h);
 	_D("volume screen size => x: %d, y: %d, w: %d, h: %d", x, y, w, h);
+
+	evas_object_smart_callback_add(eo, "iconified", _iconified_cb, NULL);
 
 	return eo;
 }
